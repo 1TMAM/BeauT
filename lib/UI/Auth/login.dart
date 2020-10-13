@@ -1,4 +1,6 @@
+import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/loginBloc.dart';
+import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/helpers/appState.dart';
@@ -20,7 +22,7 @@ class _LoginState extends State<Login> {
             centerTitle: true,
             title: Image.asset(
               "assets/images/header.png",
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               width: 100,
               height: 30,
             )),
@@ -39,8 +41,12 @@ class _LoginState extends State<Login> {
             },
             child: ListView(
               children: [
-
-
+                CustomTextField(
+                  hint: allTranslations.text("email"),
+                ),
+                CustomTextField(
+                  hint: allTranslations.text("password"),
+                ),
               ],
             )));
   }
