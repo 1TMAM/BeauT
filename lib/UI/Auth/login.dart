@@ -1,8 +1,10 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/loginBloc.dart';
+import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
+import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/login_model.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  String email, password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +27,7 @@ class _LoginState extends State<Login> {
             title: Image.asset(
               "assets/images/header.png",
               fit: BoxFit.contain,
-              width: 100,
+              width: 150,
               height: 30,
             )),
         body: BlocListener(
@@ -40,13 +44,43 @@ class _LoginState extends State<Login> {
               }
             },
             child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               children: [
+                rowItem(Icons.mail, allTranslations.text("email")),
                 CustomTextField(
-                  hint: allTranslations.text("email"),
+                  hint: "example@gmail.com",
+                  value: (String val) {
+                    setState(() {
+                      email = val;
+                    });
+                    print(email);
+                  },
                 ),
+                rowItem(Icons.lock, allTranslations.text("password")),
                 CustomTextField(
-                  hint: allTranslations.text("password"),
+                  value: (String val) {
+                    setState(() {
+                      password = val;
+                    });
+                    print(password);
+                  },
+                  hint: "************",
                 ),
+                CustomButton(
+                  onBtnPress: () {
+                    logInBloc.updateEmail(email);
+                    logInBloc.updatePassword(password);
+                  logInBloc.add(Click());
+
+                    },
+                  text: allTranslations.text("login"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Center(
+                      child: Text(allTranslations.text("forget_password"))),
+                ),
+                Center(child: Text(allTranslations.text("no_acc"))),
               ],
             )));
   }

@@ -15,7 +15,7 @@ class LogInBloc extends Bloc<AppEvent, AppState> with Validator {
 
   final email = BehaviorSubject<String>();
 
-  Function(String) get updatePhone => email.sink.add;
+  Function(String) get updateEmail => email.sink.add;
 
   Stream<String> get emailStream => email.stream.transform(emailValidator);
 
