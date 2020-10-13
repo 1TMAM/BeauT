@@ -10,8 +10,7 @@ class NetworkUtil {
 
   Dio dio = Dio();
 
-//  String base_url = "https://new.shatta.com/api/${Intl.getCurrentLocale()}/";
-  String base_url = "https://new.shatta.com/api/";
+  String base_url = "http://beauty.wothoq.co/api/";
 
   Future<ResponseType> get<ResponseType extends Mappable>(
       ResponseType responseType, String url,
