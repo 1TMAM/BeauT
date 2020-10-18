@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -26,8 +28,12 @@ class _SplashState extends State<Splash> {
     super.initState();
   }
 
+  String token;
+
   Future<Timer> _loadData() async {
-    return new Timer(Duration(seconds: 4), _onDoneLoading );
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    return new Timer(Duration(seconds: 4), _onDoneLoading);
   }
 
   _onDoneLoading() async {
@@ -36,7 +42,7 @@ class _SplashState extends State<Splash> {
         MaterialPageRoute(
           builder: (context) => Languages(),
         ),
-            (Route<dynamic> route) => false);
+        (Route<dynamic> route) => false);
   }
 
   @override
@@ -45,16 +51,17 @@ class _SplashState extends State<Splash> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(color: Theme
-            .of(context)
-            .primaryColor),
+        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
         child: AnimationConfiguration.staggeredList(
           position: 1,
           duration: Duration(seconds: 3),
           child: SlideAnimation(
             verticalOffset: 50.0,
             child: FadeInAnimation(
-              child: AppLogo(hight: 50, width: 50,),
+              child: AppLogo(
+                hight: 50,
+                width: 50,
+              ),
             ),
           ),
         ),

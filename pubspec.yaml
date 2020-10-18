@@ -43,6 +43,7 @@ dependencies:
   pin_code_text_field: ^1.7.1
   flutter_calendar_carousel: ^1.4.12
   flutter_svg: ^0.18.1
+  fluttertoast: ^7.1.1
 
 flutter_icons:
   android: true

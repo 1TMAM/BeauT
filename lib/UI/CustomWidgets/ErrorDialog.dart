@@ -7,7 +7,6 @@ void errorDialog({BuildContext context, String text, Function function}) {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
-
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 20,
           child: Container(
@@ -40,7 +39,7 @@ void errorDialog({BuildContext context, String text, Function function}) {
                     child: Icon(
                       Icons.error_outline,
                       color: Colors.white,
-                      size: 90,
+                      size: 70,
                     ),
                   ),
                   Padding(

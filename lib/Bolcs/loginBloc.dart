@@ -5,7 +5,9 @@ import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/helpers/validator.dart';
 import 'package:buty/models/login_model.dart';
+import 'package:buty/repo/user_repo.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -32,29 +34,23 @@ class LogInBloc extends Bloc<AppEvent, AppState> with Validator {
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {
-    var netUtil = NetworkUtil();
     if (event is Click) {
       yield (Start(null));
-      FormData data = FormData.fromMap({
-        "email": email.value,
-        "password": password.value,
-      });
       yield Loading(null);
       var userResponee =
-          await netUtil.post(UserResponse(), "users/auth/login", body: data);
+          await UserDataRepo.LOGIN(email.value, password.value);
       print("LogIn ResPonse" + userResponee.msg);
       if (userResponee.status == true) {
         SharedPreferenceManager preferenceManager = SharedPreferenceManager();
         preferenceManager.writeData(CachingKey.IS_LOGGED_IN, true);
-        print(userResponee.user.accessToken);
-        preferenceManager.writeData(
-            CachingKey.AUTH_TOKEN, "${userResponee.user.accessToken }");
-        yield Done(userResponee);
+        preferenceManager.writeData(CachingKey.AUTH_TOKEN, "Bearer ${userResponee.user.accessToken }");
+              yield Done(userResponee);
       } else if (userResponee.status == false) {
         print("Message   ");
         yield ErrorLoading(userResponee);
       } else {
         yield Loading(null);
+
       }
     }
   }

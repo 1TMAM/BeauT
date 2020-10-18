@@ -1,5 +1,7 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/loginBloc.dart';
+import 'package:buty/UI/Auth/forget_password.dart';
+import 'package:buty/UI/Auth/sign_up.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
@@ -37,9 +39,7 @@ class _LoginState extends State<Login> {
               if (state is Loading) showLoadingDialog(context);
               if (state is ErrorLoading) {
                 Navigator.of(context).pop();
-                errorDialog(
-                  context: context,
-                  text: data.msg,
+                errorDialog(text: data.msg,
                 );
               }
             },
@@ -70,17 +70,29 @@ class _LoginState extends State<Login> {
                   onBtnPress: () {
                     logInBloc.updateEmail(email);
                     logInBloc.updatePassword(password);
-                  logInBloc.add(Click());
-
-                    },
+                    logInBloc.add(Click());
+                  },
                   text: allTranslations.text("login"),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Center(
-                      child: Text(allTranslations.text("forget_password"))),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgetPassword()));
+                    },
+                    child: Center(
+                        child: Text(allTranslations.text("forget_password"))),
+                  ),
                 ),
-                Center(child: Text(allTranslations.text("no_acc"))),
+                InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SignUp()));
+                    },
+                    child: Center(child: Text(allTranslations.text("no_acc")))),
               ],
             )));
   }
