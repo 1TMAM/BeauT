@@ -2,8 +2,8 @@ import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/get_all_beutions.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
+import 'package:buty/UI/component/single_provider_item_row.dart';
 import 'package:buty/UI/searchBy_cat_id.dart';
-import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/search_by_address.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/all_providers_response.dart';
@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/component/single_provider_item_row.dart';
+import '../search_by_address.dart';
+
 
 class HomePage extends StatefulWidget {
   @override

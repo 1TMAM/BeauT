@@ -1,7 +1,7 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
-import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/side_menu/cards/add_new_card.dart';
+import 'package:buty/UI/side_menu/cards/add_new_card.dart';
 import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatefulWidget {

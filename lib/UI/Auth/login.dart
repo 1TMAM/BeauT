@@ -45,14 +45,14 @@ class _LoginState extends State<Login> {
                   text: data.msg,
                 );
               }
-              if (state is Done ){
+              if (state is Done) {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MainPage(),
                     ),
-                        (Route<dynamic> route) => false);
-            }
+                    (Route<dynamic> route) => false);
+              }
             },
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),

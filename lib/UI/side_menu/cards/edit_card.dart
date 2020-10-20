@@ -1,30 +1,43 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/add_new_card_bloc.dart';
+import 'package:buty/Bolcs/editCardBloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
-import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/UI/side_menu/cards/my_cards.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/general_response.dart';
+import 'package:buty/models/my_cards_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddNewCard extends StatefulWidget {
+class EditCard extends StatefulWidget {
+  final Cards card;
+
+  const EditCard({Key key, this.card}) : super(key: key);
+
   @override
-  _AddNewCardState createState() => _AddNewCardState();
+  _EditCardState createState() => _EditCardState();
 }
 
-class _AddNewCardState extends State<AddNewCard> {
-  String card_num = "123456789";
+class _EditCardState extends State<EditCard> {
+  String card_num;
+  String cardHolder;
+  String cvv;
 
-  String cardHolder = "Enter your Name";
-
-  String cvv = "1234";
-  GlobalKey<FormState> key = GlobalKey();
+  @override
+  void initState() {
+    editCardBloc.updateId(widget.card.id);
+    setState(() {
+      card_num = widget.card.number.toString();
+      cardHolder = widget.card.holderName.toString();
+      cvv = widget.card.cvv.toString();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +47,8 @@ class _AddNewCardState extends State<AddNewCard> {
           automaticallyImplyLeading: false,
           leading: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainPage(
-                              index: 0,
-                            )));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyCards()));
               },
               child: Icon(
                 Icons.arrow_back_ios,
@@ -51,7 +60,7 @@ class _AddNewCardState extends State<AddNewCard> {
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: BlocListener(
-        bloc: addCreditCardBloc,
+        bloc: editCardBloc,
         listener: (context, state) {
           var data = state.model as GeneralResponse;
           if (state is Loading) {
@@ -99,110 +108,98 @@ class _AddNewCardState extends State<AddNewCard> {
           }
         },
         child: BlocBuilder(
-          bloc: addCreditCardBloc,
+          bloc: editCardBloc,
           builder: (context, state) {
-            return Form(
-              key: key,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    exampleContainer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(allTranslations.text("card_number")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: CustomTextField(
-                        validate: (String val) {
-                          if (val.length < 16) {
-                            return "adasdasdasdasd";
-                          }
-                        },
-                        hint: card_num,
-                        inputType: TextInputType.number,
-                        value: (String val) {
-                          setState(() {
-                            card_num = val;
-                          });
-                          print(val);
-                          addCreditCardBloc.updateNumber(val);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return ListView(
+              children: [
+                exampleContainer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(allTranslations.text("card_number")),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CustomTextField(
+                    hint: widget.card.number.toString(),
+                    inputType: TextInputType.number,
+                    value: (String val) {
+                      setState(() {
+                        card_num = val;
+                      });
+                      print(val);
+                      editCardBloc.updateNumber(val);
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
                         children: [
-                          Column(
-                            children: [
-                              Text(allTranslations.text("expireDate")),
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  child: CustomTextField(
-                                    hint: "02/20",
-                                    inputType: TextInputType.number,
-                                    value: (String val) {
-                                      setState(() {
-                                        cvv = val;
-                                      });
-                                      print(val);
-                                      addCreditCardBloc.updateDate(val);
-                                    },
-                                  )),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text("CVV"),
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  child: CustomTextField(
-                                    hint: "CVV",
-                                    inputType: TextInputType.number,
-                                    value: (String val) {
-                                      setState(() {
-                                        cvv = val;
-                                      });
-                                      print(val);
-                                      addCreditCardBloc.updateCvv(val);
-                                    },
-                                  )),
-                            ],
-                          ),
+                          Text(allTranslations.text("expireDate")),
+                          Container(
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: CustomTextField(
+                                hint: "${widget.card.expDate}",
+                                inputType: TextInputType.number,
+                                value: (String val) {
+                                  setState(() {
+                                    cvv = val;
+                                  });
+                                  print(val);
+                                  editCardBloc.updateDate(val);
+                                },
+                              )),
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(allTranslations.text("card_holder")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: CustomTextField(
-                        hint: "User Name",
-                        value: (String val) {
-                          setState(() {
-                            cardHolder = val;
-                          });
-                          print(val);
-                          addCreditCardBloc.updateName(val);
-                        },
+                      Column(
+                        children: [
+                          Text("CVV"),
+                          Container(
+                              width: MediaQuery.of(context).size.width / 2.5,
+                              child: CustomTextField(
+                                hint: "${widget.card.cvv}",
+                                inputType: TextInputType.number,
+                                value: (String val) {
+                                  setState(() {
+                                    cvv = val;
+                                  });
+                                  print(val);
+                                  editCardBloc.updateCvv(val);
+                                },
+                              )),
+                        ],
                       ),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          addCreditCardBloc.add(Click());
-                        },
-                        child: CustomButton(
-                          text: "${allTranslations.text("add")}",
-                        )),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(allTranslations.text("card_holder")),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CustomTextField(
+                    hint: "User Name",
+                    value: (String val) {
+                      setState(() {
+                        cardHolder = val;
+                      });
+                      print(val);
+                      editCardBloc.updateName(val);
+                    },
+                  ),
+                ),
+                InkWell(
+                    onTap: () {
+                      editCardBloc.add(Click());
+                    },
+                    child: CustomButton(
+                      text: "${allTranslations.text("add")}",
+                    )),
+              ],
             );
           },
         ),
@@ -256,7 +253,7 @@ class _AddNewCardState extends State<AddNewCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(cvv),
-                      Text("${DateTime.now().toString().substring(0, 10)}"),
+                      Text("${widget.card.expDate}"),
                     ],
                   ),
                 ),

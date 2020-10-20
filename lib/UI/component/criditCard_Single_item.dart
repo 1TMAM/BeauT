@@ -1,51 +1,64 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/UI/side_menu/cards/edit_card.dart';
 import 'package:buty/models/my_cards_response.dart';
 import 'package:flutter/material.dart';
-class CriditCardSingleItem extends StatelessWidget {
 
-  final Cards card ;
+class CriditCardSingleItem extends StatelessWidget {
+  final Cards card;
 
   const CriditCardSingleItem({Key key, this.card}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  "assets/images/master_card.png",
-                  width: 25,
-                  height: 25,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    "assets/images/master_card.png",
+                    width: 25,
+                    height: 25,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "${card.holderName}",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                ],
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditCard(
+                                card: card,
+                              )));
+                },
+                child: Text(
+                  allTranslations.text("edit"),
+                  style: TextStyle(fontSize: 13),
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "${card.holderName}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                ),
-              ],
-            ),
-            Text(
-              allTranslations.text("edit"),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              "${card.number}",
               style: TextStyle(fontSize: 13),
             ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            "${card.number}",
-            style: TextStyle(fontSize: 13),
           ),
-        ),
-      ],
+        ],
+      ),
     );
-
   }
 }
