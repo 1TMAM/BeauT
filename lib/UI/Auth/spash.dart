@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,21 +29,33 @@ class _SplashState extends State<Splash> {
     super.initState();
   }
 
-  String token;
+  var isLogged;
+  var token;
 
   Future<Timer> _loadData() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
+    isLogged =
+        await mSharedPreferenceManager.readBoolean(CachingKey.IS_LOGGED_IN);
     token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(isLogged);
+    print(token);
     return new Timer(Duration(seconds: 4), _onDoneLoading);
   }
 
   _onDoneLoading() async {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Languages(),
-        ),
-        (Route<dynamic> route) => false);
+    isLogged == true
+        ? Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainPage(),
+            ),
+            (Route<dynamic> route) => false)
+        : Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Languages(),
+            ),
+            (Route<dynamic> route) => false);
   }
 
   @override

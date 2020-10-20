@@ -3,7 +3,7 @@ import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
-import 'package:buty/UI/side_menu/my_cards.dart';
+import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/side_menu/cards/my_cards.dart';
 import 'package:flutter/material.dart';
 
 class AddNewCard extends StatefulWidget {

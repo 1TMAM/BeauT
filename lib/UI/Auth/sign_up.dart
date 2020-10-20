@@ -12,6 +12,7 @@ import 'package:buty/models/login_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -35,11 +36,11 @@ class _SignUpState extends State<SignUp> {
             centerTitle: true,
             title: Image.asset(
               "assets/images/header.png",
-              fit: BoxFit.cover,
-              width: 100,
+              fit: BoxFit.contain,
+              width: 150,
               height: 30,
             )),
-        body: BlocListener<SignUpBloc ,AppState>(
+        body: BlocListener<SignUpBloc, AppState>(
           bloc: signUpBloc,
           listener: (context, state) {
             var data = state.model as UserResponse;
@@ -52,108 +53,116 @@ class _SignUpState extends State<SignUp> {
                 text: data.msg,
               );
               print("Dialoggg");
-            }
-            else if (state is Done){
+            } else if (state is Done) {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainPage(index: 0,),
+                    builder: (context) => MainPage(
+                      index: 0,
+                    ),
                   ),
-                      (Route<dynamic> route) => false);
+                  (Route<dynamic> route) => false);
             }
           },
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            children: [
-              rowItem(Icons.person, allTranslations.text("name")),
-              CustomTextField(
-                hint: allTranslations.text("write_name"),
-                value: (String val) {
-                  signUpBloc.updateName(val);
-                },
-              ),
-              rowItem(Icons.phone, allTranslations.text("phone")),
-              CustomTextField(
-                hint: "+966210025500",
-                value: (String val) {
-                  signUpBloc.updateMobile(val);
-                },
-              ),
-              rowItem(Icons.mail, allTranslations.text("email")),
-              CustomTextField(
-                hint: "example@gmail.com",
-                value: (String val) {
-                  signUpBloc.updateEmail(val);
-                },
-              ),
-              rowItem(Icons.location_on, allTranslations.text("address")),
-              CustomTextField(
-                hint: allTranslations.text("write_address"),
-                value: (String val) {
-                  signUpBloc.updateAddress(val);
-                },
-              ),
-              rowItem(Icons.lock, allTranslations.text("password")),
-              CustomTextField(
-                hint: "************",
-                value: (String val) {
-                  signUpBloc.updatePassword(val);
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        allTranslations.text("add_depet_card"),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          allTranslations.text("default"),
-                          style: TextStyle(color: Colors.grey[500]),
-                        ),
-                      ),
-                    ],
-                  ),
-                  showVisa == false
-                      ? InkWell(
-                          onTap: () {
-                            setState(() {
-                              showVisa = true;
-                            });
-                          },
-                          child: Icon(Icons.keyboard_arrow_up))
-                      : InkWell(
-                          onTap: () {
-                            setState(() {
-                              showVisa = false;
-                            });
-                          },
-                          child: Icon(Icons.keyboard_arrow_down)),
-                ],
-              ),
-              showVisa == false ? Visa() : SizedBox(),
-              InkWell(
-                onTap: () {
-                  signUpBloc.add(Click());
-                },
-                child: CustomButton(
-                  text: allTranslations.text("register"),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                rowItem(Icons.person, allTranslations.text("name")),
+                CustomTextField(
+                  hint: allTranslations.text("write_name"),
+                  value: (String val) {
+                    if ( val.length < 3) {
+                      Fluttertoast.showToast(msg: "يرجي ادخال اسم صحيح");
+                    } else{
+                      signUpBloc.updateName(val);
+                    }               },
                 ),
-              ),
-              InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Login()));
+                rowItem(Icons.phone, allTranslations.text("phone")),
+                CustomTextField(
+                  hint: "+966210025500",
+                  inputType: TextInputType.phone,
+                  value: (String val) {
+                    signUpBloc.updateMobile(val);
                   },
-                  child: Center(child: Text(allTranslations.text("have_acc")))),
-            ],
+                ),
+                rowItem(Icons.mail, allTranslations.text("email")),
+                CustomTextField(
+                  hint: "example@gmail.com",
+                  inputType: TextInputType.emailAddress,
+                  value: (String val) {
+                    signUpBloc.updateEmail(val);
+                  },
+                ),
+                rowItem(Icons.location_on, allTranslations.text("address")),
+                CustomTextField(
+                  hint: allTranslations.text("write_address"),
+                  value: (String val) {
+                    signUpBloc.updateAddress(val);
+                  },
+                ),
+                rowItem(Icons.lock, allTranslations.text("password")),
+                CustomTextField(
+                  hint: "************",
+                  secureText: true,
+                  value: (String val) {
+                    signUpBloc.updatePassword(val);
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          allTranslations.text("add_depet_card"),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            allTranslations.text("default"),
+                            style: TextStyle(color: Colors.grey[500]),
+                          ),
+                        ),
+                      ],
+                    ),
+                    showVisa == false
+                        ? InkWell(
+                            onTap: () {
+                              setState(() {
+                                showVisa = true;
+                              });
+                            },
+                            child: Icon(Icons.keyboard_arrow_up))
+                        : InkWell(
+                            onTap: () {
+                              setState(() {
+                                showVisa = false;
+                              });
+                            },
+                            child: Icon(Icons.keyboard_arrow_down)),
+                  ],
+                ),
+                showVisa == false ? Visa() : SizedBox(),
+                InkWell(
+                  onTap: () {
+                    signUpBloc.add(Click());
+                  },
+                  child: CustomButton(
+                    text: allTranslations.text("register"),
+                  ),
+                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                    },
+                    child: Center(child: Text(allTranslations.text("have_acc")))),
+              ],
+            ),
           ),
         ));
   }
@@ -261,5 +270,11 @@ class _SignUpState extends State<SignUp> {
         ],
       ),
     );
+  }
+
+  void vlidateInput(String val, String key) {
+    if (key == "name" && val.length < 3) {
+      Fluttertoast.showToast(msg: "يرجي ادخال اسم صحيح");
+    }
   }
 }

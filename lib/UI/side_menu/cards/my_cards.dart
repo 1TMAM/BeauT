@@ -1,7 +1,16 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/mycards_bloc.dart';
+import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
+import 'package:buty/UI/CustomWidgets/EmptyItem.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
+import 'package:buty/UI/component/criditCard_Single_item.dart';
+import 'package:buty/helpers/appEvent.dart';
+import 'package:buty/helpers/appState.dart';
+import 'package:buty/models/my_cards_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'add_new_card.dart';
 
@@ -11,6 +20,13 @@ class MyCards extends StatefulWidget {
 }
 
 class _MyCardsState extends State<MyCards> {
+  @override
+  void initState() {
+
+    allCardsBloc.add(Hydrate());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,8 +53,43 @@ class _MyCardsState extends State<MyCards> {
       body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           children: [
-            address_item(),
-            address_item(),
+            BlocListener<AllCardsBloc, AppState>(
+              bloc: allCardsBloc,
+              listener: (context, state) {},
+              child: BlocBuilder(
+                bloc: allCardsBloc,
+                builder: (context, state) {
+                  var data = state.model as MyCardsResponse;
+                  return data == null
+                      ? AppLoader()
+                      : data.cards == null
+                          ? Center(
+                              child: EmptyItem(
+                              text: data.msg,
+                            ))
+                          : AnimationLimiter(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: data.cards.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 375),
+                                    child: SlideAnimation(
+                                      verticalOffset: 50.0,
+                                      child: FadeInAnimation(
+                                          child: CriditCardSingleItem(
+                                        card: data.cards[index],
+                                      )),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                },
+              ),
+            ),
             CustomButton(
               onBtnPress: () {
                 Navigator.push(context,
@@ -47,7 +98,7 @@ class _MyCardsState extends State<MyCards> {
               text: allTranslations.text("add_new_card"),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10 ,vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -83,7 +134,7 @@ class _MyCardsState extends State<MyCards> {
               child: Divider(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10 ,vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -118,43 +169,5 @@ class _MyCardsState extends State<MyCards> {
     );
   }
 
-  Widget address_item() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  "assets/images/master_card.png",
-                  width: 25,
-                  height: 25,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Karim Taha",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                ),
-              ],
-            ),
-            Text(
-              allTranslations.text("edit"),
-              style: TextStyle(fontSize: 13),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Text(
-            "xxxx xxxx xxxx 8555",
-            style: TextStyle(fontSize: 13),
-          ),
-        ),
-      ],
-    );
-  }
+  Widget address_item() {}
 }

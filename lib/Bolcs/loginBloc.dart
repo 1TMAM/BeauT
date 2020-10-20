@@ -48,9 +48,6 @@ class LogInBloc extends Bloc<AppEvent, AppState> with Validator {
       } else if (userResponee.status == false) {
         print("Message   ");
         yield ErrorLoading(userResponee);
-      } else {
-        yield Loading(null);
-
       }
     }
   }

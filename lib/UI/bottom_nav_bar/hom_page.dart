@@ -1,7 +1,17 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/get_all_beutions.dart';
+import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
-import 'package:buty/UI/buty_details/buty_details.dart';
+import 'package:buty/UI/searchBy_cat_id.dart';
+import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/search_by_address.dart';
+import 'package:buty/helpers/appEvent.dart';
+import 'package:buty/helpers/appState.dart';
+import 'package:buty/models/all_providers_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+
+import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/component/single_provider_item_row.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,6 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    allProvicersBloc.add(Hydrate());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +52,22 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Card(
-                        child: Container(
-                            width: MediaQuery.of(context).size.width / 2.3,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Text(allTranslations.text("where")),
-                            )),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchByAddress()));
+                        },
+                        child: Card(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width / 2.3,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Text(allTranslations.text("where")),
+                              )),
+                        ),
                       ),
                       Card(
                         child: Container(
@@ -60,50 +84,70 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width / 3.3,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 80,
-                            child: Center(
-                              child: Image.asset(
-                                "assets/images/makeup.png",
-                                width: 50,
-                                height: 50,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchResult(
+                                      cat_id: 1,
+                                    )));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 3.3,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 80,
+                              child: Center(
+                                child: Image.asset(
+                                  "assets/images/makeup.png",
+                                  width: 50,
+                                  height: 50,
+                                ),
                               ),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.white),
                             ),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white),
-                          ),
-                          Text(
-                            allTranslations.text("makeup"),
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
+                            Text(
+                              allTranslations.text("makeup"),
+                              style: TextStyle(color: Colors.white),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 3.3,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 80,
-                            child: Center(
-                              child: Image.asset(
-                                "assets/images/hair.png",
-                                width: 50,
-                                height: 50,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchResult(
+                                      cat_id: 2,
+                                    )));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 3.3,
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 80,
+                              child: Center(
+                                child: Image.asset(
+                                  "assets/images/hair.png",
+                                  width: 50,
+                                  height: 50,
+                                ),
                               ),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.white),
                             ),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.white),
-                          ),
-                          Text(
-                            allTranslations.text("hair"),
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
+                            Text(
+                              allTranslations.text("hair"),
+                              style: TextStyle(color: Colors.white),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     Container(
@@ -141,118 +185,40 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          itemCard(),
-          itemCard(),
-          itemCard(),
-          itemCard(),
-          itemCard(),
+          BlocListener<AllProvicersBloc, AppState>(
+            bloc: allProvicersBloc,
+            listener: (context, state) {},
+            child: BlocBuilder(
+              bloc: allProvicersBloc,
+              builder: (context, state) {
+                var data = state.model as AllProvidersResponse;
+                return data == null
+                    ? AppLoader()
+                    : AnimationLimiter(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: data.beauticians.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: SingleProviderItemRow(
+                                    beautic: data.beauticians[index],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+              },
+            ),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget itemCard() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ButyDetails()));
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 200,
-              color: Colors.grey[300],
-            ),
-            Text(
-              "بيوتي ندي احمد ",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Row(
-              children: [
-                Text(
-                  "${allTranslations.text("services")} : ",
-                ),
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200], shape: BoxShape.circle),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/images/makeup.png",
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200], shape: BoxShape.circle),
-                    child: Center(
-                      child: Image.asset(
-                        "assets/images/hair.png",
-                        width: 25,
-                        height: 25,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200], shape: BoxShape.circle),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/images/nails.png",
-                      width: 25,
-                      height: 25,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${allTranslations.text("service_address")} : ",
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200], shape: BoxShape.circle),
-                      child: Center(
-                          child: Icon(
-                        Icons.home,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "${allTranslations.text("at_home")}",
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

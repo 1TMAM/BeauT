@@ -1,9 +1,20 @@
-
 import 'package:buty/helpers/network-mappers.dart';
 
 abstract class AppState {
   get model => null;
 }
+
+class NameError extends AppState {}
+
+class PasswordError extends AppState {}
+
+class EmailError extends AppState {}
+
+class MobileError extends AppState {}
+
+class AddressError extends AppState {}
+
+class NumberError extends AppState {}
 
 class Done extends AppState {
   Mappable model;
@@ -13,6 +24,7 @@ class Done extends AppState {
   @override
   String toString() => 'Done';
 }
+
 class Start extends AppState {
   Mappable model;
 

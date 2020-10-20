@@ -33,6 +33,7 @@ class UserDataRepo {
       String number,
       String cvv,
       String exp_date}) async {
+
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
@@ -42,12 +43,12 @@ class UserDataRepo {
       "name": name,
       "mobile": mobile,
       "address": address,
-      "longitude": 23.8859,
-      "latitude":  45.0792,
+      "longitude": 23.88598885,
+      "latitude":  45.07928888,
       "number": number,
       "cvv": cvv,
       "holder_name": holder_name,
-      "exp_date": "25/12/2021",
+      "exp_date":number==null ?null : "02/23",
       "password": password,
       "lang": allTranslations.currentLanguage
     });

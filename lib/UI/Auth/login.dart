@@ -6,6 +6,7 @@ import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
+import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/login_model.dart';
@@ -39,9 +40,19 @@ class _LoginState extends State<Login> {
               if (state is Loading) showLoadingDialog(context);
               if (state is ErrorLoading) {
                 Navigator.of(context).pop();
-                errorDialog(text: data.msg,
+                errorDialog(
+                  context: context,
+                  text: data.msg,
                 );
               }
+              if (state is Done ){
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainPage(),
+                    ),
+                        (Route<dynamic> route) => false);
+            }
             },
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),

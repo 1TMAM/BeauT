@@ -1,0 +1,51 @@
+import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/models/my_cards_response.dart';
+import 'package:flutter/material.dart';
+class CriditCardSingleItem extends StatelessWidget {
+
+  final Cards card ;
+
+  const CriditCardSingleItem({Key key, this.card}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Image.asset(
+                  "assets/images/master_card.png",
+                  width: 25,
+                  height: 25,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  "${card.holderName}",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+              ],
+            ),
+            Text(
+              allTranslations.text("edit"),
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Text(
+            "${card.number}",
+            style: TextStyle(fontSize: 13),
+          ),
+        ),
+      ],
+    );
+
+  }
+}

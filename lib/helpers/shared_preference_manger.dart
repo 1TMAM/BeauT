@@ -58,7 +58,7 @@ class NotValidCacheTypeException implements Exception {
   String message() => "Not a valid cahing type";
 }
 
-class CachingKey extends Enum<String> {
+class   CachingKey extends Enum<String> {
   const CachingKey(String val) : super(val);
   static const CachingKey USER_NAME = const CachingKey('USER_NAME');
   static const CachingKey USER_ID = const CachingKey('USER_ID');

@@ -27,7 +27,7 @@ class _EmptyItemState extends State<EmptyItem> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                widget.text ?? "لا توجد اعلانات",
+                widget.text ?? "لا توجد بيانات",
                 style: TextStyle(fontSize: 18.0, color: Color(0xff999999)),
                 textAlign: TextAlign.center,
               ),

@@ -4,7 +4,7 @@ import 'package:buty/UI/side_menu/add_address.dart';
 import 'package:buty/UI/side_menu/call_us.dart';
 import 'package:buty/UI/side_menu/change_lang.dart';
 import 'package:buty/UI/side_menu/edit_profile.dart';
-import 'package:buty/UI/side_menu/my_cards.dart';
+import 'file:///C:/Users/taiko/AndroidStudioProjects/buty/lib/UI/side_menu/cards/my_cards.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatefulWidget {
