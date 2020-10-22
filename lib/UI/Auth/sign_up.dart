@@ -20,13 +20,8 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String card_num = "123456789";
-
-  String cardHolder = "Enter your Name";
-
-  String cvv = "1234";
-
   bool showVisa = false;
+  GlobalKey<FormState> key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -65,103 +60,133 @@ class _SignUpState extends State<SignUp> {
             }
           },
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                rowItem(Icons.person, allTranslations.text("name")),
-                CustomTextField(
-                  hint: allTranslations.text("write_name"),
-                  value: (String val) {
-                    if ( val.length < 3) {
-                      Fluttertoast.showToast(msg: "يرجي ادخال اسم صحيح");
-                    } else{
-                      signUpBloc.updateName(val);
-                    }               },
-                ),
-                rowItem(Icons.phone, allTranslations.text("phone")),
-                CustomTextField(
-                  hint: "+966210025500",
-                  inputType: TextInputType.phone,
-                  value: (String val) {
-                    signUpBloc.updateMobile(val);
-                  },
-                ),
-                rowItem(Icons.mail, allTranslations.text("email")),
-                CustomTextField(
-                  hint: "example@gmail.com",
-                  inputType: TextInputType.emailAddress,
-                  value: (String val) {
-                    signUpBloc.updateEmail(val);
-                  },
-                ),
-                rowItem(Icons.location_on, allTranslations.text("address")),
-                CustomTextField(
-                  hint: allTranslations.text("write_address"),
-                  value: (String val) {
-                    signUpBloc.updateAddress(val);
-                  },
-                ),
-                rowItem(Icons.lock, allTranslations.text("password")),
-                CustomTextField(
-                  hint: "************",
-                  secureText: true,
-                  value: (String val) {
-                    signUpBloc.updatePassword(val);
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          allTranslations.text("add_depet_card"),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            allTranslations.text("default"),
-                            style: TextStyle(color: Colors.grey[500]),
-                          ),
-                        ),
-                      ],
-                    ),
-                    showVisa == false
-                        ? InkWell(
-                            onTap: () {
-                              setState(() {
-                                showVisa = true;
-                              });
-                            },
-                            child: Icon(Icons.keyboard_arrow_up))
-                        : InkWell(
-                            onTap: () {
-                              setState(() {
-                                showVisa = false;
-                              });
-                            },
-                            child: Icon(Icons.keyboard_arrow_down)),
-                  ],
-                ),
-                showVisa == false ? Visa() : SizedBox(),
-                InkWell(
-                  onTap: () {
-                    signUpBloc.add(Click());
-                  },
-                  child: CustomButton(
-                    text: allTranslations.text("register"),
-                  ),
-                ),
-                InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
+            child: Form(
+              key: key,
+              child: Column(
+                children: [
+                  rowItem(Icons.person, allTranslations.text("name")),
+                  CustomTextField(
+                    validate: (String val) {
+                      if (val.isEmpty) {
+                        return "     ";
+                      }
                     },
-                    child: Center(child: Text(allTranslations.text("have_acc")))),
-              ],
+                    hint: allTranslations.text("write_name"),
+                    value: (String val) {
+                      signUpBloc.updateName(val);
+                    },
+                  ),
+                  rowItem(Icons.phone, allTranslations.text("phone")),
+                  CustomTextField(
+                    validate: (String val) {
+                      if (val.length < 10) {
+                        return "     ";
+                      }
+                    },
+                    hint: "+966210025500",
+                    inputType: TextInputType.phone,
+                    value: (String val) {
+                      signUpBloc.updateMobile(val);
+                    },
+                  ),
+                  rowItem(Icons.mail, allTranslations.text("email")),
+                  CustomTextField(
+                    validate: (String val) {
+                      if (val.isEmpty) {
+                        return "     ";
+                      }
+                    },
+                    hint: "example@gmail.com",
+                    inputType: TextInputType.emailAddress,
+                    value: (String val) {
+                      signUpBloc.updateEmail(val);
+                    },
+                  ),
+                  rowItem(Icons.location_on, allTranslations.text("address")),
+                  CustomTextField(
+                    validate: (String val) {
+                      if (val.isEmpty) {
+                        return "     ";
+                      }
+                    },
+                    hint: allTranslations.text("write_address"),
+                    value: (String val) {
+                      signUpBloc.updateAddress(val);
+                    },
+                  ),
+                  rowItem(Icons.lock, allTranslations.text("password")),
+                  CustomTextField(
+                    validate: (String val) {
+                      if (val.isEmpty) {
+                        return "     ";
+                      }
+                    },
+                    hint: "************",
+                    secureText: true,
+                    value: (String val) {
+                      signUpBloc.updatePassword(val);
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            allTranslations.text("add_depet_card"),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              allTranslations.text("default"),
+                              style: TextStyle(color: Colors.grey[500]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      showVisa == false
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showVisa = true;
+                                });
+                              },
+                              child: Icon(Icons.keyboard_arrow_up))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  showVisa = false;
+                                });
+                              },
+                              child: Icon(Icons.keyboard_arrow_down)),
+                    ],
+                  ),
+                  showVisa == false ? Visa() : SizedBox(),
+                  InkWell(
+                    onTap: () {
+                      if (!key.currentState.validate()) {
+                        return;
+                      } else {
+                        signUpBloc.add(Click());
+                      }
+                    },
+                    child: CustomButton(
+                      text: allTranslations.text("register"),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      },
+                      child: Center(
+                          child: Text(allTranslations.text("have_acc")))),
+                ],
+              ),
             ),
           ),
         ));
@@ -178,7 +203,7 @@ class _SignUpState extends State<SignUp> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: CustomTextField(
-            hint: card_num,
+            hint: allTranslations.text("card_number"),
             inputType: TextInputType.number,
             value: (String val) {
               signUpBloc.updateNumber(val);
@@ -251,24 +276,21 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget rowItem(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: Theme.of(context).primaryColor,
-            size: 25,
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: Theme.of(context).primaryColor,
+          size: 25,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 13),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 13),
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
+import 'package:buty/models/general_response.dart';
 import 'package:buty/models/login_model.dart';
 import 'package:dio/dio.dart';
 
@@ -20,8 +21,22 @@ class UserDataRepo {
       body: data,
     );
   }
+  static Future<GeneralResponse> ForgetPassword(String email) async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    FormData data = FormData.fromMap({
+      "email": email,
+    });
+    return NetworkUtil.internal().post(
+      GeneralResponse(),
+      "users/auth/resend-code",
+      body: data,
+    );
+  }
 
-  static Future<UserResponse> SIGNUP(
+  static Future<GeneralResponse> SIGNUP(
       {String holder_name,
       String email,
       String name,
@@ -39,21 +54,22 @@ class UserDataRepo {
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
     FormData data = FormData.fromMap({
-      "email": email,
       "name": name,
+
+      "email": email,
+      "password": password,
       "mobile": mobile,
       "address": address,
-      "longitude": 23.88598885,
-      "latitude":  45.07928888,
+      "longitude": 31.245175,
+      "latitude":  41.245175,
       "number": number,
       "cvv": cvv,
-      "holder_name": holder_name,
       "exp_date":number==null ?null : "02/23",
-      "password": password,
+      "holder_name": holder_name,
       "lang": allTranslations.currentLanguage
     });
     return NetworkUtil.internal().post(
-      UserResponse(),
+      GeneralResponse(),
       "users/auth/signup",
       body: data,
     );

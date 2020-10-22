@@ -1,6 +1,6 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/bottom_nav_bar/hom_page.dart';
-import 'package:buty/UI/bottom_nav_bar/reservations.dart';
+import 'package:buty/UI/bottom_nav_bar/reservations/reservations.dart';
 import 'package:buty/UI/component/drawer.dart';
 import 'package:flutter/material.dart';
 

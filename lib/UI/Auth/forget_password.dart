@@ -4,7 +4,6 @@ import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:flutter/material.dart';
 
 import 'check_code.dart';
-import 'login.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -12,6 +11,8 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  GlobalKey<FormState> key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,34 +21,49 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           centerTitle: true,
           title: Image.asset(
             "assets/images/header.png",
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             width: 100,
             height: 30,
           )),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Center(
-              child: Icon(Icons.lock ,size: 40,color: Theme.of(context).primaryColor,),
+      body: Form(
+        key: key,
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Center(
+                child: Icon(
+                  Icons.lock,
+                  size: 40,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
             ),
-          ),
-          Center(child: Text(allTranslations.text("forget_password"))),
-
-          rowItem(Icons.phone, allTranslations.text("phone")),
-          CustomTextField(
-            hint: allTranslations.text("phone"),
-          ),
-          SizedBox(height: 30,),
-          InkWell(
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => CheckCode()));
+            Center(child: Text(allTranslations.text("forget_password"))),
+            rowItem(Icons.mail, allTranslations.text("email")),
+            CustomTextField(
+              hint: "example@gmail.com",
+              validate: (String val) {
+                if (val.isEmpty) {
+                  return " البريد الالكتروني غير صحيح";
+                }
               },
-              child: CustomButton(text: allTranslations.text("send"),)),
-        ],
+              value: (String val) {},
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CheckCode()));
+                },
+                child: CustomButton(
+                  text: allTranslations.text("send"),
+                )),
+          ],
+        ),
       ),
     );
   }

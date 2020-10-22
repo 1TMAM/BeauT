@@ -116,7 +116,7 @@ class _AddNewCardState extends State<AddNewCard> {
                       child: CustomTextField(
                         validate: (String val) {
                           if (val.length < 16) {
-                            return "adasdasdasdasd";
+                            return "Complete Data";
                           }
                         },
                         hint: card_num,
@@ -142,6 +142,11 @@ class _AddNewCardState extends State<AddNewCard> {
                                   width:
                                       MediaQuery.of(context).size.width / 2.5,
                                   child: CustomTextField(
+                                    validate: (String val) {
+                                      if (val.length < 5) {
+                                        return "Complete Data";
+                                      }
+                                    },
                                     hint: "02/20",
                                     inputType: TextInputType.number,
                                     value: (String val) {
@@ -163,7 +168,13 @@ class _AddNewCardState extends State<AddNewCard> {
                                   child: CustomTextField(
                                     hint: "CVV",
                                     inputType: TextInputType.number,
+                                    validate: (String val){
+                                      if(val.length <3){
+                                        return "يرجي اكمال البيانات";
+                                      }
+                                    },
                                     value: (String val) {
+
                                       setState(() {
                                         cvv = val;
                                       });
@@ -184,6 +195,11 @@ class _AddNewCardState extends State<AddNewCard> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: CustomTextField(
                         hint: "User Name",
+                        validate: (String val){
+                          if(val.isEmpty){
+                            return "يرجي اكمال البيانات";
+                          }
+                        },
                         value: (String val) {
                           setState(() {
                             cardHolder = val;
@@ -195,7 +211,11 @@ class _AddNewCardState extends State<AddNewCard> {
                     ),
                     InkWell(
                         onTap: () {
-                          addCreditCardBloc.add(Click());
+                          if (!key.currentState.validate()) {
+                            return;
+                          } else {
+                            addCreditCardBloc.add(Click());
+                          }
                         },
                         child: CustomButton(
                           text: "${allTranslations.text("add")}",

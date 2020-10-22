@@ -43,40 +43,29 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      onFieldSubmitted: widget.onSubmitted,
-      onTap: widget.onTab,
-      initialValue: widget.initialText ?? "",
-      maxLines: widget.lines ?? 1,
-      style:
-          TextStyle(color: Theme.of(context).primaryColor, fontSize: 11.0),
-      obscureText: widget.secureText ?? false,
-      cursorColor: Theme.of(context).accentColor,
-      keyboardType: widget.inputType ?? TextInputType.multiline,
-      validator: widget.validate,
-      decoration: InputDecoration(
-          // enabledBorder: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(widget.raduis ?? 10),
-          //   borderSide: BorderSide(
-          //     color: Colors.grey[500],
-          //   ),
-          // ),
-          errorStyle: TextStyle(color: Colors.red, fontSize: 10.0),
-          contentPadding: EdgeInsets.only(
-              right: 20.0, top: 5.0, bottom: 5.0, left: 20),
-          // border: OutlineInputBorder(
-          //   borderRadius: new BorderRadius.circular(widget.raduis ?? 10.0),
-          //   borderSide: new BorderSide(color: Colors.grey),
-          // ),
-          suffixIcon: widget.suffix,
-          prefixIcon: widget.icon,
-          labelText: widget.label,
-          // labelStyle: TextStyle(
-          //     fontSize: 12, color: Theme.of(context).primaryColor),
-          hintStyle: TextStyle(
-              fontSize: 12, color: Theme.of(context).primaryColor),
-          hintText: widget.hint),
-      onChanged: widget.value,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: TextFormField(
+        onFieldSubmitted: widget.onSubmitted,
+        onTap: widget.onTab,
+        initialValue: widget.initialText ?? "",
+        maxLines: widget.lines ?? 1,
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 11.0),
+        obscureText: widget.secureText ?? false,
+        cursorColor: Theme.of(context).accentColor,
+        keyboardType: widget.inputType ?? TextInputType.multiline,
+        validator: widget.validate,
+        decoration: InputDecoration(
+            errorStyle: TextStyle(color: Colors.red, fontSize: 10.0),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            suffixIcon: widget.suffix,
+            prefixIcon: widget.icon,
+            labelText: widget.label,
+            hintStyle:
+                TextStyle(fontSize: 12, color: Theme.of(context).primaryColor),
+            hintText: widget.hint),
+        onChanged: widget.value,
+      ),
     );
   }
 }

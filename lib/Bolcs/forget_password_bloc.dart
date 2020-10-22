@@ -11,16 +11,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-class LogInBloc extends Bloc<AppEvent, AppState> {
+class ForgetPasswordBloc extends Bloc<AppEvent, AppState> {
   @override
   AppState get initialState => Start(null);
 
   final email = BehaviorSubject<String>();
-  final password = BehaviorSubject<String>();
 
   Function(String) get updateEmail => email.sink.add;
 
-  Function(String) get updatePassword =>password.sink.add;
 
 
   String msg;
@@ -30,13 +28,10 @@ class LogInBloc extends Bloc<AppEvent, AppState> {
     if (event is Click) {
       yield (Start(null));
       yield Loading(null);
-      var userResponee = await UserDataRepo.LOGIN(email.value, password.value);
+      var userResponee = await UserDataRepo.ForgetPassword(email.value);
       print("LogIn ResPonse" + userResponee.msg);
       if (userResponee.status == true) {
-        SharedPreferenceManager preferenceManager = SharedPreferenceManager();
-        preferenceManager.writeData(CachingKey.IS_LOGGED_IN, true);
-        preferenceManager.writeData(CachingKey.AUTH_TOKEN, "Bearer ${userResponee.user.accessToken }");
-              yield Done(userResponee);
+      yield Done(userResponee);
       } else if (userResponee.status == false) {
         print("Message   ");
         yield ErrorLoading(userResponee);
@@ -46,8 +41,7 @@ class LogInBloc extends Bloc<AppEvent, AppState> {
 
   dispose() {
     email.close();
-    password.close();
   }
 }
 
-final logInBloc = LogInBloc();
+final forgetPasswordBloc = ForgetPasswordBloc();

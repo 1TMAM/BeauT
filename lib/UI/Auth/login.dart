@@ -19,7 +19,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email, password;
+  GlobalKey<FormState> key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -54,57 +54,67 @@ class _LoginState extends State<Login> {
                     (Route<dynamic> route) => false);
               }
             },
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              children: [
-                rowItem(Icons.mail, allTranslations.text("email")),
-                CustomTextField(
-                  hint: "example@gmail.com",
-                  value: (String val) {
-                    setState(() {
-                      email = val;
-                    });
-                    print(email);
-                  },
-                ),
-                rowItem(Icons.lock, allTranslations.text("password")),
-                CustomTextField(
-                  value: (String val) {
-                    setState(() {
-                      password = val;
-                    });
-                    print(password);
-                  },
-                  hint: "************",
-                ),
-                CustomButton(
-                  onBtnPress: () {
-                    logInBloc.updateEmail(email);
-                    logInBloc.updatePassword(password);
-                    logInBloc.add(Click());
-                  },
-                  text: allTranslations.text("login"),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ForgetPassword()));
+            child: Form(
+              key: key,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                children: [
+                  rowItem(Icons.mail, allTranslations.text("email")),
+                  CustomTextField(
+                    hint: "example@gmail.com",
+                    validate: (String val) {
+                      if (val.isEmpty) {
+                        return " البريد الالكتروني غير صحيح";
+                      }
                     },
-                    child: Center(
-                        child: Text(allTranslations.text("forget_password"))),
+                    value: (String val) {
+                      logInBloc.updateEmail(val);
+                    },
                   ),
-                ),
-                InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => SignUp()));
+                  rowItem(Icons.lock, allTranslations.text("password")),
+                  CustomTextField(
+                    secureText: true,
+                    validate: (String val) {
+                      if (val.length < 8) {
+                        return "الرقم السري غير صحيح";
+                      }
                     },
-                    child: Center(child: Text(allTranslations.text("no_acc")))),
-              ],
+                    value: (String val) {
+                      logInBloc.updatePassword(val);
+                    },
+                    hint: "************",
+                  ),
+                  CustomButton(
+                    onBtnPress: () {
+                      if (!key.currentState.validate()) {
+                        return;
+                      } else {
+                        logInBloc.add(Click());
+                      }
+                    },
+                    text: allTranslations.text("login"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPassword()));
+                      },
+                      child: Center(
+                          child: Text(allTranslations.text("forget_password"))),
+                    ),
+                  ),
+                  InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Center(child: Text(allTranslations.text("no_acc")))),
+                ],
+              ),
             )));
   }
 

@@ -15,7 +15,7 @@ class Intro extends StatelessWidget {
           centerTitle: true,
           title: Image.asset(
             "assets/images/header.png",
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             width: 100,
             height: 30,
           )),

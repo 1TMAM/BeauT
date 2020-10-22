@@ -1,11 +1,12 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/Auth/spash.dart';
-import 'package:buty/UI/side_menu/add_address.dart';
+import 'package:buty/UI/side_menu/address/myAddress.dart';
 import 'package:buty/UI/side_menu/call_us.dart';
 import 'package:buty/UI/side_menu/cards/my_cards.dart';
 import 'package:buty/UI/side_menu/change_lang.dart';
 import 'package:buty/UI/side_menu/edit_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDrawer extends StatefulWidget {
   @override
@@ -57,8 +58,16 @@ class _MyDrawerState extends State<MyDrawer> {
 
   Widget itemRow(String lable, IconData icon, Widget page) {
     return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      onTap: () async {
+        if (lable == allTranslations.text("log_out")) {
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          preferences.clear();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => page));
+        } else {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => page));
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),

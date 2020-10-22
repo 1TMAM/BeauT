@@ -47,6 +47,26 @@ class NetworkUtil {
     return handleResponse(response, responseType);
   }
 
+  Future<ResponseType> put<ResponseType extends Mappable>(
+      ResponseType responseType, String url,
+      {Map headers, FormData body, encoding}) async {
+    var response;
+    dio.options.baseUrl = base_url;
+    try {
+      print(headers);
+      print(body.fields);
+      response = await dio.post(url,
+          data: body,
+          options: Options(headers: headers, requestEncoder: encoding));
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print("HERER");
+        response = e.response;
+      }
+    }
+    return handleResponse(response, responseType);
+  }
+
   ResponseType handleResponse<ResponseType extends Mappable>(
       Response response, ResponseType responseType) {
     final int statusCode = response.statusCode;

@@ -10,7 +10,7 @@ void errorDialog({BuildContext context, String text, Function function}) {
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 20,
           child: Container(
-            height: function != null ? 280 : 220,
+            height: function != null ? 290 : 230,
             width: 120,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
             child: Center(
