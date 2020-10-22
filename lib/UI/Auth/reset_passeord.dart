@@ -1,8 +1,15 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/reset_password_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
+import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
+import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
+import 'package:buty/helpers/appEvent.dart';
+import 'package:buty/helpers/appState.dart';
+import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -10,9 +17,9 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
-  bool seeNew = false;
+  bool seeNew = true;
 
-  bool seeConfirm = false;
+  bool seeConfirm = true;
 
   void changeNew() {
     setState(() {
@@ -28,6 +35,8 @@ class _ResetPasswordState extends State<ResetPassword> {
     print("Status ==> ${seeConfirm}");
   }
 
+  GlobalKey<FormState> key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,76 +45,115 @@ class _ResetPasswordState extends State<ResetPassword> {
           centerTitle: true,
           title: Image.asset(
             "assets/images/header.png",
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             width: 100,
             height: 30,
           )),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        children: [
-          rowItem(Icons.lock, allTranslations.text("newPassword")),
-          CustomTextField(
-            suffix: InkWell(
-              onTap: () {
-                changeNew();
-                print(seeNew);
-              },
-              child: seeNew == false
-                  ? Icon(Icons.visibility_off)
-                  : Icon(Icons.visibility),
-            ),
-            secureText: seeNew,
-            hint: "**********",
+      body: BlocListener(
+        bloc: resetPasswordBloc,
+        listener: (context, state) {
+          var data = state.model as GeneralResponse;
+          if (state is Loading) showLoadingDialog(context);
+          if (state is ErrorLoading) {
+            Navigator.of(context).pop();
+            errorDialog(
+              context: context,
+              text: data.msg,
+            );
+          }
+          if (state is Done) {
+            CustomSheet(
+                context: context,
+                widget: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Container(
+                        width: 100,
+                        height: 10,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(25)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Icon(
+                        Icons.check_circle,
+                        size: 100,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    Text(allTranslations.text("change_done")),
+                    CustomButton(
+                      text: allTranslations.text("login"),
+                    ),
+                  ],
+                ));
+          }
+        },
+        child: Form(
+          key: key,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            children: [
+              rowItem(Icons.lock, allTranslations.text("newPassword")),
+              CustomTextField(
+                value: (String val) {
+                  resetPasswordBloc.updateConfirmPassword(val);
+                },
+                validate: (String val) {
+                  if (val.length < 8) {
+                    return "الرجاء ادخال كلمة مرور صحيحة";
+                  }
+                },
+                suffix: InkWell(
+                  onTap: () {
+                    changeNew();
+                    print(seeNew);
+                  },
+                  child: seeNew == false
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility),
+                ),
+                secureText: seeNew,
+                hint: "**********",
+              ),
+              rowItem(Icons.lock, allTranslations.text("confirm_newPassword")),
+              CustomTextField(
+                validate: (String val) {
+                  if (val.length < 8) {
+                    return "الرجاء ادخال كلمة مرور صحيحة";
+                  }
+                },
+                suffix: InkWell(
+                  onTap: () {
+                    changeConfirm();
+                  },
+                  child: seeConfirm == false
+                      ? Icon(Icons.visibility_off)
+                      : Icon(Icons.visibility),
+                ),
+                value: (String val) {
+                  resetPasswordBloc.updateConfirmPassword(val);
+                },
+                secureText: seeConfirm,
+                hint: "**********",
+              ),
+              CustomButton(
+                onBtnPress: () {
+                  if (!key.currentState.validate()) {
+                    return;
+                  } else {
+                    resetPasswordBloc.add(Click());
+                  }
+                },
+                text: allTranslations.text("change"),
+              )
+            ],
           ),
-          rowItem(Icons.lock, allTranslations.text("confirm_newPassword")),
-          CustomTextField(
-            suffix: InkWell(
-              onTap: () {
-                changeConfirm();
-              },
-              child: seeConfirm == false
-                  ? Icon(Icons.visibility_off)
-                  : Icon(Icons.visibility),
-            ),
-            secureText: seeConfirm,
-            hint: "**********",
-          ),
-          CustomButton(
-            onBtnPress: () {
-              CustomSheet(
-                  context: context,
-                  widget: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          width: 100,
-                          height: 10,
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(25)),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Icon(
-                          Icons.check_circle,
-                          size: 100,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      Text(allTranslations.text("change_done")),
-                      CustomButton(
-                        text: allTranslations.text("login"),
-                      ),
-                    ],
-                  ));
-            },
-            text: allTranslations.text("change"),
-          )
-        ],
+        ),
       ),
     );
   }

@@ -45,12 +45,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             );
           }
           if (state is Done) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CheckCode(),
-                ),
-                (Route<dynamic> route) => false);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => CheckCode()));
           }
         },
         child: Form(
