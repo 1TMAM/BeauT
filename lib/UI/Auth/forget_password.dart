@@ -1,7 +1,14 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/forget_password_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
+import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
+import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
+import 'package:buty/helpers/appEvent.dart';
+import 'package:buty/helpers/appState.dart';
+import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'check_code.dart';
 
@@ -25,44 +32,70 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             width: 100,
             height: 30,
           )),
-      body: Form(
-        key: key,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Center(
-                child: Icon(
-                  Icons.lock,
-                  size: 40,
-                  color: Theme.of(context).primaryColor,
+      body: BlocListener(
+        bloc: forgetPasswordBloc,
+        listener: (context, state) {
+          var data = state.model as GeneralResponse;
+          if (state is Loading) showLoadingDialog(context);
+          if (state is ErrorLoading) {
+            Navigator.of(context).pop();
+            errorDialog(
+              context: context,
+              text: data.msg,
+            );
+          }
+          if (state is Done) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CheckCode(),
+                ),
+                (Route<dynamic> route) => false);
+          }
+        },
+        child: Form(
+          key: key,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Center(
+                  child: Icon(
+                    Icons.lock,
+                    size: 40,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
-            ),
-            Center(child: Text(allTranslations.text("forget_password"))),
-            rowItem(Icons.mail, allTranslations.text("email")),
-            CustomTextField(
-              hint: "example@gmail.com",
-              validate: (String val) {
-                if (val.isEmpty) {
-                  return " البريد الالكتروني غير صحيح";
-                }
-              },
-              value: (String val) {},
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => CheckCode()));
+              Center(child: Text(allTranslations.text("forget_password"))),
+              rowItem(Icons.mail, allTranslations.text("email")),
+              CustomTextField(
+                hint: "example@gmail.com",
+                validate: (String val) {
+                  if (val.isEmpty) {
+                    return " البريد الالكتروني غير صحيح";
+                  }
                 },
-                child: CustomButton(
-                  text: allTranslations.text("send"),
-                )),
-          ],
+                value: (String val) {
+                  forgetPasswordBloc.updateEmail(val);
+                },
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              CustomButton(
+                onBtnPress: () {
+                  if (!key.currentState.validate()) {
+                    return "Invalid Email";
+                  } else {
+                    forgetPasswordBloc.add(Click());
+                  }
+                },
+                text: allTranslations.text("send"),
+              ),
+            ],
+          ),
         ),
       ),
     );

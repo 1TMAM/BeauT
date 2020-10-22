@@ -1,13 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
-import 'package:buty/helpers/validator.dart';
-import 'package:buty/models/login_model.dart';
 import 'package:buty/repo/user_repo.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -19,8 +14,6 @@ class ForgetPasswordBloc extends Bloc<AppEvent, AppState> {
 
   Function(String) get updateEmail => email.sink.add;
 
-
-
   String msg;
 
   @override
@@ -31,7 +24,10 @@ class ForgetPasswordBloc extends Bloc<AppEvent, AppState> {
       var userResponee = await UserDataRepo.ForgetPassword(email.value);
       print("LogIn ResPonse" + userResponee.msg);
       if (userResponee.status == true) {
-      yield Done(userResponee);
+        SharedPreferenceManager preferenceManager = SharedPreferenceManager();
+        preferenceManager.writeData(CachingKey.EMAIL, email.value);
+
+        yield Done(userResponee);
       } else if (userResponee.status == false) {
         print("Message   ");
         yield ErrorLoading(userResponee);

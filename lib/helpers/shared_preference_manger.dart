@@ -61,6 +61,7 @@ class NotValidCacheTypeException implements Exception {
 class   CachingKey extends Enum<String> {
   const CachingKey(String val) : super(val);
   static const CachingKey USER_NAME = const CachingKey('USER_NAME');
+  static const CachingKey EMAIL = const CachingKey('EMAIL');
   static const CachingKey USER_ID = const CachingKey('USER_ID');
   static const CachingKey AUTH_TOKEN = const CachingKey('AUTH_TOKEN');
   static const CachingKey USER_IMAGE = const CachingKey('USER_IMAGE');
