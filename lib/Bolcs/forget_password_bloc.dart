@@ -25,7 +25,7 @@ class ForgetPasswordBloc extends Bloc<AppEvent, AppState> {
       print("LogIn ResPonse" + userResponee.msg);
       if (userResponee.status == true) {
         SharedPreferenceManager preferenceManager = SharedPreferenceManager();
-        preferenceManager.writeData(CachingKey.EMAIL, email.value);
+          preferenceManager.writeData(CachingKey.EMAIL, email.value);
 
         yield Done(userResponee);
       } else if (userResponee.status == false) {

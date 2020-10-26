@@ -5,7 +5,6 @@ abstract class RequestMappable {
   Map<String, dynamic> toJson();
 }
 
-// Handler for the network's response.
 
 abstract class Mappable<T>  {
   factory Mappable(Mappable type, String data) {

@@ -1,22 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/repo/user_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
-class LogInBloc extends Bloc<AppEvent, AppState> {
+class ActiveAccount extends Bloc<AppEvent, AppState> {
   @override
   AppState get initialState => Start(null);
 
-  final email = BehaviorSubject<String>();
-  final password = BehaviorSubject<String>();
+  final code = BehaviorSubject<String>();
 
-  Function(String) get updateEmail => email.sink.add;
-
-  Function(String) get updatePassword => password.sink.add;
-
+  Function(String) get updateEmail => code.sink.add;
   String msg;
 
   @override
@@ -24,12 +19,9 @@ class LogInBloc extends Bloc<AppEvent, AppState> {
     if (event is Click) {
       yield (Start(null));
       yield Loading(null);
-      var userResponee = await UserDataRepo.LOGIN(email.value, password.value);
+      var userResponee = await UserDataRepo.ActiveAccountFunction(code.value);
       print("LogIn ResPonse" + userResponee.msg);
       if (userResponee.status == true) {
-        SharedPreferenceManager preferenceManager = SharedPreferenceManager();
-        preferenceManager.writeData(CachingKey.IS_LOGGED_IN, true);
-        preferenceManager.writeData(CachingKey.AUTH_TOKEN, "Bearer ${userResponee.user.accessToken}");
         yield Done(userResponee);
       } else if (userResponee.status == false) {
         print("Message   ");
@@ -39,9 +31,8 @@ class LogInBloc extends Bloc<AppEvent, AppState> {
   }
 
   dispose() {
-    email.close();
-    password.close();
+    code.close();
   }
 }
 
-final logInBloc = LogInBloc();
+final activeAccount = ActiveAccount();

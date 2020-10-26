@@ -65,6 +65,8 @@ class SignUpBloc extends Bloc<AppEvent, AppState> {
       print("LogIn ResPonse" + response.msg);
       if (response.status == true) {
         print(response);
+        SharedPreferenceManager preferenceManager = SharedPreferenceManager();
+        preferenceManager.writeData(CachingKey.EMAIL, email.value);
         yield Done(response);
       } else if (response.status == false) {
         print("Error Loading Event ");

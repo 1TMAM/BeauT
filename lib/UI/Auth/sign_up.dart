@@ -5,14 +5,15 @@ import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
-import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/models/login_model.dart';
+import 'package:buty/models/general_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'active_account.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -38,7 +39,7 @@ class _SignUpState extends State<SignUp> {
         body: BlocListener<SignUpBloc, AppState>(
           bloc: signUpBloc,
           listener: (context, state) {
-            var data = state.model as UserResponse;
+            var data = state.model as GeneralResponse;
             if (state is Loading) {
               showLoadingDialog(context);
             } else if (state is ErrorLoading) {
@@ -52,9 +53,7 @@ class _SignUpState extends State<SignUp> {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MainPage(
-                      index: 0,
-                    ),
+                    builder: (context) => ActiveAccount(),
                   ),
                   (Route<dynamic> route) => false);
             }
