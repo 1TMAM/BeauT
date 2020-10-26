@@ -37,6 +37,21 @@ class UserJourny {
         AllProvidersResponse(), "user/provider/get-all-provider",
         headers: headers);
   }
+  //------------------------------------------------------------------------------/
+
+  static Future<CategoriesResponse> GetAllCategoriesAPI() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+
+    Map<String, String> headers = {
+      'Authorization': token,
+    };
+    return NetworkUtil.internal().get(
+        CategoriesResponse(), "user/categories/get-all-categories?lang=${allTranslations.currentLanguage}",
+        headers: headers);
+  }
 
 //------------------------------------------------------------------------------/
 

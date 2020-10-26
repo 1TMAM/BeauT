@@ -12,8 +12,9 @@ import 'CustomWidgets/EmptyItem.dart';
 
 class SearchResult extends StatefulWidget {
   final int cat_id;
+  final String name;
 
-  const SearchResult({Key key, this.cat_id}) : super(key: key);
+  const SearchResult({Key key, this.cat_id, this.name}) : super(key: key);
 
   @override
   _SearchResultState createState() => _SearchResultState();
@@ -31,7 +32,18 @@ class _SearchResultState extends State<SearchResult> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cat Name"),
+        leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+        title: Text(
+          "${widget.name}",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: BlocListener<SearchByCategoryBloc, AppState>(
@@ -44,7 +56,10 @@ class _SearchResultState extends State<SearchResult> {
             return data == null
                 ? AppLoader()
                 : data.data == null
-                    ? Center(child: EmptyItem(text: data.msg,))
+                    ? Center(
+                        child: EmptyItem(
+                        text: data.msg,
+                      ))
                     : AnimationLimiter(
                         child: ListView.builder(
                           shrinkWrap: true,

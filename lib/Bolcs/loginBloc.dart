@@ -12,9 +12,7 @@ class LogInBloc extends Bloc<AppEvent, AppState> {
 
   final email = BehaviorSubject<String>();
   final password = BehaviorSubject<String>();
-
   Function(String) get updateEmail => email.sink.add;
-
   Function(String) get updatePassword => password.sink.add;
 
   String msg;
@@ -30,6 +28,9 @@ class LogInBloc extends Bloc<AppEvent, AppState> {
         SharedPreferenceManager preferenceManager = SharedPreferenceManager();
         preferenceManager.writeData(CachingKey.IS_LOGGED_IN, true);
         preferenceManager.writeData(CachingKey.AUTH_TOKEN, "Bearer ${userResponee.user.accessToken}");
+        preferenceManager.writeData(CachingKey.USER_NAME, userResponee.user.name);
+        preferenceManager.writeData(CachingKey.EMAIL, userResponee.user.email);
+        preferenceManager.writeData(CachingKey.MOBILE_NUMBER, userResponee.user.mobile);
         yield Done(userResponee);
       } else if (userResponee.status == false) {
         print("Message   ");

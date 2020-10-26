@@ -8,28 +8,6 @@ class AllProvidersResponse extends BaseMappable {
 
   AllProvidersResponse({this.status, this.errNum, this.msg, this.beauticians});
 
-  AllProvidersResponse.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    errNum = json['errNum'];
-    msg = json['msg'];
-    if (json['beauticians'] != null) {
-      beauticians = new List<Beauticians>();
-      json['beauticians'].forEach((v) {
-        beauticians.add(new Beauticians.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['errNum'] = this.errNum;
-    data['msg'] = this.msg;
-    if (this.beauticians != null) {
-      data['beauticians'] = this.beauticians.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 
   @override
   Mappable fromJson(Map<String, dynamic> json) {
@@ -43,7 +21,7 @@ class AllProvidersResponse extends BaseMappable {
       });
     }
     return AllProvidersResponse(
-        status: status, errNum: errNum, msg: msg, beauticians: beauticians);
+        status: status, errNum: errNum, msg: msg, beauticians:status==false ?null : beauticians);
   }
 }
 
