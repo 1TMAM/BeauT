@@ -89,10 +89,12 @@ class _ReservationState extends State<Reservation> {
                 ),
               ],
             ),
-           type =="current"? CurrentReservationView():Padding(
-             padding: const EdgeInsets.symmetric(vertical: 150),
-             child: Center(child: Text("No Reservations")),
-           ),
+            type == "current"
+                ? CurrentReservationView()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 150),
+                    child: Center(child: Text("No Reservations")),
+                  ),
           ],
         ));
   }
