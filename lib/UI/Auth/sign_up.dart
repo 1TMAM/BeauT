@@ -216,20 +216,27 @@ class _SignUpState extends State<SignUp> {
             children: [
               Column(
                 children: [
-                  Text(allTranslations.text("expireDate")),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Theme.of(context).primaryColor)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(DateTime.now().toString().substring(0, 10)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 60,
                       ),
-                    ),
+                      Text("expireDate"),
+                      SizedBox(
+                        width: 60,
+                      ),
+                    ],
                   ),
+                  Container(
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      child: CustomTextField(
+                        hint: "12/20",
+                        inputType: TextInputType.number,
+                        value: (String val) {
+                          signUpBloc.updateExpDate(val);
+                        },
+                      )),
                 ],
               ),
               Column(
@@ -237,14 +244,17 @@ class _SignUpState extends State<SignUp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      SizedBox(
+                        width: 60,
+                      ),
                       Text("CVV"),
                       SizedBox(
-                        width: 120,
+                        width: 60,
                       ),
                     ],
                   ),
                   Container(
-                      width: MediaQuery.of(context).size.width / 2,
+                      width: MediaQuery.of(context).size.width / 2.5,
                       child: CustomTextField(
                         hint: "CVV",
                         inputType: TextInputType.number,
@@ -293,9 +303,4 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  void vlidateInput(String val, String key) {
-    if (key == "name" && val.length < 3) {
-      Fluttertoast.showToast(msg: "يرجي ادخال اسم صحيح");
-    }
-  }
 }

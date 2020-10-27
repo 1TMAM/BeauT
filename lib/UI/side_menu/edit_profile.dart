@@ -8,6 +8,7 @@ import 'package:buty/UI/CustomWidgets/on_done_dialog.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,24 @@ class _EditProfileState extends State<EditProfile> {
   String type = "data";
   GlobalKey<FormState> dataKey = GlobalKey();
   GlobalKey<FormState> passKey = GlobalKey();
+  String name, email, mobile;
+
+  void getFromCash() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    name = await mSharedPreferenceManager.readString(CachingKey.USER_NAME);
+    email = await mSharedPreferenceManager.readString(CachingKey.EMAIL);
+    mobile = await mSharedPreferenceManager.readString(CachingKey.MOBILE_NUMBER);
+  }
+
+  @override
+  void initState() {
+    getFromCash();
+    print("sdasdasdasd");
+    print(name);
+    print(email);
+    print(mobile);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -50,7 +50,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         onTap: widget.onTab,
         initialValue: widget.initialText ?? "",
         maxLines: widget.lines ?? 1,
-        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 11.0),
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 16.0),
         obscureText: widget.secureText ?? false,
         cursorColor: Theme.of(context).accentColor,
         keyboardType: widget.inputType ?? TextInputType.multiline,
@@ -62,7 +62,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             prefixIcon: widget.icon,
             labelText: widget.label,
             hintStyle:
-                TextStyle(fontSize: 12, color: Theme.of(context).primaryColor),
+                TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
             hintText: widget.hint),
         onChanged: widget.value,
       ),

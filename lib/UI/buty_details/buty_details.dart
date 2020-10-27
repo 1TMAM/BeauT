@@ -2,9 +2,14 @@ import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/UI/buty_details/choose_date.dart';
+import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 
 class ButyDetails extends StatefulWidget {
+  final BeauticianServices data ;
+
+  const ButyDetails({Key key, this.data}) : super(key: key);
+
   @override
   _ButyDetailsState createState() => _ButyDetailsState();
 }

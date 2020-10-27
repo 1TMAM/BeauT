@@ -1,5 +1,6 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/search_by_address_bloc.dart';
+import 'package:buty/Bolcs/search_by_time_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
@@ -12,12 +13,12 @@ import 'CustomWidgets/AppLoader.dart';
 import 'CustomWidgets/EmptyItem.dart';
 import 'component/searchResultItem.dart';
 
-class SearchByAddress extends StatefulWidget {
+class SearchByTime extends StatefulWidget {
   @override
-  _SearchByAddressState createState() => _SearchByAddressState();
+  _SearchByTimeState createState() => _SearchByTimeState();
 }
 
-class _SearchByAddressState extends State<SearchByAddress> {
+class _SearchByTimeState extends State<SearchByTime> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,53 +40,55 @@ class _SearchByAddressState extends State<SearchByAddress> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5)),
                 child: CustomTextField(
-                  hint: "${allTranslations.text("enter_location")}",
+                  hint: "${allTranslations.text("enter_time")}",
                   value: (String val) {
                     print(val);
                     searchByAddressBloc.updateAddress(val);
                   },
                   icon: InkWell(
                       onTap: () {
-                        searchByAddressBloc.add(Hydrate());
+                        print("CliCCKKK");
+
+                        searchByTimeBloc.add(Hydrate());
                       },
                       child: Icon(Icons.search)),
                 )),
           ),
-            BlocListener<SearchByAddressBloc, AppState>(
-            bloc: searchByAddressBloc,
+          BlocListener<SearchByTimeBloc, AppState>(
+            bloc: searchByTimeBloc,
             listener: (context, state) {},
             child: BlocBuilder(
-              bloc: searchByAddressBloc,
+              bloc: searchByTimeBloc,
               builder: (context, state) {
                 var data = state.model as SearchByCategoryResponse;
                 return data == null
-                    ? AppLoader()
+                    ? EmptyItem(text: data==null ?"${allTranslations.text("enter_location")}" :data.msg,)
                     : data.data == null
-                        ? Center(
-                            child: EmptyItem(
-                            text: data.msg,
-                          ))
-                        : AnimationLimiter(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: data.data.beauticianServices.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 375),
-                                  child: SlideAnimation(
-                                    verticalOffset: 50.0,
-                                    child: FadeInAnimation(
-                                        child: SearchReslutItem(
-                                      beautic:
-                                          data.data.beauticianServices[index],
-                                    )),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
+                    ? Center(
+                    child: EmptyItem(
+                      text: data.msg,
+                    ))
+                    : AnimationLimiter(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: data.data.beauticianServices.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        child: SlideAnimation(
+                          verticalOffset: 50.0,
+                          child: FadeInAnimation(
+                              child: SearchReslutItem(
+                                beautic:
+                                data.data.beauticianServices[index],
+                              )),
+                        ),
+                      );
+                    },
+                  ),
+                );
               },
             ),
           ),

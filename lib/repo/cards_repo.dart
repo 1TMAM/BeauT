@@ -19,6 +19,7 @@ class CardsRepo {
         headers: headers);
   }
 
+//-----------------------------------------------------------------------------
   static Future<GeneralResponse> ADDNEWCARD(
       {String number, String date, String cvv, String holder_name}) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
@@ -28,10 +29,6 @@ class CardsRepo {
     Map<String, String> headers = {
       'Authorization': token,
     };
-    print(number);
-    print(holder_name);
-    print(date);
-    print(cvv);
     FormData data = FormData.fromMap({
       "number": number,
       "cvv": cvv,
@@ -43,9 +40,13 @@ class CardsRepo {
     return NetworkUtil.internal().post(GeneralResponse(), "users/cards/store",
         headers: headers, body: data);
   }
-
+//-----------------------------------------------------------------------------
   static Future<GeneralResponse> EditCard(
-      {int id,String number, String date, String cvv, String holder_name}) async {
+      {int id,
+      String number,
+      String date,
+      String cvv,
+      String holder_name}) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);

@@ -3,6 +3,7 @@ import 'package:buty/Bolcs/active_account_bloc.dart';
 import 'package:buty/UI/Auth/login.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
+import 'package:buty/UI/CustomWidgets/on_done_dialog.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/general_response.dart';
@@ -18,7 +19,7 @@ class ActiveAccount extends StatefulWidget {
 class ActiveAccountState extends State<ActiveAccount> {
   TextEditingController code;
   TextStyle style =
-      TextStyle(color: Colors.black, fontFamily: 'Cairo', fontSize: 16);
+  TextStyle(color: Colors.black, fontFamily: 'Cairo', fontSize: 16);
   bool valid_code = false;
 
   @override
@@ -47,8 +48,10 @@ class ActiveAccountState extends State<ActiveAccount> {
             );
           }
           if (state is Done) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Login()));
+            onDoneDialog(context: context, text: data.msg, function: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Login()));
+            });
           }
         },
         child: ListView(
@@ -57,9 +60,9 @@ class ActiveAccountState extends State<ActiveAccount> {
               padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 70),
               child: Center(
                   child: Text(
-                allTranslations.text("enter_code"),
-                textAlign: TextAlign.center,
-              )),
+                    allTranslations.text("enter_code"),
+                    textAlign: TextAlign.center,
+                  )),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -78,13 +81,19 @@ class ActiveAccountState extends State<ActiveAccount> {
                         print(value);
                         activeAccount.add(Click());
                       },
-                      defaultBorderColor: Theme.of(context).primaryColor,
+                      defaultBorderColor: Theme
+                          .of(context)
+                          .primaryColor,
                       pinBoxRadius: 5,
                       highlightPinBoxColor: Colors.grey[50],
-                      hasTextBorderColor: Theme.of(context).primaryColor,
+                      hasTextBorderColor: Theme
+                          .of(context)
+                          .primaryColor,
                       controller: code,
                       pinTextStyle: TextStyle(
-                          color: Theme.of(context).primaryColor, fontSize: 18),
+                          color: Theme
+                              .of(context)
+                              .primaryColor, fontSize: 18),
                       textDirection: TextDirection.ltr,
                       keyboardType: TextInputType.phone,
                     ),

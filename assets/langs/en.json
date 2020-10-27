@@ -95,7 +95,9 @@
   "duration": "expected duration",
   "total": "total cost",
   "pay_method": "payment method",
-  "add_depet_card": "Add Credit Card"
+  "add_depet_card": "Add Credit Card",
+  "enter_location": "Please Enter Location",
+  "enter_time": "Please Enter Time"
 
 
 }

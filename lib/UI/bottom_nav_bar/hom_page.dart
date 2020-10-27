@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../search_by_address.dart';
+import '../search_by_time.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -74,14 +75,22 @@ class _HomePageState extends State<HomePage> {
                               )),
                         ),
                       ),
-                      Card(
-                        child: Container(
-                            width: MediaQuery.of(context).size.width / 2.3,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Text(allTranslations.text("when")),
-                            )),
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchByTime()));
+                        },
+                        child: Card(
+                          child: Container(
+                              width: MediaQuery.of(context).size.width / 2.3,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Text(allTranslations.text("when")),
+                              )),
+                        ),
                       ),
                     ],
                   ),
