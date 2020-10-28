@@ -1,6 +1,8 @@
+import 'package:buty/Base/Notifications.dart';
 import 'package:buty/Base/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 
 import 'Base/AllTranslation.dart';
 import 'UI/Auth/spash.dart';
@@ -33,20 +35,20 @@ class _MyAppState extends State<MyApp> {
 
   final GlobalKey<NavigatorState> navKey = GlobalKey();
 
-  // AppPushNotifications appPushNotifications = AppPushNotifications();
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   setState(() {
-  //     appPushNotifications.notificationSetup(navKey);
-  //   });
-  //   Future<PermissionStatus> permissionStatus =
-  //   NotificationPermissions.getNotificationPermissionStatus();
-  //   permissionStatus.then((status) {
-  //     print("======> $status");
-  //   });
-  // }
+  AppPushNotifications appPushNotifications = AppPushNotifications();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      appPushNotifications.notificationSetup(navKey);
+    });
+    Future<PermissionStatus> permissionStatus =
+    NotificationPermissions.getNotificationPermissionStatus();
+    permissionStatus.then((status) {
+      print("======> $status");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
