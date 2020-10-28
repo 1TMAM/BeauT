@@ -1,6 +1,5 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/buty_details/buty_details.dart';
-import 'package:buty/models/all_providers_response.dart';
 import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,12 @@ class SearchReslutItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ButyDetails()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => ButyDetails(
+                      id: beautic.id,
+                      name: beautic.beautName,
+                    )));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -51,15 +55,12 @@ class SearchReslutItem extends StatelessWidget {
                             width: 35,
                             height: 35,
                             decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(beautic.services[index].icon),
+                                    fit: BoxFit.cover),
                                 color: Colors.grey[200],
                                 shape: BoxShape.circle),
-                            child: Center(
-                              child: Image.asset(
-                                "${beautic.services[index].icon}",
-                                width: 25,
-                                height: 25,
-                              ),
-                            ),
+
                           ),
                         );
                       }),
@@ -84,9 +85,9 @@ class SearchReslutItem extends StatelessWidget {
                           color: Colors.grey[200], shape: BoxShape.circle),
                       child: Center(
                           child: Icon(
-                            Icons.home,
-                            color: Theme.of(context).primaryColor,
-                          )),
+                        Icons.home,
+                        color: Theme.of(context).primaryColor,
+                      )),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

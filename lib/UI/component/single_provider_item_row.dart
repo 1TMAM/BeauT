@@ -13,7 +13,12 @@ class SingleProviderItemRow extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ButyDetails()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => ButyDetails(
+                      id: beautic.id,
+                      name: beautic.beautName,
+                    )));
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -50,15 +55,12 @@ class SingleProviderItemRow extends StatelessWidget {
                             width: 35,
                             height: 35,
                             decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(beautic
+                                        .services[index].icon),
+                                    fit: BoxFit.cover),
                                 color: Colors.grey[200],
                                 shape: BoxShape.circle),
-                            child: Center(
-                              child: Image.asset(
-                                "${beautic.services[index].icon}",
-                                width: 25,
-                                height: 25,
-                              ),
-                            ),
                           ),
                         );
                       }),

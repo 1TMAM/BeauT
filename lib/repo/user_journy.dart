@@ -8,6 +8,8 @@ import 'package:buty/models/general_response.dart';
 import 'package:buty/models/search_by_category.dart';
 import 'package:dio/dio.dart';
 
+import '../models/BeauticianDetails.dart';
+
 class UserJourny {
   static Future<CategoriesResponse> GETALLCATEGORIES() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
@@ -66,6 +68,21 @@ class UserJourny {
     };
     return NetworkUtil.internal().get(SearchByCategoryResponse(),
         "users/search/category-search?category_id=${id}",
+        headers: headers);
+  }
+
+//------------------------------------------------------------------------------/
+
+  static Future<BeauticianDetailsResponse> GetBeauticianDetails(int id) async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    Map<String, String> headers = {
+      'Authorization': token,
+    };
+    return NetworkUtil.internal().get(BeauticianDetailsResponse(),
+        "user/provider/get-beautician?beautician_id=${id}",
         headers: headers);
   }
 
