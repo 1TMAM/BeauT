@@ -65,7 +65,7 @@
   "log_out": "log out",
   "current_password": "current PIN",
   "new_password": "new PIN code",
-  "confirm_new_password" :" confirm new pin",
+  "confirm_new_password": " confirm new pin",
   "confirm_change_phone": "confirm mobile number change",
   "resend_code": "resend code",
   "my_adresses": "my addresses",
@@ -97,7 +97,8 @@
   "pay_method": "payment method",
   "add_depet_card": "Add Credit Card",
   "enter_location": "Please Enter Location",
-  "enter_time": "Please Enter Time"
-
+  "enter_time": "Please Enter Time",
+  "sar": "SAR",
+  "enter_items": "Please Choose Services"
 
 }

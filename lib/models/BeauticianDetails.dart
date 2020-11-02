@@ -196,6 +196,7 @@ class Services {
   int beauticianId;
   int categoryId;
   int count;
+  bool isSellected;
 
 
   Services({this.id,
@@ -210,6 +211,7 @@ class Services {
     this.count,
     this.location,
     this.beauticianId,
+    this.isSellected,
     this.categoryId});
 
   Services.fromJson(Map<String, dynamic> json) {
@@ -226,6 +228,8 @@ class Services {
     count=0;
     beauticianId = json['beautician_id'];
     categoryId = json['category_id'];
+    isSellected=false ;
+
   }
 
   Map<String, dynamic> toJson() {

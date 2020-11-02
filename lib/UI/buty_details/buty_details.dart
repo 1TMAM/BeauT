@@ -1,14 +1,17 @@
+import 'dart:convert';
+
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/getBeauticianDetailsBloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/Carousel.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
+import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/UI/buty_details/choose_date.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/BeauticianDetails.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +26,11 @@ class ButyDetails extends StatefulWidget {
 }
 
 class _ButyDetailsState extends State<ButyDetails> {
-  int _current =0;
+  int _current = 0;
+
+  List<int> allPrices = List();
+  List<MyList> servicesList = List();
+  int total = 0;
 
   @override
   void initState() {
@@ -66,7 +73,9 @@ class _ButyDetailsState extends State<ButyDetails> {
                 ? AppLoader()
                 : ListView(
                     children: [
-                      CustomCarousel(img: data.beautician[0].gallery,),
+                      CustomCarousel(
+                        img: data.beautician[0].gallery,
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
@@ -114,40 +123,6 @@ class _ButyDetailsState extends State<ButyDetails> {
                       SizedBox(
                         height: 20,
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       Text(
-                      //         "${allTranslations.text("service_address")} : ",
-                      //       ),
-                      //       Row(
-                      //         children: [
-                      //           Container(
-                      //             width: 35,
-                      //             height: 35,
-                      //             decoration: BoxDecoration(
-                      //                 color: Colors.grey[200],
-                      //                 shape: BoxShape.circle),
-                      //             child: Center(
-                      //                 child: Icon(
-                      //               Icons.home,
-                      //               color: Theme.of(context).primaryColor,
-                      //             )),
-                      //           ),
-                      //           Padding(
-                      //             padding: const EdgeInsets.symmetric(
-                      //                 horizontal: 10),
-                      //             child: Text(
-                      //               "${allTranslations.text("at_home")}",
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
@@ -165,30 +140,27 @@ class _ButyDetailsState extends State<ButyDetails> {
                           itemCount: data.beautician[0].services.length,
                           itemBuilder: (context, index) {
                             return serviceRow(
-                                allTranslations.currentLanguage == "ar"
-                                    ? data.beautician[0].services[index].nameAr
-                                    : data.beautician[0].services[index].nameEn,
-                                allTranslations.currentLanguage == "ar"
-                                    ? data
-                                        .beautician[0].services[index].detailsAr
-                                    : data.beautician[0].services[index]
-                                        .detailsEn,
-                                data.beautician[0].services[index].price,
-                                data.beautician[0].services[index]
-                                    .estimatedTime,
-                                data.beautician[0].services[index].count);
+                                data.beautician[0].services, index);
                           }),
-
                       InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChooseDate()));
+                            if (servicesList.isEmpty) {
+                              errorDialog(
+                                  context: context,
+                                  text: allTranslations.text("enter_items"));
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChooseDate(
+                                            total: total,
+                                            servicseList: servicesList,
+                                          )));
+                            }
                           },
                           child: CustomButton(
                             text:
-                                "${allTranslations.text("choose_time")} 35 ريال",
+                                "${allTranslations.text("choose_time")} ${total} ريال",
                           ))
                     ],
                   );
@@ -198,8 +170,7 @@ class _ButyDetailsState extends State<ButyDetails> {
     );
   }
 
-  Widget serviceRow(
-      String title, String details, String price, String time, int count) {
+  Widget serviceRow(List<Services> list, int index) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -213,7 +184,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                 child: Row(
                   children: [
                     Text(
-                      "${title}",
+                      "${allTranslations.currentLanguage == "ar" ? list[index].nameAr : list[index].nameEn}",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -229,20 +200,34 @@ class _ButyDetailsState extends State<ButyDetails> {
                     ),
                     Row(
                       children: [
-                        Icon(
-                          Icons.add,
-                          size: 15,
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              list[index].count++;
+                            });
+                          },
+                          child: Icon(
+                            Icons.add,
+                            size: 25,
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
-                            "${count}",
+                            "${list[index].count}",
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
-                        Icon(
-                          Icons.remove,
-                          size: 15,
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              list[index].count--;
+                            });
+                          },
+                          child: Icon(
+                            Icons.remove,
+                            size: 25,
+                          ),
                         ),
                       ],
                     ),
@@ -257,7 +242,7 @@ class _ButyDetailsState extends State<ButyDetails> {
               Container(
                 width: MediaQuery.of(context).size.width / 2.5,
                 child: Text(
-                  "${details}  ",
+                  "${allTranslations.currentLanguage == "ar" ? list[index].detailsAr : list[index].detailsEn}  ",
                   style: TextStyle(fontSize: 10),
                 ),
               ),
@@ -271,11 +256,11 @@ class _ButyDetailsState extends State<ButyDetails> {
                       child: Column(
                         children: [
                           Text(
-                            "${price} ريال",
+                            "${list[index].price} ريال",
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
-                            "${time} دقيقة",
+                            "${list[index].estimatedTime} دقيقة",
                             style: TextStyle(fontSize: 10),
                           ),
                         ],
@@ -286,11 +271,40 @@ class _ButyDetailsState extends State<ButyDetails> {
                         Text(
                           allTranslations.text("reserve"),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Icon(
-                            Icons.check_circle_outline,
-                            size: 20,
+                        InkWell(
+                          onTap: () {
+                            if (list[index].count == 0) {
+                              print("cannot");
+                            } else {
+                              servicesList.add(new MyList(
+                                  id: list[index].id,
+                                  price: list[index].price,
+                                  nameAr: list[index].nameAr,
+                                  nameEn: list[index].nameEn,
+                                  estimatedTime: list[index].estimatedTime,
+                                  count: list[index].count));
+                              setState(() {
+                                list[index].isSellected = true;
+                                total = total +
+                                    (list[index].count *
+                                        int.parse(list[index].price));
+                              });
+                              print(json.encode(servicesList));
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: list[index].isSellected == false
+                                ? Icon(
+                                    Icons.check_circle_outline,
+                                    size: 20,
+                                    color: Theme.of(context).primaryColor,
+                                  )
+                                : Icon(
+                                    Icons.check_circle,
+                                    size: 20,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                           ),
                         ),
                       ],

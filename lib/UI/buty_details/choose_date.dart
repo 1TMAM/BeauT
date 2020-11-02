@@ -1,20 +1,27 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/buty_details/payment.dart';
+import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel, EventList;
 
 class ChooseDate extends StatefulWidget {
+  final List<MyList> servicseList;
+  final int total;
+
+  const ChooseDate({Key key, this.servicseList, this.total}) : super(key: key);
+
   @override
   _ChooseDateState createState() => _ChooseDateState();
 }
 
 class _ChooseDateState extends State<ChooseDate> {
   DateTime _currentDate = DateTime.now();
-
   CalendarCarousel _calendarCarousel;
+  bool isHouse = true;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +29,8 @@ class _ChooseDateState extends State<ChooseDate> {
       onDayPressed: (DateTime date, List<Event> events) {
         this.setState(() => _currentDate = date);
         events.forEach((event) => print(event.title));
+        print(date.toString().substring(0, 10));
+        createOrderBloc.updateDate("${date}");
       },
       isScrollable: true,
       thisMonthDayBorderColor: Colors.grey,
@@ -130,56 +139,38 @@ class _ChooseDateState extends State<ChooseDate> {
             ),
           ),
           Divider(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "قص شعر   x 2 ",
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      "35 ريال  ",
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      "30 min ",
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  " استشوار x2  ",
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      "35 ريال  ",
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-                    ),
-                    Text(
-                      "30 min ",
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.servicseList.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}   x ${widget.servicseList[index].count} ",
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.bold),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            "${widget.servicseList[index].count} min ",
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }),
           Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -188,99 +179,125 @@ class _ChooseDateState extends State<ChooseDate> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200], shape: BoxShape.circle),
-                      child: Center(
-                        child: Icon(
-                          Icons.home,
-                          color: Theme.of(context).primaryColor,
+          InkWell(
+            onTap: () {
+              setState(() {
+                isHouse = true;
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200], shape: BoxShape.circle),
+                        child: Center(
+                          child: Icon(
+                            Icons.home,
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        allTranslations.text("at_home"),
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          allTranslations.text("at_home"),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "130 ريال",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          "130 ريال",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).primaryColor,
-                      size: 25,
-                    ),
-                  ],
-                ),
-              ],
+                      isHouse == true
+                          ? Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            )
+                          : Icon(
+                              Icons.check_circle_outline,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200], shape: BoxShape.circle),
-                      child: Center(
-                        child: Image.asset(
-                          "assets/images/car.png",
-                          width: 25,
-                          height: 25,
+          InkWell(
+            onTap: () {
+              setState(() {
+                isHouse = false;
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200], shape: BoxShape.circle),
+                        child: Center(
+                          child: Image.asset(
+                            "assets/images/car.png",
+                            width: 25,
+                            height: 25,
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        allTranslations.text("at_buty"),
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          allTranslations.text("at_buty"),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "100 ريال",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          "100 ريال",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.check_circle,
-                      color: Theme.of(context).primaryColor,
-                      size: 25,
-                    ),
-                  ],
-                ),
-              ],
+                      isHouse == false
+                          ? Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            )
+                          : Icon(
+                              Icons.check_circle_outline,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           InkWell(
@@ -289,7 +306,8 @@ class _ChooseDateState extends State<ChooseDate> {
                   MaterialPageRoute(builder: (context) => PaymentScreen()));
             },
             child: CustomButton(
-              text: "${allTranslations.text("pay_now")}  150 ريال  ",
+              text:
+                  "${allTranslations.text("pay_now")}  ${widget.total} ريال  ",
             ),
           )
         ],
