@@ -7,7 +7,7 @@ import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/UI/component/criditCard_Single_item.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/models/my_cards_response.dart';
+import 'package:buty/models/AllPaymentMethodsResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -22,7 +22,6 @@ class MyCards extends StatefulWidget {
 class _MyCardsState extends State<MyCards> {
   @override
   void initState() {
-
     allCardsBloc.add(Hydrate());
     super.initState();
   }
@@ -59,29 +58,99 @@ class _MyCardsState extends State<MyCards> {
               child: BlocBuilder(
                 bloc: allCardsBloc,
                 builder: (context, state) {
-                  var data = state.model as MyCardsResponse;
+                  var data = state.model as PaymentMethodsResponse;
                   return data == null
                       ? AppLoader()
-                      : data.cards == null
+                      : data.paymentMethods.isEmpty
                           ? Center(
                               child: EmptyItem(
-                              text: data.msg,
+                              text: data.msg ?? "No Added Credit Cards",
                             ))
                           : AnimationLimiter(
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: data.cards.length,
+                                itemCount: data.paymentMethods.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return AnimationConfiguration.staggeredList(
                                     position: index,
                                     duration: const Duration(milliseconds: 375),
                                     child: SlideAnimation(
                                       verticalOffset: 50.0,
-                                      child: FadeInAnimation(
-                                          child: CriditCardSingleItem(
-                                        card: data.cards[index],
-                                      )),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 20),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  data.paymentMethods[index]
+                                                              .id ==
+                                                          1
+                                                      ? "assets/images/master_card.png"
+                                                      : data.paymentMethods[index]
+                                                                  .id ==
+                                                              2
+                                                          ? "assets/images/apple.png"
+                                                          : "assets/images/pay_hand.png",
+                                                  width: 25,
+                                                  height: 25,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 10),
+                                                  child: Text(
+                                                    allTranslations
+                                                                .currentLanguage ==
+                                                            "ar"
+                                                        ? data
+                                                            .paymentMethods[
+                                                                index]
+                                                            .nameAr
+                                                        : data
+                                                            .paymentMethods[
+                                                                index]
+                                                            .nameEn,
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            ListView.builder(
+                                                itemCount: data
+                                                    .paymentMethods[index]
+                                                    .card
+                                                    .length,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, indexx) {
+                                                  return CriditCardSingleItem(
+                                                    card: data
+                                                        .paymentMethods[index]
+                                                        .card[indexx],
+                                                  );
+                                                }),
+                                            data.paymentMethods[index].id == 1
+                                                ? CustomButton(
+                                                    onBtnPress: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  AddNewCard()));
+                                                    },
+                                                    text: allTranslations
+                                                        .text("add_new_card"),
+                                                  )
+                                                : SizedBox(),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   );
                                 },
@@ -90,81 +159,43 @@ class _MyCardsState extends State<MyCards> {
                 },
               ),
             ),
-            CustomButton(
-              onBtnPress: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddNewCard()));
-              },
-              text: allTranslations.text("add_new_card"),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        "assets/images/pay_hand.png",
-                        width: 25,
-                        height: 25,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          allTranslations.text("cash_on_delivary"),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Text(
-                        "   (${allTranslations.text("default")})   ",
-                        style: TextStyle(color: Colors.grey, fontSize: 13),
-                      ),
-                    ],
-                  ),
-                  Icon(
-                    Icons.check_circle,
-                    color: Theme.of(context).primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Divider(),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        "assets/images/pay_hand.png",
-                        width: 25,
-                        height: 25,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "Apple Pay",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Icon(
-                    Icons.check_circle,
-                    color: Theme.of(context).primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Divider(),
-            ),
+
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 50),
+            //   child: Divider(),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Row(
+            //         children: [
+            //           Image.asset(
+            //             "assets/images/pay_hand.png",
+            //             width: 25,
+            //             height: 25,
+            //           ),
+            //           Padding(
+            //             padding: const EdgeInsets.symmetric(horizontal: 10),
+            //             child: Text(
+            //               "Apple Pay",
+            //               style: TextStyle(fontWeight: FontWeight.bold),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //       Icon(
+            //         Icons.check_circle,
+            //         color: Theme.of(context).primaryColor,
+            //       )
+            //     ],
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 50),
+            //   child: Divider(),
+            // ),
           ]),
     );
   }

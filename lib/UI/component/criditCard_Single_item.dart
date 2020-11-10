@@ -1,6 +1,6 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/side_menu/cards/edit_card.dart';
-import 'package:buty/models/my_cards_response.dart';
+import 'package:buty/models/AllPaymentMethodsResponse.dart';
 import 'package:flutter/material.dart';
 
 class CriditCardSingleItem extends StatelessWidget {

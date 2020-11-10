@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/Bolcs/getBeauticianDetailsBloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/Carousel.dart';
@@ -36,6 +37,7 @@ class _ButyDetailsState extends State<ButyDetails> {
   void initState() {
     getBeauticianDetailsBloc.updateId(widget.id);
     getBeauticianDetailsBloc.add(Hydrate());
+    createOrderBloc.updateBeauticianId(widget.id);
     super.initState();
   }
 

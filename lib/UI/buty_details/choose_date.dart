@@ -30,7 +30,7 @@ class _ChooseDateState extends State<ChooseDate> {
         this.setState(() => _currentDate = date);
         events.forEach((event) => print(event.title));
         print(date.toString().substring(0, 10));
-        createOrderBloc.updateDate("${date}");
+        createOrderBloc.updateDate(date.toString().substring(0, 10));
       },
       isScrollable: true,
       thisMonthDayBorderColor: Colors.grey,
@@ -162,7 +162,7 @@ class _ChooseDateState extends State<ChooseDate> {
                                 fontSize: 13, fontWeight: FontWeight.w400),
                           ),
                           Text(
-                            "${widget.servicseList[index].count} min ",
+                            "${widget.servicseList[index].estimatedTime} min ",
                             style: TextStyle(fontSize: 13),
                           ),
                         ],
@@ -184,6 +184,7 @@ class _ChooseDateState extends State<ChooseDate> {
               setState(() {
                 isHouse = true;
               });
+              createOrderBloc.updateLocationType(0);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -244,6 +245,7 @@ class _ChooseDateState extends State<ChooseDate> {
               setState(() {
                 isHouse = false;
               });
+              createOrderBloc.updateLocationType(1);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -302,8 +304,14 @@ class _ChooseDateState extends State<ChooseDate> {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PaymentScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PaymentScreen(
+                            servicseList: widget.servicseList,
+                            address: isHouse,
+                            total: widget.total.toString(),
+                          )));
             },
             child: CustomButton(
               text:

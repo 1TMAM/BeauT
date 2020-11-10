@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.width / 1.6,
+            height: MediaQuery.of(context).size.width / 1.5,
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(10)),
                       child: CustomTextField(
                         hint: allTranslations.text("search"),
                         icon: Icon(Icons.search),
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

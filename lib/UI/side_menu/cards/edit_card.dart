@@ -1,5 +1,4 @@
 import 'package:buty/Base/AllTranslation.dart';
-import 'package:buty/Bolcs/add_new_card_bloc.dart';
 import 'package:buty/Bolcs/editCardBloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -9,8 +8,8 @@ import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/side_menu/cards/my_cards.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
+import 'package:buty/models/AllPaymentMethodsResponse.dart';
 import 'package:buty/models/general_response.dart';
-import 'package:buty/models/my_cards_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

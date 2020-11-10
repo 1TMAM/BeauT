@@ -1,12 +1,13 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
+import 'package:buty/models/AllPaymentMethodsResponse.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:buty/models/my_cards_response.dart';
 import 'package:dio/dio.dart';
 
 class CardsRepo {
-  static Future<MyCardsResponse> GETALLCARDS() async {
+  static Future<PaymentMethodsResponse> GETALLCARDS() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
@@ -14,8 +15,8 @@ class CardsRepo {
     Map<String, String> headers = {
       'Authorization': token,
     };
-    return NetworkUtil.internal().get(MyCardsResponse(),
-        "users/cards/get-my-cards?lang=${allTranslations.currentLanguage}",
+    return NetworkUtil.internal().get(PaymentMethodsResponse(),
+        "users/methods/get-payment-method-card?lang=${allTranslations.currentLanguage}",
         headers: headers);
   }
 

@@ -3,6 +3,7 @@ import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:buty/models/login_model.dart';
+import 'package:buty/models/user_profile_response.dart';
 import 'package:dio/dio.dart';
 
 class UserDataRepo {
@@ -120,6 +121,21 @@ class UserDataRepo {
     });
     return NetworkUtil.internal().post(GeneralResponse(), "users/user/update",
         body: data, headers: headers);
+  }
+
+//-------------------------------------------------------------------------------
+  static Future<UserProfileResoonse> GetProfileApi() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+
+
+    Map<String, String> headers = {
+      'Authorization': token,
+    };
+
+    print("TOKEN FOR PROFILE   "+token);
+
+    return NetworkUtil.internal().post(UserProfileResoonse(), "users/user/get-user", headers: headers);
   }
 
 //-------------------------------------------------------------------------------

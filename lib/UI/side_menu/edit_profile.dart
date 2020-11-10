@@ -1,5 +1,7 @@
 import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Bolcs/get_my_profile_bloc.dart';
 import 'package:buty/Bolcs/update_profile_bloc.dart';
+import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
@@ -10,6 +12,7 @@ import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/general_response.dart';
+import 'package:buty/models/user_profile_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,22 +25,10 @@ class _EditProfileState extends State<EditProfile> {
   String type = "data";
   GlobalKey<FormState> dataKey = GlobalKey();
   GlobalKey<FormState> passKey = GlobalKey();
-  String name, email, mobile;
-
-  void getFromCash() async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
-    name = await mSharedPreferenceManager.readString(CachingKey.USER_NAME);
-    email = await mSharedPreferenceManager.readString(CachingKey.EMAIL);
-    mobile = await mSharedPreferenceManager.readString(CachingKey.MOBILE_NUMBER);
-  }
 
   @override
   void initState() {
-    getFromCash();
-    print("sdasdasdasd");
-    print(name);
-    print(email);
-    print(mobile);
+    getMyProfileBloc.add(Hydrate());
     super.initState();
   }
 
@@ -64,121 +55,133 @@ class _EditProfileState extends State<EditProfile> {
             allTranslations.text("edit_profile"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
-      body: BlocListener(
-        bloc: updateProfileBloc,
-        listener: (context, state) {
-          var data = state.model as GeneralResponse;
-          if (state is Loading) {
-            showLoadingDialog(context);
-          } else if (state is ErrorLoading) {
-            Navigator.pop(context);
-            errorDialog(
-              context: context,
-              text: data.msg,
-            );
-            print("Dialoggg");
-          } else if (state is Done) {
-            onDoneDialog(
-                context: context,
-                text: data.msg,
-                function: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPage(
-                          index: 0,
-                        ),
-                      ),
-                      (Route<dynamic> route) => false);
-                });
-          }
-        },
-        child: ListView(
-          children: [
-            Row(
+      body: BlocListener<GetMyProfileBloc, AppState>(
+        bloc: getMyProfileBloc,
+        listener: (context, state) {},
+        child: BlocBuilder(
+          bloc: getMyProfileBloc,
+          builder: (context, state) {
+            var date = state.model as UserProfileResoonse;
+            return date ==null ?AppLoader(): ListView(
               children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      type = "data";
-                    });
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          allTranslations.text("edit_profile"),
-                          style: TextStyle(
-                              fontWeight: type == "data"
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          type = "data";
+                        });
+                      },
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              allTranslations.text("edit_profile"),
+                              style: TextStyle(
+                                  fontWeight: type == "data"
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 4,
+                              height: 2,
+                              color: type == "data"
+                                  ? Colors.black
+                                  : Colors.grey[200],
+                            )
+                          ],
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 4,
-                          height: 2,
-                          color:
-                              type == "data" ? Colors.black : Colors.grey[200],
-                        )
-                      ],
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 40,
+                        color: Colors.grey[200],
+                      ),
                     ),
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 40,
-                    color: Colors.grey[200],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      type = "last";
-                    });
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          allTranslations.text("password"),
-                          style: TextStyle(
-                              fontWeight: type == "last"
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          type = "last";
+                        });
+                      },
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              allTranslations.text("password"),
+                              style: TextStyle(
+                                  fontWeight: type == "last"
+                                      ? FontWeight.bold
+                                      : FontWeight.normal),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 4,
+                              height: 2,
+                              color: type == "last"
+                                  ? Colors.black
+                                  : Colors.grey[200],
+                            )
+                          ],
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 4,
-                          height: 2,
-                          color:
-                              type == "last" ? Colors.black : Colors.grey[200],
-                        )
-                      ],
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 40,
+                        color: Colors.grey[200],
+                      ),
                     ),
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 40,
-                    color: Colors.grey[200],
-                  ),
+                  ],
                 ),
+                type == "data" ? editDataView(date.user) : passView(),
+                BlocListener(
+                  bloc: updateProfileBloc,
+                  listener: (context, state) {
+                    var data = state.model as GeneralResponse;
+                    if (state is Loading) {
+                      showLoadingDialog(context);
+                    } else if (state is ErrorLoading) {
+                      Navigator.pop(context);
+                      errorDialog(
+                        context: context,
+                        text: data.msg,
+                      );
+                      print("Dialoggg");
+                    } else if (state is Done) {
+                      onDoneDialog(
+                          context: context,
+                          text: data.msg,
+                          function: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainPage(
+                                    index: 0,
+                                  ),
+                                ),
+                                (Route<dynamic> route) => false);
+                          });
+                    }
+                  },
+                  child: CustomButton(
+                    onBtnPress: () {
+                      if (type == "data") {
+                        if (!dataKey.currentState.validate()) {
+                          return;
+                        } else {
+                          updateProfileBloc.add(Click());
+                        }
+                      } else {
+                        if (!passKey.currentState.validate()) {
+                          return;
+                        } else {
+                          updateProfileBloc.add(Click());
+                        }
+                      }
+                    },
+                    text: allTranslations.text("change"),
+                  ),
+                )
               ],
-            ),
-            type == "data" ? editDataView() : passView(),
-            CustomButton(
-              onBtnPress: () {
-                if (type == "data") {
-                  if (!dataKey.currentState.validate()) {
-                    return;
-                  } else {
-                    updateProfileBloc.add(Click());
-                  }
-                } else {
-                  if (!passKey.currentState.validate()) {
-                    return;
-                  } else {
-                    updateProfileBloc.add(Click());
-                  }
-                }
-              },
-              text: allTranslations.text("change"),
-            )
-          ],
+            );
+          },
         ),
       ),
     );
@@ -206,7 +209,7 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Widget editDataView() {
+  Widget editDataView(User data) {
     return Form(
       key: dataKey,
       child: Column(
@@ -226,7 +229,7 @@ class _EditProfileState extends State<EditProfile> {
                   return "      ";
                 }
               },
-              hint: "User Name ",
+              hint: "${data.name}",
             ),
           ),
           Padding(
@@ -244,7 +247,7 @@ class _EditProfileState extends State<EditProfile> {
                   return "      ";
                 }
               },
-              hint: "+966012545236",
+              hint: "+${data.mobile}",
             ),
           ),
           Padding(
@@ -262,7 +265,7 @@ class _EditProfileState extends State<EditProfile> {
                   return "      ";
                 }
               },
-              hint: "example@gmail.com",
+              hint: "${data.email}",
             ),
           ),
         ],

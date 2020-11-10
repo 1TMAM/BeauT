@@ -177,6 +177,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
   }
 
   Widget cansel(int id) {
+    print(id);
     return BlocListener(
       bloc: canselOrderbloc,
       listener: (context, state) {
@@ -213,7 +214,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
               CustomButton(
                 onBtnPress: () {
                   canselOrderbloc.updateId(id);
-                  canselOrderbloc.updateStatus(3);
+                  canselOrderbloc.updateStatus(4);
                   canselOrderbloc.add(Click());
                 },
                 width: MediaQuery.of(context).size.width / 2.8,

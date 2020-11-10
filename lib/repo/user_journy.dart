@@ -144,7 +144,7 @@ class UserJourny {
     Map<String, String> headers = {
       'Authorization': token,
     };
-    return NetworkUtil.internal().post(GeneralResponse(), "users/orders/update",
+    return NetworkUtil.internal().post(GeneralResponse(), "users/orders/change-status",
         headers: headers, body: data);
   }
 
@@ -163,10 +163,20 @@ class UserJourny {
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
+    print("In RePPO");
+    print("Sellected Date ===========>" + date);
+    // print("Time  ===========>" + time ??"No Time");
+    print("Location Time  ===========>${location_type == 0 ? "Home " : "AT  Butyy Place"}");
+    print("beautician_id  ===========> ${beautician_id}");
+    print("servces   ===========> ${services}");
+    print("persons   ===========> ${person_num}");
+    print("payment_method ======> ${payment_method} ");
+    print("coupon ======>  ${coupon}");
+    print("location_id  ======> ${location_id}");
     FormData data = FormData.fromMap({
       "lang": allTranslations.currentLanguage,
       "date": date,
-      "time": time,
+      "time": "10:00",
       "location_type": location_type,
       "beautician_id": beautician_id,
       "services": services,
@@ -175,6 +185,7 @@ class UserJourny {
       "coupon": coupon,
       "location_id": location_id
     });
+
     Map<String, String> headers = {
       'Authorization': token,
     };

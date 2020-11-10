@@ -99,6 +99,8 @@
   "enter_location": "Please Enter Location",
   "enter_time": "Please Enter Time",
   "sar": "SAR",
-  "enter_items": "Please Choose Services"
+  "enter_items": "Please Choose Services",
+  "confimPay": "Confirm Pay "
+
 
 }

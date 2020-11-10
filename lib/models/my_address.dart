@@ -8,7 +8,6 @@ class MyAddressResponse extends BaseMappable {
 
   MyAddressResponse({this.status, this.errNum, this.msg, this.locations});
 
-
   @override
   Mappable fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -35,6 +34,7 @@ class Locations {
   String latitude;
   int userId;
   String createdAt;
+  bool isSellected;
 
   Locations(
       {this.id,
@@ -42,6 +42,7 @@ class Locations {
       this.longitude,
       this.latitude,
       this.userId,
+      this.isSellected,
       this.createdAt});
 
   Locations.fromJson(Map<String, dynamic> json) {
@@ -51,6 +52,7 @@ class Locations {
     latitude = json['latitude'];
     userId = json['user_id'];
     createdAt = json['created_at'];
+    isSellected = false;
   }
 
   Map<String, dynamic> toJson() {
