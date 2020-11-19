@@ -13,7 +13,7 @@ class UserResponse extends BaseMappable {
     status = json['status'];
     errNum = json['errNum'];
     msg = json['msg'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['status'] != false ? new User.fromJson(json['user']) : null;
     return UserResponse(status: status, msg: msg, user: user, errNum: errNum);
   }
 }

@@ -19,13 +19,12 @@ class MyAddresses extends StatefulWidget {
 }
 
 class _MyAddressesState extends State<MyAddresses> {
-
-
   @override
   void initState() {
     myAdressBloc.add(Hydrate());
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,42 +61,56 @@ class _MyAddressesState extends State<MyAddresses> {
                   return data == null
                       ? AppLoader()
                       : data.locations == null
-                      ? Center(
-                      child: EmptyItem(
-                        text: data.msg,
-                      ))
-                      : AnimationLimiter(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: data.locations.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                                child: AddressRow(address: data.locations[index],)),
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                          ? Center(
+                              child: EmptyItem(
+                              text: data.msg == "الرمز المميز غير موجود"
+                                  ? "عفواً يرجي تسجيل الدخول اولاًً "
+                                  : data.msg == "الرمز المميز غير موجود"
+                                      ? "Authorization Token Not Found"
+                                      : "Sorry You Must Log In First",
+                            ))
+                          : AnimationLimiter(
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    itemCount: data.locations.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return AnimationConfiguration
+                                          .staggeredList(
+                                        position: index,
+                                        duration:
+                                            const Duration(milliseconds: 375),
+                                        child: SlideAnimation(
+                                          verticalOffset: 50.0,
+                                          child: FadeInAnimation(
+                                              child: AddressRow(
+                                            address: data.locations[index],
+                                          )),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  CustomButton(
+                                    onBtnPress: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddNewLocation()));
+                                    },
+                                    text: allTranslations
+                                        .text("add_new_location"),
+                                  )
+                                ],
+                              ),
+                            );
                 },
               ),
             ),
-
-
-            CustomButton(
-              onBtnPress: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddNewLocation()));
-              },
-              text: allTranslations.text("add_new_location"),
-            )
           ]),
     );
   }
-
 }

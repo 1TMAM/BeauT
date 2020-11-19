@@ -18,7 +18,7 @@ class _EmptyItemState extends State<EmptyItem> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(vertical: 100),
               child: Image(
                 width: MediaQuery.of(context).size.width / 1.5,
                 image: ExactAssetImage("assets/images/empty.png"),

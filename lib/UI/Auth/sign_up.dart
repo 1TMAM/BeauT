@@ -11,7 +11,6 @@ import 'package:buty/models/general_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'active_account.dart';
 
@@ -42,14 +41,16 @@ class _SignUpState extends State<SignUp> {
             var data = state.model as GeneralResponse;
             if (state is Loading) {
               showLoadingDialog(context);
-            } else if (state is ErrorLoading) {
-              Navigator.pop(context);
+            }
+            if (state is ErrorLoading) {
+              Navigator.of(context).pop();
               errorDialog(
                 context: context,
                 text: data.msg,
               );
               print("Dialoggg");
-            } else if (state is Done) {
+            }
+            if (state is Done) {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -195,90 +196,61 @@ class _SignUpState extends State<SignUp> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(allTranslations.text("card_number")),
+        Text(allTranslations.text("card_number")),
+        CustomTextField(
+          hint: allTranslations.text("card_number"),
+          inputType: TextInputType.number,
+          value: (String val) {
+            signUpBloc.updateNumber(val);
+          },
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: CustomTextField(
-            hint: allTranslations.text("card_number"),
-            inputType: TextInputType.number,
-            value: (String val) {
-              signUpBloc.updateNumber(val);
-            },
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text("expireDate"),
+                ),
+                Container(
+                    width: MediaQuery.of(context).size.width / 2.1,
+                    child: CustomTextField(
+                      hint: "Exp Date",
+                      inputType: TextInputType.number,
+                      value: (String val) {
+                        signUpBloc.updateExpDate(val);
+                      },
+                    )),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text("CVV"),
+                ),
+                Container(
+                    width: MediaQuery.of(context).size.width / 2.1,
+                    child: CustomTextField(
+                      hint: "CVV",
+                      inputType: TextInputType.number,
+                      value: (String val) {
+                        signUpBloc.updateCvv(val);
+                      },
+                    )),
+              ],
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 60,
-                      ),
-                      Text("expireDate"),
-                      SizedBox(
-                        width: 60,
-                      ),
-                    ],
-                  ),
-                  Container(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      child: CustomTextField(
-                        hint: "12/20",
-                        inputType: TextInputType.number,
-                        value: (String val) {
-                          signUpBloc.updateExpDate(val);
-                        },
-                      )),
-                ],
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 60,
-                      ),
-                      Text("CVV"),
-                      SizedBox(
-                        width: 60,
-                      ),
-                    ],
-                  ),
-                  Container(
-                      width: MediaQuery.of(context).size.width / 2.5,
-                      child: CustomTextField(
-                        hint: "CVV",
-                        inputType: TextInputType.number,
-                        value: (String val) {
-                          signUpBloc.updateCvv(val);
-                        },
-                      )),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(allTranslations.text("card_holder")),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: CustomTextField(
-            hint: "User Name",
-            value: (String val) {
-              signUpBloc.updateHolderName(val);
-            },
-          ),
+        Text(allTranslations.text("card_holder")),
+        CustomTextField(
+          hint: "User Name",
+          value: (String val) {
+            signUpBloc.updateHolderName(val);
+          },
         ),
       ],
     );
@@ -302,5 +274,4 @@ class _SignUpState extends State<SignUp> {
       ],
     );
   }
-
 }

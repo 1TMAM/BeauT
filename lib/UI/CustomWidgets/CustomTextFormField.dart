@@ -43,42 +43,45 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-        // controller: widget.controller,
-        onFieldSubmitted: widget.onSubmitted,
-        onTap:widget. onTab,
-        maxLines:widget. lines ?? 1,
-        style: TextStyle(
-            color: Colors.black, fontSize: 16.0),
-        obscureText: widget.secureText ?? false,
-        cursorColor: Colors.black,
-        keyboardType: widget.inputType ?? TextInputType.multiline,
-        validator:widget. validate,
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(widget.raduis ?? 10),
-              borderSide: BorderSide(
-                color:  Colors.black45,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+          // controller: widget.controller,
+          onFieldSubmitted: widget.onSubmitted,
+          onTap:widget. onTab,
+          maxLines:widget. lines ?? 1,
+          style: TextStyle(
+              color: Colors.black, fontSize: 16.0),
+          obscureText: widget.secureText ?? false,
+          cursorColor: Colors.black,
+          keyboardType: widget.inputType ?? TextInputType.multiline,
+          validator:widget. validate,
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(widget.raduis ?? 10),
+                borderSide: BorderSide(
+                  color:  Theme.of(context).primaryColor,
+                ),
               ),
-            ),
-            errorStyle: TextStyle(fontSize: 10.0),
-            contentPadding: EdgeInsets.all(5),
-            border: OutlineInputBorder(
-              borderRadius: new BorderRadius.circular(widget.raduis ?? 10.0),
-              borderSide: new BorderSide(color: Colors.black , width: 1),
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            labelText: widget.label,
-            prefixIcon: widget.icon??null,
-            // errorText: widget.errorTxt,
-            errorBorder: OutlineInputBorder(
-              borderRadius: new BorderRadius.circular(widget.raduis ?? 10.0),
-              borderSide: new BorderSide(color: Colors.red , width: 1),
-            ),
-            labelStyle: TextStyle(fontSize: 16 ,color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.w400),
-            hintStyle: TextStyle(fontSize: 16 , fontWeight: FontWeight.w400),
-            hintText: widget.hint),
-        onChanged: widget.value);
+              errorStyle: TextStyle(fontSize: 10.0),
+              contentPadding: EdgeInsets.all(5),
+              border: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(widget.raduis ?? 10.0),
+                borderSide: new BorderSide(color: Theme.of(context).primaryColor , width: 1),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+              labelText: widget.label,
+              prefixIcon: widget.icon??null,
+              // errorText: widget.errorTxt,
+              errorBorder: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(widget.raduis ?? 10.0),
+                borderSide: new BorderSide(color: Colors.red , width: 1),
+              ),
+              labelStyle: TextStyle(fontSize: 16 ,color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.w400),
+              hintStyle: TextStyle(fontSize: 16 , fontWeight: FontWeight.w400),
+              hintText: widget.hint),
+          onChanged: widget.value),
+    );
   }
 }

@@ -3,7 +3,6 @@ import 'package:buty/Base/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:notification_permissions/notification_permissions.dart';
-
 import 'Base/AllTranslation.dart';
 import 'UI/Auth/spash.dart';
 
@@ -71,6 +70,7 @@ class _MyAppState extends State<MyApp> {
         }),
         //---------------------------------------------------------------
         primaryColor: Color(0xFFDBB2D2),
+        scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Cairo',
       ),
       home: Splash(

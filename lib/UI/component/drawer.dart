@@ -1,5 +1,6 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/Auth/spash.dart';
+import 'package:buty/UI/CustomWidgets/app_logo.dart';
 import 'package:buty/UI/side_menu/address/myAddress.dart';
 import 'package:buty/UI/side_menu/call_us.dart';
 import 'package:buty/UI/side_menu/cards/my_cards.dart';
@@ -22,20 +23,7 @@ class _MyDrawerState extends State<MyDrawer> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 40),
             children: [
-              Text(
-                "User Name",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white),
-              ),
-              Text(
-                "Country  - City",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white),
-              ),
+             AppLogo(),
               SizedBox(
                 height: 30,
               ),

@@ -1,20 +1,24 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/get_all_beutions.dart';
 import 'package:buty/Bolcs/get_category_bloc.dart';
+import 'package:buty/Bolcs/search_by_address_bloc.dart';
+import 'package:buty/Bolcs/search_by_name_bloc.dart';
+import 'package:buty/Bolcs/search_by_time_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
+import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
+import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/component/single_provider_item_row.dart';
 import 'package:buty/UI/searchBy_cat_id.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/all_providers_response.dart';
 import 'package:buty/models/categories_response.dart';
+import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
-import '../search_by_address.dart';
-import '../search_by_time.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,9 +28,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
+    getFromCash();
     getCategoriesBloc.add(Hydrate());
     allProvicersBloc.add(Hydrate());
     super.initState();
+  }
+
+  void getFromCash() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var logged =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print( "USER STATUS${logged  !=" "? false : true}");
   }
 
   @override
@@ -36,61 +48,145 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.width / 1.5,
+            height:  MediaQuery.of(context).size.width / 1.4,
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: CustomTextField(
-                        hint: allTranslations.text("search"),
-                        icon: Icon(Icons.search),
-                      )),
+                BlocListener(
+                  bloc: searchByNameBloc,
+                  listener: (context, state) {
+                    var data = state.model as SearchByCategoryResponse;
+                    if (state is Loading) showLoadingDialog(context);
+                    if (state is ErrorLoading) {
+                      // Navigator.of(context).pop();
+                      errorDialog(
+                        context: context,
+                        text: data.msg,
+                      );
+                    }
+                    if (state is Done) {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchResult(
+                                    beauticianServices:
+                                        data.data.beauticianServices,
+                                  )));
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: CustomTextField(
+                          value: (String val) {
+                            searchByNameBloc.updateName(val);
+                          },
+                          hint: allTranslations.text("search"),
+                          icon: InkWell(
+                              onTap: () {
+                                searchByNameBloc.add(Click());
+                              },
+                              child: Icon(Icons.search)),
+                        )),
+                  ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchByAddress()));
+                      BlocListener(
+                        bloc: searchByAddressBloc,
+                        listener: (context, state) {
+                          var data = state.model as SearchByCategoryResponse;
+                          if (state is Loading) showLoadingDialog(context);
+                          if (state is ErrorLoading) {
+                            Navigator.of(context).pop();
+                            errorDialog(
+                              context: context,
+                              text: data.msg,
+                            );
+                          }
+                          if (state is Done) {
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchResult(
+                                          beauticianServices: data.data
+                                                      .beauticianServices ==
+                                                  null
+                                              ? null
+                                              : data.data.beauticianServices,
+                                        )));
+                          }
                         },
-                        child: Card(
-                          child: Container(
-                              width: MediaQuery.of(context).size.width / 2.3,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                child: Text(allTranslations.text("where")),
-                              )),
-                        ),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width / 2.4,
+                            child: CustomTextField(
+                              hint: allTranslations.text("where"),
+                              icon: Icon(Icons.location_on),
+                              onSubmitted: (String val) {
+                                searchByAddressBloc.updateAddress(val);
+
+                                print(val);
+                                searchByAddressBloc.add(Click());
+                              },
+                              inputType: TextInputType.text,
+                              value: (String val) {
+                                print("=====" + val);
+                                searchByAddressBloc.updateAddress(val);
+                              },
+                            )),
                       ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchByTime()));
+                      BlocListener(
+                        bloc: searchByTimeBloc,
+                        listener: (context, state) {
+                          var data = state.model as SearchByCategoryResponse;
+                          if (state is Loading) showLoadingDialog(context);
+                          if (state is ErrorLoading) {
+                            Navigator.of(context).pop();
+                            errorDialog(
+                              context: context,
+                              text: data.msg,
+                            );
+                          }
+                          if (state is Done) {
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchResult(
+                                          beauticianServices: data.data
+                                                      .beauticianServices ==
+                                                  null
+                                              ? null
+                                              : data.data.beauticianServices,
+                                        )));
+                          }
                         },
-                        child: Card(
-                          child: Container(
-                              width: MediaQuery.of(context).size.width / 2.3,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                child: Text(allTranslations.text("when")),
-                              )),
-                        ),
+                        child: Container(
+                            width: MediaQuery.of(context).size.width / 2.4,
+                            child: CustomTextField(
+                              hint: allTranslations.text("when"),
+                              onSubmitted: (String val) {
+                                searchByTimeBloc.updateId(val);
+                                print(val);
+                                searchByTimeBloc.add(Click());
+                              },
+                              icon: Icon(Icons.lock_clock),
+                              inputType: TextInputType.number,
+                              value: (String val) {
+                                print("=====" + val);
+                                searchByTimeBloc.updateId(val);
+                              },
+                            )),
                       ),
                     ],
                   ),
@@ -105,11 +201,14 @@ class _HomePageState extends State<HomePage> {
                       return data == null
                           ? AppLoader()
                           : data.categories == null
-                              ? Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 100),
-                                  child: Center(child: Text(data.msg)),
-                                )
+                              ? Center(child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 30),
+                                child: Text( data.msg == "الرمز المميز غير موجود"
+                                    ? "عفواً يرجي تسجيل الدخول اولاًً "
+                                    : data.msg == "الرمز المميز غير موجود"
+                                    ? "Authorization Token Not Found"
+                                    : "Sorry You Must Log In First" ,style: TextStyle(color: Colors.white),),
+                              ))
                               : AnimationLimiter(
                                   child: Container(
                                     height: 110,

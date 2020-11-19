@@ -1,20 +1,26 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
+import 'package:buty/models/NotificationResponse.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:buty/models/login_model.dart';
 import 'package:buty/models/user_profile_response.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDataRepo {
   static Future<UserResponse> LOGIN(String email, String password) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    SharedPreferences preferences =await SharedPreferences.getInstance();
+
     print(token);
     FormData data = FormData.fromMap({
       "email": email,
       "password": password,
+      "deviceToken" :preferences.getString("msgToken")
+
     });
     return NetworkUtil.internal().post(
       UserResponse(),
@@ -35,7 +41,7 @@ class UserDataRepo {
     });
     return NetworkUtil.internal().post(
       GeneralResponse(),
-      "users/auth/resend-code",
+      "users/auth/send-code",
       body: data,
     );
   }
@@ -126,16 +132,17 @@ class UserDataRepo {
 //-------------------------------------------------------------------------------
   static Future<UserProfileResoonse> GetProfileApi() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
-    var token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
 
     Map<String, String> headers = {
       'Authorization': token,
     };
 
-    print("TOKEN FOR PROFILE   "+token);
+    print("TOKEN FOR PROFILE   " + token);
 
-    return NetworkUtil.internal().post(UserProfileResoonse(), "users/user/get-user", headers: headers);
+    return NetworkUtil.internal()
+        .post(UserProfileResoonse(), "users/user/get-user", headers: headers);
   }
 
 //-------------------------------------------------------------------------------
@@ -155,6 +162,7 @@ class UserDataRepo {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    SharedPreferences preferences =await SharedPreferences.getInstance();
     print(token);
     FormData data = FormData.fromMap({
       "name": name,
@@ -168,12 +176,46 @@ class UserDataRepo {
       "cvv": cvv,
       "exp_date": number == null ? null : "02/23",
       "holder_name": holder_name,
-      "lang": allTranslations.currentLanguage
+      "lang": allTranslations.currentLanguage,
+      "deviceToken" :preferences.getString("msgToken")
     });
     return NetworkUtil.internal().post(
       GeneralResponse(),
       "users/auth/signup",
       body: data,
     );
+  }
+
+//-------------------------------------------------------------------------------
+
+  static Future<NotificationResponse> GetNotifications() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    Map<String, String> headers = {
+      'Authorization': token,
+    };
+    return NetworkUtil.internal().get(
+        NotificationResponse(), "users/user/get-user-notifications",
+        headers: headers);
+  }
+
+  //-------------------------------------------------------------------------------
+
+  static Future<GeneralResponse> ClearNotifications(int id) async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    Map<String, String> headers = {
+      'Authorization': token,
+    };
+    FormData data = FormData.fromMap({
+      "id": id,
+    });
+    return NetworkUtil.internal().post(
+        GeneralResponse(), "users/user/delete",
+        headers: headers, body: data);
   }
 }

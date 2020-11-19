@@ -4,13 +4,13 @@ import 'package:buty/repo/user_journy.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SearchByAddressBloc extends Bloc<AppEvent, AppState> {
+class SearchByNameBloc extends Bloc<AppEvent, AppState> {
   @override
   AppState get initialState => Start(null);
 
-  final address = BehaviorSubject<String>();
+  final name = BehaviorSubject<String>();
 
-  Function(String) get updateAddress => address.sink.add;
+  Function(String) get updateName => name.sink.add;
 
   var ress;
 
@@ -18,7 +18,9 @@ class SearchByAddressBloc extends Bloc<AppEvent, AppState> {
   Stream<AppState> mapEventToState(AppEvent event) async* {
     if (event is Click) {
       yield Loading(null);
-      ress = await UserJourny.SEARCHBYADDRESS(address.value);
+      ress = await UserJourny.SearchByName(name.value);
+      print("Status " + ress.status.toString() + "");
+
       if (ress.status == true) {
         yield Done(ress);
       } else if (ress.status == false) {
@@ -29,4 +31,4 @@ class SearchByAddressBloc extends Bloc<AppEvent, AppState> {
   }
 }
 
-final searchByAddressBloc = SearchByAddressBloc();
+final searchByNameBloc = SearchByNameBloc();

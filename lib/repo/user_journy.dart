@@ -100,6 +100,20 @@ class UserJourny {
         "users/search/search-beautician-time?time=${time}",
         headers: headers);
   }
+//------------------------------------------------------------------------------/
+
+  static Future<SearchByCategoryResponse> SearchByName(String Name) async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    Map<String, String> headers = {
+      'Authorization': token,
+    };
+    return NetworkUtil.internal().get(SearchByCategoryResponse(),
+        "users/search/search-beautician-name?name=${Name}",
+        headers: headers);
+  }
 
 //------------------------------------------------------------------------------/
 

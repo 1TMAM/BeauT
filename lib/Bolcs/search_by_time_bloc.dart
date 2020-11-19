@@ -15,13 +15,17 @@ class SearchByTimeBloc extends Bloc<AppEvent, AppState> {
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {
-    if (event is Hydrate) {
-      yield Start(null);
+    if (event is Click) {
+      yield Loading(null);
       ress = await UserJourny.SEARCHBYTIME(time.value);
       print("Status " + ress.status.toString() + "");
 
-      yield Done(ress);
-    }
+      if (ress.status == true) {
+        yield Done(ress);
+      } else if (ress.status == false) {
+        print("Message   ");
+        yield ErrorLoading(ress);
+      }    }
   }
 }
 

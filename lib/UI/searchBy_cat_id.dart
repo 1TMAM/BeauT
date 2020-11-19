@@ -1,3 +1,4 @@
+import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/search_by_category_bloc.dart';
 import 'package:buty/UI/component/searchResultItem.dart';
 import 'package:buty/helpers/appEvent.dart';
@@ -13,8 +14,10 @@ import 'CustomWidgets/EmptyItem.dart';
 class SearchResult extends StatefulWidget {
   final int cat_id;
   final String name;
+  final List<BeauticianServices> beauticianServices;
 
-  const SearchResult({Key key, this.cat_id, this.name}) : super(key: key);
+  const SearchResult({Key key, this.cat_id, this.name, this.beauticianServices})
+      : super(key: key);
 
   @override
   _SearchResultState createState() => _SearchResultState();
@@ -23,8 +26,6 @@ class SearchResult extends StatefulWidget {
 class _SearchResultState extends State<SearchResult> {
   @override
   void initState() {
-    searchByCategoryBloc.updateId(widget.cat_id);
-    searchByCategoryBloc.add(Hydrate());
     super.initState();
   }
 
@@ -41,48 +42,31 @@ class _SearchResultState extends State<SearchResult> {
               color: Colors.white,
             )),
         title: Text(
-          "${widget.name}",
+          "${allTranslations.text("result")}",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),
-      body: BlocListener<SearchByCategoryBloc, AppState>(
-        bloc: searchByCategoryBloc,
-        listener: (context, state) {},
-        child: BlocBuilder(
-          bloc: searchByCategoryBloc,
-          builder: (context, state) {
-            var data = state.model as SearchByCategoryResponse;
-            return data == null
-                ? AppLoader()
-                : data.data == null
-                    ? Center(
-                        child: EmptyItem(
-                        text: data.msg,
-                      ))
-                    : AnimationLimiter(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: data.data.beauticianServices.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                    child: SearchReslutItem(
-                                  beautic: data.data.beauticianServices[index],
-                                )),
-                              ),
-                            );
-                          },
-                        ),
-                      );
+      body: AnimationLimiter(
+        child:widget.beauticianServices==null ?Center(child: Text("عفوا لا  يوجد  خبراء تجميل"),): ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: widget.beauticianServices.length,
+          itemBuilder: (BuildContext context, int index) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                    child: SearchReslutItem(
+                      beautic: widget.beauticianServices[index],
+                    )),
+              ),
+            );
           },
         ),
-      ),
+      )
     );
   }
 }

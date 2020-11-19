@@ -42,7 +42,11 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
               : data.orders == null
                   ? Center(
                       child: EmptyItem(
-                      text: data.msg,
+                      text:  data.msg == "الرمز المميز غير موجود"
+                          ? "عفواً يرجي تسجيل الدخول اولاًً "
+                          : data.msg == "الرمز المميز غير موجود"
+                          ? "Authorization Token Not Found"
+                          : "Sorry You Must Log In First",
                     ))
                   : AnimationLimiter(
                       child: ListView.builder(

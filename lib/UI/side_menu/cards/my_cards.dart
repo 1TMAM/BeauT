@@ -61,10 +61,14 @@ class _MyCardsState extends State<MyCards> {
                   var data = state.model as PaymentMethodsResponse;
                   return data == null
                       ? AppLoader()
-                      : data.paymentMethods.isEmpty
+                      : data.paymentMethods== null
                           ? Center(
                               child: EmptyItem(
-                              text: data.msg ?? "No Added Credit Cards",
+                              text: data.msg == "الرمز المميز غير موجود"
+                                  ? "عفواً يرجي تسجيل الدخول اولاًً "
+                                  : data.msg == "الرمز المميز غير موجود"
+                                      ? "Authorization Token Not Found"
+                                      : "Sorry You Must Log In First",
                             ))
                           : AnimationLimiter(
                               child: ListView.builder(
@@ -135,7 +139,7 @@ class _MyCardsState extends State<MyCards> {
                                                         .card[indexx],
                                                   );
                                                 }),
-                                            data.paymentMethods[index].id == 1
+                                             data.paymentMethods[index].id == 1
                                                 ? CustomButton(
                                                     onBtnPress: () {
                                                       Navigator.push(

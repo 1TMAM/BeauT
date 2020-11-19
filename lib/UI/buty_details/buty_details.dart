@@ -11,6 +11,7 @@ import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/UI/buty_details/choose_date.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/BeauticianDetails.dart';
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +30,37 @@ class ButyDetails extends StatefulWidget {
 class _ButyDetailsState extends State<ButyDetails> {
   int _current = 0;
 
+  bool isLogged = false ;
   List<int> allPrices = List();
   List<MyList> servicesList = List();
   int total = 0;
 
+
+
+  void getFromCash() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var logged =
+    await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+
+    if(logged ==""){
+      setState(() {
+        isLogged =false;
+      });
+    }else{
+      setState(() {
+        isLogged =true;
+      });
+    }
+    print("Valuee ===>  ${mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN)}");
+
+    print( "USER STATUS    ======> ${isLogged ==true ?"User" :"Geust"}");
+
+
+  }
+
   @override
   void initState() {
+    getFromCash();
     getBeauticianDetailsBloc.updateId(widget.id);
     getBeauticianDetailsBloc.add(Hydrate());
     createOrderBloc.updateBeauticianId(widget.id);
@@ -66,7 +92,11 @@ class _ButyDetailsState extends State<ButyDetails> {
           )),
       body: BlocListener<GetBeauticianDetailsBloc, AppState>(
         bloc: getBeauticianDetailsBloc,
-        listener: (context, state) {},
+        listener: (context, state) {
+          SharedPreferenceManager pref = SharedPreferenceManager();
+
+
+        },
         child: BlocBuilder(
           bloc: getBeauticianDetailsBloc,
           builder: (context, state) {
