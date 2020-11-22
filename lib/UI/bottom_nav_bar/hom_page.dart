@@ -60,14 +60,13 @@ class _HomePageState extends State<HomePage> {
                     var data = state.model as SearchByCategoryResponse;
                     if (state is Loading) showLoadingDialog(context);
                     if (state is ErrorLoading) {
-                      // Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                       errorDialog(
                         context: context,
                         text: data.msg,
                       );
                     }
                     if (state is Done) {
-                      Navigator.of(context).pop();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -106,14 +105,14 @@ class _HomePageState extends State<HomePage> {
                         listener: (context, state) {
                           var data = state.model as SearchByCategoryResponse;
                           if (state is Loading) showLoadingDialog(context);
-                          if (state is ErrorLoading) {
+                          else if (state is ErrorLoading) {
                             Navigator.of(context).pop();
                             errorDialog(
                               context: context,
                               text: data.msg,
                             );
                           }
-                          if (state is Done) {
+                         else if (state is Done) {
                             Navigator.of(context).pop();
                             Navigator.push(
                                 context,
@@ -229,8 +228,9 @@ class _HomePageState extends State<HomePage> {
                                             child: FadeInAnimation(
                                                 child: cat_item(
                                                     data.categories[index].icon,
-                                                    data.categories[index]
-                                                        .nameAr,
+                                                   allTranslations.currentLanguage =="ar"? data.categories[index]
+                                                        .nameAr:data.categories[index]
+                                                       .nameEn,
                                                     data.categories[index].id)),
                                           ),
                                         );

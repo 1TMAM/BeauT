@@ -28,6 +28,7 @@ class CategoriesResponse extends BaseMappable {
 class Categories {
   int id;
   String nameAr;
+  String nameEn;
   String icon;
 
   Categories({this.id, this.nameAr, this.icon});
@@ -35,6 +36,7 @@ class Categories {
   Categories.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nameAr = json['name_ar'];
+    nameEn = json['name_en'];
     icon = json['icon'];
   }
 

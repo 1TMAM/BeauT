@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import '../models/BeauticianDetails.dart';
 
 class UserJourny {
+
   static Future<CategoriesResponse> GETALLCATEGORIES() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
@@ -19,9 +20,7 @@ class UserJourny {
     Map<String, String> headers = {
       'Authorization': token,
     };
-    return NetworkUtil.internal().get(CategoriesResponse(),
-        "admins/categories/get-all-categories?lang=${allTranslations.currentLanguage}",
-        headers: headers);
+    return NetworkUtil.internal().get(CategoriesResponse(), "user/categories/get-all-categories?lang=${allTranslations.currentLanguage}", headers: headers);
   }
 
 //------------------------------------------------------------------------------/

@@ -2,8 +2,8 @@
   "user": "User",
   "name": "name",
   "email": "email",
-  "password": "PIN number",
-  "newPassword": "New Password code",
+  "password": "Password",
+  "newPassword": "New Password",
   "confirm_newPassword": "Confirm new Password",
   "login": "Login",
   "sign_up": "create a new account",
@@ -101,7 +101,9 @@
   "sar": "SAR",
   "enter_items": "Please Choose Services",
   "confimPay": "Confirm Pay ",
-  "result": "Search Result"
+  "result": "Search Result",
+  "min" : "Minute",
+  "service_name" : "Service Name "
 
 
 

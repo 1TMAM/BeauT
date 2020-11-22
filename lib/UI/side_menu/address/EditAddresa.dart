@@ -174,7 +174,7 @@ class _EditAddressState extends State<EditAddress> {
                       editAddressBloc.add(Click());
                     }
                   },
-                  text: allTranslations.text("add"),
+                  text: allTranslations.text("edit"),
                 ),
               )
             ],

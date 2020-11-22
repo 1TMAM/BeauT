@@ -50,7 +50,6 @@ class _MyCardsState extends State<MyCards> {
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           children: [
             BlocListener<AllCardsBloc, AppState>(
               bloc: allCardsBloc,
@@ -88,12 +87,11 @@ class _MyCardsState extends State<MyCards> {
                                           children: [
                                             Row(
                                               children: [
-                                                Image.asset(
-                                                  data.paymentMethods[index]
-                                                              .id ==
-                                                          1
-                                                      ? "assets/images/master_card.png"
-                                                      : data.paymentMethods[index]
+                                                data.paymentMethods[index]
+                                                    .id ==
+                                                    1
+                                                    ?Icon(Icons.credit_card , color: Theme.of(context).primaryColor,):    Image.asset(
+                                                   data.paymentMethods[index]
                                                                   .id ==
                                                               2
                                                           ? "assets/images/apple.png"
@@ -124,21 +122,24 @@ class _MyCardsState extends State<MyCards> {
                                                 ),
                                               ],
                                             ),
-                                            ListView.builder(
-                                                itemCount: data
-                                                    .paymentMethods[index]
-                                                    .card
-                                                    .length,
-                                                shrinkWrap: true,
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                itemBuilder: (context, indexx) {
-                                                  return CriditCardSingleItem(
-                                                    card: data
-                                                        .paymentMethods[index]
-                                                        .card[indexx],
-                                                  );
-                                                }),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10),
+                                              child: ListView.builder(
+                                                  itemCount: data
+                                                      .paymentMethods[index]
+                                                      .card
+                                                      .length,
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  itemBuilder: (context, indexx) {
+                                                    return CriditCardSingleItem(
+                                                      card: data
+                                                          .paymentMethods[index]
+                                                          .card[indexx],
+                                                    );
+                                                  }),
+                                            ),
                                              data.paymentMethods[index].id == 1
                                                 ? CustomButton(
                                                     onBtnPress: () {

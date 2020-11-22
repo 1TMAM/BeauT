@@ -17,7 +17,6 @@ class GetMyProfileBloc extends Bloc<AppEvent, AppState> {
     if (event is Hydrate) {
       yield Start(null);
       ress = await UserDataRepo.GetProfileApi();
-      print("Status " + ress.status.toString() + "");
       print("InBlocc");
 
       yield Done(ress);

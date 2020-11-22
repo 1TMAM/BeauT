@@ -30,32 +30,30 @@ class ButyDetails extends StatefulWidget {
 class _ButyDetailsState extends State<ButyDetails> {
   int _current = 0;
 
-  bool isLogged = false ;
+  bool isLogged = false;
+
   List<int> allPrices = List();
   List<MyList> servicesList = List();
   int total = 0;
 
-
-
   void getFromCash() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var logged =
-    await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
 
-    if(logged ==""){
+    if (logged == "") {
       setState(() {
-        isLogged =false;
+        isLogged = false;
       });
-    }else{
+    } else {
       setState(() {
-        isLogged =true;
+        isLogged = true;
       });
     }
-    print("Valuee ===>  ${mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN)}");
+    print(
+        "Valuee ===>  ${mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN)}");
 
-    print( "USER STATUS    ======> ${isLogged ==true ?"User" :"Geust"}");
-
-
+    print("USER STATUS    ======> ${isLogged == true ? "User" : "Geust"}");
   }
 
   @override
@@ -94,8 +92,6 @@ class _ButyDetailsState extends State<ButyDetails> {
         bloc: getBeauticianDetailsBloc,
         listener: (context, state) {
           SharedPreferenceManager pref = SharedPreferenceManager();
-
-
         },
         child: BlocBuilder(
           bloc: getBeauticianDetailsBloc,
@@ -176,18 +172,26 @@ class _ButyDetailsState extends State<ButyDetails> {
                           }),
                       InkWell(
                           onTap: () {
-                            if (servicesList.isEmpty) {
-                              errorDialog(
-                                  context: context,
-                                  text: allTranslations.text("enter_items"));
+                            if (isLogged == true) {
+                              if (servicesList.isEmpty) {
+                                errorDialog(
+                                    context: context,
+                                    text: allTranslations.text("enter_items"));
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ChooseDate(
+                                              total: total,
+                                              servicseList: servicesList,
+                                            )));
+                              }
                             } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChooseDate(
-                                            total: total,
-                                            servicseList: servicesList,
-                                          )));
+                              errorDialog(
+                                  text: allTranslations.currentLanguage == "ar"
+                                      ? "يرجي تسجيل الدخول اولاًً "
+                                      : " You Must Login Frist",
+                                  context: context);
                             }
                           },
                           child: CustomButton(
@@ -212,7 +216,7 @@ class _ButyDetailsState extends State<ButyDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 2.1,
+                width: MediaQuery.of(context).size.width / 4,
                 child: Row(
                   children: [
                     Text(
@@ -223,7 +227,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 2.1,
+                width: MediaQuery.of(context).size.width / 1.7,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -272,14 +276,14 @@ class _ButyDetailsState extends State<ButyDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 2.5,
+                width: MediaQuery.of(context).size.width / 3.5,
                 child: Text(
                   "${allTranslations.currentLanguage == "ar" ? list[index].detailsAr : list[index].detailsEn}  ",
                   style: TextStyle(fontSize: 10),
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 2,
+                width: MediaQuery.of(context).size.width / 1.7,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -298,48 +302,40 @@ class _ButyDetailsState extends State<ButyDetails> {
                         ],
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          allTranslations.text("reserve"),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            if (list[index].count == 0) {
-                              print("cannot");
-                            } else {
-                              servicesList.add(new MyList(
-                                  id: list[index].id,
-                                  price: list[index].price,
-                                  nameAr: list[index].nameAr,
-                                  nameEn: list[index].nameEn,
-                                  estimatedTime: list[index].estimatedTime,
-                                  count: list[index].count));
-                              setState(() {
-                                list[index].isSellected = true;
-                                total = total +
-                                    (list[index].count *
-                                        int.parse(list[index].price));
-                              });
-                              print(json.encode(servicesList));
-                            }
-                          },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: InkWell(
+                        onTap: () {
+                          if (list[index].count == 0) {
+                            print("cannot");
+                          } else {
+                            servicesList.add(new MyList(
+                                id: list[index].id,
+                                price: list[index].price,
+                                nameAr: list[index].nameAr,
+                                nameEn: list[index].nameEn,
+                                estimatedTime: list[index].estimatedTime,
+                                count: list[index].count));
+                            setState(() {
+                              list[index].isSellected = true;
+                              total = total +
+                                  (list[index].count *
+                                      int.parse(list[index].price));
+                            });
+                            print(json.encode(servicesList));
+                          }
+                        },
+                        child:  Container(
+                          decoration: BoxDecoration(color: Theme.of(context).primaryColor ,borderRadius: BorderRadius.circular(5)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: list[index].isSellected == false
-                                ? Icon(
-                                    Icons.check_circle_outline,
-                                    size: 20,
-                                    color: Theme.of(context).primaryColor,
-                                  )
-                                : Icon(
-                                    Icons.check_circle,
-                                    size: 20,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
+                            padding: const EdgeInsets.symmetric(horizontal: 20 ,vertical: 1),
+                            child: Text(
+                              allTranslations.text("reserve"),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),

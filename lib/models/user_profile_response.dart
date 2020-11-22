@@ -26,8 +26,7 @@ class User {
   String mobile;
   int emailVerified;
   int block;
-  Null createdAt;
-  String updatedAt;
+
 
   User(
       {this.id,
@@ -36,8 +35,7 @@ class User {
       this.mobile,
       this.emailVerified,
       this.block,
-      this.createdAt,
-      this.updatedAt});
+      });
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -46,9 +44,7 @@ class User {
     mobile = json['mobile'];
     emailVerified = json['email_verified'];
     block = json['block'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
+}
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -58,8 +54,6 @@ class User {
     data['mobile'] = this.mobile;
     data['email_verified'] = this.emailVerified;
     data['block'] = this.block;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

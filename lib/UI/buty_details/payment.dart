@@ -108,10 +108,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
         },
         child: BlocBuilder(
           bloc: createOrderBloc,
-          builder: (context , state){
-          return  ListView(
+          builder: (context, state) {
+            return ListView(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               children: [
+                Text(
+                  allTranslations.text("services"),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -119,27 +123,47 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
                           children: [
-                            Text(
-                              "${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}   x ${widget.servicseList[index].count} ",
-                              style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.bold),
-                            ),
-                            Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
                               children: [
-                                Text(
-                                  "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
-                                  style: TextStyle(
-                                      fontSize: 13, fontWeight: FontWeight.w400),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${allTranslations.text("service_name")}  :  ${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "${allTranslations.text("persons")}  :  ${widget.servicseList[index].count}  ",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "${widget.servicseList[index].estimatedTime} min ",
-                                  style: TextStyle(fontSize: 13),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    Text(
+                                      "${widget.servicseList[index].estimatedTime} ${allTranslations.text("min")} ",
+                                      style: TextStyle(fontSize: 13),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
+                            Divider()
                           ],
                         ),
                       );
@@ -153,84 +177,87 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 widget.address == false
                     ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              shape: BoxShape.circle),
-                          child: Center(
-                            child: Image.asset(
-                              "assets/images/car.png",
-                              width: 25,
-                              height: 25,
-                            ),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    shape: BoxShape.circle),
+                                child: Center(
+                                  child: Image.asset(
+                                    "assets/images/car.png",
+                                    width: 25,
+                                    height: 25,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  allTranslations.text("at_buty"),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            allTranslations.text("at_buty"),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  "100 ريال",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            "100 ريال",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
+                        ],
+                      )
                     : BlocListener<MyAdressBloc, AppState>(
-                  bloc: myAdressBloc,
-                  listener: (context, state) {},
-                  child: BlocBuilder(
-                    bloc: myAdressBloc,
-                    builder: (context, state) {
-                      var data = state.model as MyAddressResponse;
-                      return data == null
-                          ? AppLoader()
-                          : data.locations == null
-                          ? Center(
-                          child: EmptyItem(
-                            text: data.msg,
-                          ))
-                          : AnimationLimiter(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: data.locations.length,
-                          itemBuilder:
-                              (BuildContext context, int index) {
-                            return AnimationConfiguration
-                                .staggeredList(
-                              position: index,
-                              duration:
-                              const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                  verticalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                      child: address_item(
-                                          data, index))),
-                            );
+                        bloc: myAdressBloc,
+                        listener: (context, state) {},
+                        child: BlocBuilder(
+                          bloc: myAdressBloc,
+                          builder: (context, state) {
+                            var data = state.model as MyAddressResponse;
+                            return data == null
+                                ? AppLoader()
+                                : data.locations == null
+                                    ? Center(
+                                        child: EmptyItem(
+                                        text: data.msg,
+                                      ))
+                                    : AnimationLimiter(
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: data.locations.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return AnimationConfiguration
+                                                .staggeredList(
+                                              position: index,
+                                              duration: const Duration(
+                                                  milliseconds: 375),
+                                              child: SlideAnimation(
+                                                  verticalOffset: 50.0,
+                                                  child: FadeInAnimation(
+                                                      child: address_item(
+                                                          data, index))),
+                                            );
+                                          },
+                                        ),
+                                      );
                           },
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
                 SizedBox(
                   height: 20,
                 ),
@@ -263,7 +290,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
-                      child: Text("${time} Min"),
+                      child: Text("${time} ${allTranslations.text("min")}"),
                     ),
                   ],
                 ),
@@ -278,7 +305,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
-                      child: Text("${DateTime.now().toString().substring(0, 10)}"),
+                      child:
+                          Text("${DateTime.now().toString().substring(0, 10)}"),
                     ),
                   ],
                 ),
@@ -302,8 +330,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
-                      child:
-                      Text("${widget.total}   ${allTranslations.text("sar")}"),
+                      child: Text(
+                          "${widget.total}   ${allTranslations.text("sar")}"),
                     ),
                   ],
                 ),
@@ -324,11 +352,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       return data == null
                           ? AppLoader()
                           : data.paymentMethods.isEmpty
-                          ? Center(
-                          child: EmptyItem(
-                            text: data.msg ?? "No Added Credit Cards",
-                          ))
-                          : paymentMethods(data);
+                              ? Center(
+                                  child: EmptyItem(
+                                  text: data.msg ?? "No Added Credit Cards",
+                                ))
+                              : paymentMethods(data);
                     },
                   ),
                 ),
@@ -426,16 +454,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
         print("Sellected Id ==== > ${data.locations[index].id}");
         createOrderBloc.updateLocationId(data.locations[index].id);
       },
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(children: [
-          Icon(Icons.location_on_sharp, color: Theme.of(context).primaryColor),
-          Text("${data.locations[index].address}"),
-        ]),
-        data.locations[index].isSellected == false
-            ? Icon(Icons.check_circle_outline,
-                color: Theme.of(context).primaryColor)
-            : Icon(Icons.check_circle, color: Theme.of(context).primaryColor)
-      ]),
+      child: Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(children: [
+              Icon(Icons.location_on_sharp,
+                  color: Theme.of(context).primaryColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  "${data.locations[index].address}",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ]),
+            data.locations[index].isSellected == false
+                ? Icon(Icons.check_circle_outline,
+                    color: Theme.of(context).primaryColor)
+                : Icon(Icons.check_circle,
+                    color: Theme.of(context).primaryColor)
+          ]),
+          Divider()
+        ],
+      ),
     );
   }
 }

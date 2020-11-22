@@ -79,7 +79,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 borderSide: new BorderSide(color: Colors.red , width: 1),
               ),
               labelStyle: TextStyle(fontSize: 16 ,color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.w400),
-              hintStyle: TextStyle(fontSize: 16 , fontWeight: FontWeight.w400),
+              hintStyle: TextStyle(fontSize: 14 , fontWeight: FontWeight.w400 ),
+
               hintText: widget.hint),
           onChanged: widget.value),
     );

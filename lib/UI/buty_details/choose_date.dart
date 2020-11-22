@@ -24,8 +24,16 @@ class _ChooseDateState extends State<ChooseDate> {
   bool isHouse = true;
 
   @override
+  void initState() {
+    createOrderBloc.updateDate(_currentDate.toString().substring(0, 10));
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _calendarCarousel = CalendarCarousel<Event>(
+      nextMonthDayBorderColor: Theme.of(context).primaryColor,
+      prevMonthDayBorderColor: Theme.of(context).primaryColor,
       onDayPressed: (DateTime date, List<Event> events) {
         this.setState(() => _currentDate = date);
         events.forEach((event) => print(event.title));
@@ -146,32 +154,48 @@ class _ChooseDateState extends State<ChooseDate> {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Text(
-                        "${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}   x ${widget.servicseList[index].count} ",
-                        style: TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.bold),
-                      ),
-                      Column(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
                         children: [
-                          Text(
-                            "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w400),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${allTranslations.text("service_name")}  :  ${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "${allTranslations.text("persons")}  :  ${widget.servicseList[index].count}  ",
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                          Text(
-                            "${widget.servicseList[index].estimatedTime} min ",
-                            style: TextStyle(fontSize: 13),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
+                                style: TextStyle(
+                                    fontSize: 13, fontWeight: FontWeight.w400),
+                              ),
+                              Text(
+                                "${widget.servicseList[index].estimatedTime} ${allTranslations.text("min")} ",
+                                style: TextStyle(fontSize: 13),
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      Divider()
                     ],
                   ),
                 );
               }),
-          Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

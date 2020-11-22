@@ -45,8 +45,8 @@ class CreateOrderBloc extends Bloc<AppEvent, AppState> {
       yield Loading(null);
 
       print("Sellected Time ===========>" + date.value);
-      print(
-          "Location Time  ===========>${location_type.value == 0 ? "Home " : "AT  Butyy Place"}");
+      // print(
+      //     "Location Time  ===========>${location_type.value == 0 ? "Home " : "AT  Butyy Place"}");
       print("beautician_id  ===========> ${beautician_id.value}");
       print("servces   ===========> ${services.value}");
       print("persons   ===========> ${person_num.value}");

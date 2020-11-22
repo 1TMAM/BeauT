@@ -47,6 +47,23 @@ class UserDataRepo {
   }
 
 //-------------------------------------------------------------------------------
+
+  static Future<GeneralResponse> ResendCode(String email) async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    FormData data = FormData.fromMap({
+      "email": email,
+    });
+    return NetworkUtil.internal().post(
+      GeneralResponse(),
+      "users/auth/send-code",
+      body: data,
+    );
+  }
+
+//-------------------------------------------------------------------------------
   static Future<GeneralResponse> CheckCode(String code) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var email = await mSharedPreferenceManager.readString(CachingKey.EMAIL);
@@ -132,17 +149,11 @@ class UserDataRepo {
 //-------------------------------------------------------------------------------
   static Future<UserProfileResoonse> GetProfileApi() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-
+    var token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     Map<String, String> headers = {
       'Authorization': token,
     };
-
-    print("TOKEN FOR PROFILE   " + token);
-
-    return NetworkUtil.internal()
-        .post(UserProfileResoonse(), "users/user/get-user", headers: headers);
+    return NetworkUtil.internal().post(UserProfileResoonse(), "users/user/get-user", headers: headers);
   }
 
 //-------------------------------------------------------------------------------
@@ -187,7 +198,6 @@ class UserDataRepo {
   }
 
 //-------------------------------------------------------------------------------
-
   static Future<NotificationResponse> GetNotifications() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
