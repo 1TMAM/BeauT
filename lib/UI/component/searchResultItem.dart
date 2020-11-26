@@ -1,7 +1,7 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/buty_details/buty_details.dart';
 import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class SearchReslutItem extends StatelessWidget {
   final BeauticianServices beautic;
@@ -39,7 +39,7 @@ class SearchReslutItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "${allTranslations.text("services")} : ",
+                  "${translator.translate("services")} : ",
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width - 100,
@@ -56,11 +56,11 @@ class SearchReslutItem extends StatelessWidget {
                             height: 35,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: NetworkImage(beautic.services[index].icon),
+                                    image: NetworkImage(
+                                        beautic.services[index].icon),
                                     fit: BoxFit.cover),
                                 color: Colors.grey[200],
                                 shape: BoxShape.circle),
-
                           ),
                         );
                       }),
@@ -74,7 +74,7 @@ class SearchReslutItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${allTranslations.text("service_address")} : ",
+                  "${translator.translate("service_address")} : ",
                 ),
                 Row(
                   children: [

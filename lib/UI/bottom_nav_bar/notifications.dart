@@ -44,7 +44,7 @@ class _NotificationsState extends State<Notifications> {
             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
             //   children: [
             //     Text(
-            //       allTranslations.text("notifications"),
+            //        translator.translate("notifications"),
             //       style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
             //     ),
             //     Text(

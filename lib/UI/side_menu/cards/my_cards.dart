@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/mycards_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -46,7 +46,7 @@ class _MyCardsState extends State<MyCards> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("payment_methods"),
+             translator.translate("payment_methods"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: ListView(
@@ -104,8 +104,7 @@ class _MyCardsState extends State<MyCards> {
                                                           .symmetric(
                                                       horizontal: 10),
                                                   child: Text(
-                                                    allTranslations
-                                                                .currentLanguage ==
+                                                    translator ==
                                                             "ar"
                                                         ? data
                                                             .paymentMethods[
@@ -149,8 +148,7 @@ class _MyCardsState extends State<MyCards> {
                                                               builder: (context) =>
                                                                   AddNewCard()));
                                                     },
-                                                    text: allTranslations
-                                                        .text("add_new_card"),
+                                                    text: translator.translate("add_new_card"),
                                                   )
                                                 : SizedBox(),
                                           ],

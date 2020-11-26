@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/Bolcs/my_address_bloc.dart';
 import 'package:buty/Bolcs/mycards_bloc.dart';
@@ -75,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("payment"),
+            translator.translate("payment"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: BlocListener(
@@ -113,7 +113,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               children: [
                 Text(
-                  allTranslations.text("services"),
+                  translator.translate("services"),
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 ListView.builder(
@@ -133,13 +133,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${allTranslations.text("service_name")}  :  ${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                      "${translator.translate("service_name")}  :  ${translator == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      "${allTranslations.text("persons")}  :  ${widget.servicseList[index].count}  ",
+                                      "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold),
@@ -150,13 +150,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
+                                      "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w400),
                                     ),
                                     Text(
-                                      "${widget.servicseList[index].estimatedTime} ${allTranslations.text("min")} ",
+                                      "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
                                       style: TextStyle(fontSize: 13),
                                     ),
                                   ],
@@ -169,7 +169,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       );
                     }),
                 Text(
-                  allTranslations.text("address"),
+                  translator.translate("address"),
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -199,7 +199,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  allTranslations.text("at_buty"),
+                                  translator.translate("at_buty"),
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -265,13 +265,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      allTranslations.text("copoun"),
+                      translator.translate("copoun"),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Container(
                         width: MediaQuery.of(context).size.width / 2,
                         child: CustomTextField(
-                          hint: allTranslations.text("enter_copoun"),
+                          hint: translator.translate("enter_copoun"),
                           inputType: TextInputType.number,
                           value: (String val) {
                             createOrderBloc.updateCopone(val);
@@ -286,11 +286,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      allTranslations.text("duration"),
+                      translator.translate("duration"),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
-                      child: Text("${time} ${allTranslations.text("min")}"),
+                      child: Text("${time} ${translator.translate("min")}"),
                     ),
                   ],
                 ),
@@ -301,7 +301,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      allTranslations.text("date"),
+                      translator.translate("date"),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
@@ -314,7 +314,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      allTranslations.text("time"),
+                      translator.translate("time"),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
@@ -326,12 +326,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      allTranslations.text("total"),
+                      translator.translate("total"),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Center(
                       child: Text(
-                          "${widget.total}   ${allTranslations.text("sar")}"),
+                          "${widget.total}   ${translator.translate("sar")}"),
                     ),
                   ],
                 ),
@@ -339,7 +339,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   height: 20,
                 ),
                 Text(
-                  allTranslations.text("pay_method"),
+                  translator.translate("pay_method"),
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 BlocListener<AllCardsBloc, AppState>(
@@ -378,7 +378,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     createOrderBloc.add(Click());
                   },
                   child: CustomButton(
-                    text: allTranslations.text("pay_now"),
+                    text: translator.translate("pay_now"),
                   ),
                 )
               ],
@@ -421,7 +421,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          allTranslations.currentLanguage == "ar"
+                          translator == "ar"
                               ? data.paymentMethods[index].nameAr
                               : data.paymentMethods[index].nameEn,
                           style: TextStyle(fontWeight: FontWeight.bold),

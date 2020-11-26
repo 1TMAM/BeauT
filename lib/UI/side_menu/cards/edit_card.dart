@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/editCardBloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -12,6 +11,7 @@ import 'package:buty/models/AllPaymentMethodsResponse.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class EditCard extends StatefulWidget {
   final Cards card;
@@ -55,7 +55,7 @@ class _EditCardState extends State<EditCard> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("add_new_card"),
+            translator.translate("add_new_card"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: BlocListener(
@@ -83,7 +83,7 @@ class _EditCardState extends State<EditCard> {
                             color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    Text(allTranslations.text("done_add_card")),
+                    Text(translator.translate("done_add_card")),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Icon(
@@ -99,7 +99,7 @@ class _EditCardState extends State<EditCard> {
                             MaterialPageRoute(builder: (context) => MyCards()));
                       },
                       child: CustomButton(
-                        text: allTranslations.text("back"),
+                        text: translator.translate("back"),
                       ),
                     )
                   ],
@@ -114,7 +114,7 @@ class _EditCardState extends State<EditCard> {
                 exampleContainer(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(allTranslations.text("card_number")),
+                  child: Text(translator.translate("card_number")),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -137,7 +137,7 @@ class _EditCardState extends State<EditCard> {
                     children: [
                       Column(
                         children: [
-                          Text(allTranslations.text("expireDate")),
+                          Text(translator.translate("expireDate")),
                           Container(
                               width: MediaQuery.of(context).size.width / 2.5,
                               child: CustomTextField(
@@ -176,7 +176,7 @@ class _EditCardState extends State<EditCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(allTranslations.text("card_holder")),
+                  child: Text(translator.translate("card_holder")),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -196,7 +196,7 @@ class _EditCardState extends State<EditCard> {
                       editCardBloc.add(Click());
                     },
                     child: CustomButton(
-                      text: "${allTranslations.text("add")}",
+                      text: "${translator.translate("add")}",
                     )),
               ],
             );

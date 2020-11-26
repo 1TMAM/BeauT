@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/search_by_address_bloc.dart';
 import 'package:buty/Bolcs/search_by_time_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
@@ -8,8 +7,8 @@ import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
-import 'CustomWidgets/AppLoader.dart';
 import 'CustomWidgets/EmptyItem.dart';
 import 'component/searchResultItem.dart';
 
@@ -40,7 +39,7 @@ class _SearchByTimeState extends State<SearchByTime> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5)),
                 child: CustomTextField(
-                  hint: "${allTranslations.text("enter_time")}",
+                  hint: "${translator.translate("enter_time")}",
                   value: (String val) {
                     print(val);
                     searchByAddressBloc.updateAddress(val);
@@ -62,33 +61,37 @@ class _SearchByTimeState extends State<SearchByTime> {
               builder: (context, state) {
                 var data = state.model as SearchByCategoryResponse;
                 return data == null
-                    ? EmptyItem(text: data==null ?"${allTranslations.text("enter_location")}" :data.msg,)
+                    ? EmptyItem(
+                        text: data == null
+                            ? "${translator.translate("enter_location")}"
+                            : data.msg,
+                      )
                     : data.data == null
-                    ? Center(
-                    child: EmptyItem(
-                      text: data.msg,
-                    ))
-                    : AnimationLimiter(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: data.data.beauticianServices.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        duration: const Duration(milliseconds: 375),
-                        child: SlideAnimation(
-                          verticalOffset: 50.0,
-                          child: FadeInAnimation(
-                              child: SearchReslutItem(
-                                beautic:
-                                data.data.beauticianServices[index],
-                              )),
-                        ),
-                      );
-                    },
-                  ),
-                );
+                        ? Center(
+                            child: EmptyItem(
+                            text: data.msg,
+                          ))
+                        : AnimationLimiter(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: data.data.beauticianServices.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return AnimationConfiguration.staggeredList(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 375),
+                                  child: SlideAnimation(
+                                    verticalOffset: 50.0,
+                                    child: FadeInAnimation(
+                                        child: SearchReslutItem(
+                                      beautic:
+                                          data.data.beauticianServices[index],
+                                    )),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
               },
             ),
           ),

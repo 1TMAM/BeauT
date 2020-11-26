@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/NotificationResponse.dart';
@@ -71,7 +71,7 @@ class UserDataRepo {
     FormData data = FormData.fromMap({
       "email": email,
       "code": code,
-      "lang": allTranslations.currentLanguage
+      "lang": translator.currentLanguage
     });
     return NetworkUtil.internal().post(
       GeneralResponse(),
@@ -88,7 +88,7 @@ class UserDataRepo {
     FormData data = FormData.fromMap({
       "email": email,
       "code": code,
-      "lang": allTranslations.currentLanguage
+      "lang": translator.currentLanguage
     });
     return NetworkUtil.internal().post(
       GeneralResponse(),
@@ -105,9 +105,9 @@ class UserDataRepo {
     print(email);
     FormData data = FormData.fromMap({
       "email": email,
-      "code": password,
+      "password": password,
       "password_confirmation": confirmPassword,
-      "lang": allTranslations.currentLanguage
+      "lang": translator.currentLanguage
     });
     return NetworkUtil.internal().post(
       GeneralResponse(),
@@ -140,7 +140,7 @@ class UserDataRepo {
       "update_password": newPassword,
       "update_password_confirmation": confirmPassword,
       "current_password": currentPassword,
-      "lang": allTranslations.currentLanguage
+      "lang": translator.currentLanguage
     });
     return NetworkUtil.internal().post(GeneralResponse(), "users/user/update",
         body: data, headers: headers);
@@ -187,7 +187,7 @@ class UserDataRepo {
       "cvv": cvv,
       "exp_date": number == null ? null : "02/23",
       "holder_name": holder_name,
-      "lang": allTranslations.currentLanguage,
+      "lang": translator.currentLanguage,
       "deviceToken" :preferences.getString("msgToken")
     });
     return NetworkUtil.internal().post(

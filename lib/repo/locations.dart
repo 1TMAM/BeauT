@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/general_response.dart';
@@ -15,7 +15,7 @@ class AddressRepo {
       'Authorization': token,
     };
     return NetworkUtil.internal().get(MyAddressResponse(),
-        "users/locations/get-my-locations?lang=${allTranslations.currentLanguage}",
+        "users/locations/get-my-locations?lang=${translator.currentLanguage}",
         headers: headers);
   }
 
@@ -29,7 +29,7 @@ class AddressRepo {
       'Authorization': token,
     };
     FormData data = FormData.fromMap({
-      "lang": allTranslations.currentLanguage,
+      "lang": translator.currentLanguage,
       "address": address,
       "longitude": long,
       "latitude": lat
@@ -49,7 +49,7 @@ class AddressRepo {
       'Authorization': token,
     };
     FormData data = FormData.fromMap({
-      "lang": allTranslations.currentLanguage,
+      "lang": translator.currentLanguage,
       "location_id": id,
       "address": address,
       "longitude": long,

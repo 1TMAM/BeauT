@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/loginBloc.dart';
 import 'package:buty/UI/Auth/forget_password.dart';
 import 'package:buty/UI/Auth/sign_up.dart';
@@ -12,8 +12,7 @@ import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Login extends StatefulWidget {
+ class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
@@ -59,7 +58,7 @@ class _LoginState extends State<Login> {
               child: ListView(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 children: [
-                  rowItem(Icons.mail, allTranslations.text("email")),
+                  rowItem(Icons.mail,  translator.translate("email")),
                   CustomTextField(
                     hint: "example@gmail.com",
                     validate: (String val) {
@@ -71,7 +70,7 @@ class _LoginState extends State<Login> {
                       logInBloc.updateEmail(val);
                     },
                   ),
-                  rowItem(Icons.lock, allTranslations.text("password")),
+                  rowItem(Icons.lock,  translator.translate("password")),
                   CustomTextField(
                     secureText: true,
                     validate: (String val) {
@@ -92,7 +91,7 @@ class _LoginState extends State<Login> {
                         logInBloc.add(Click());
                       }
                     },
-                    text: allTranslations.text("login"),
+                    text:  translator.translate("login"),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -104,7 +103,7 @@ class _LoginState extends State<Login> {
                                 builder: (context) => ForgetPassword()));
                       },
                       child: Center(
-                          child: Text(allTranslations.text("forget_password"))),
+                          child: Text( translator.translate("forget_password"))),
                     ),
                   ),
                   InkWell(
@@ -112,7 +111,7 @@ class _LoginState extends State<Login> {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => SignUp()));
                       },
-                      child: Center(child: Text(allTranslations.text("no_acc")))),
+                      child: Center(child: Text( translator.translate("no_acc")))),
                 ],
               ),
             )));
@@ -126,13 +125,13 @@ class _LoginState extends State<Login> {
           Icon(
             icon,
             color: Theme.of(context).primaryColor,
-            size: 25,
+            size: 20,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               text,
-              style: TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),
             ),
           )
         ],

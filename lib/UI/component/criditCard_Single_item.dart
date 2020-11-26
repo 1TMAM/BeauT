@@ -1,7 +1,7 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/side_menu/cards/edit_card.dart';
 import 'package:buty/models/AllPaymentMethodsResponse.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class CriditCardSingleItem extends StatelessWidget {
   final Cards card;
@@ -44,7 +44,7 @@ class CriditCardSingleItem extends StatelessWidget {
                               )));
                 },
                 child: Text(
-                  allTranslations.text("edit"),
+                  translator.translate("edit"),
                   style: TextStyle(fontSize: 13),
                 ),
               ),

@@ -8,12 +8,10 @@ import 'package:rxdart/subjects.dart';
 class ResetPasswordBloc extends Bloc<AppEvent, AppState> {
   @override
   AppState get initialState => Start(null);
-
   final password = BehaviorSubject<String>();
-
-  Function(String) get updatePassword => password.sink.add;
   final confirmPassword = BehaviorSubject<String>();
 
+  Function(String) get updatePassword => password.sink.add;
   Function(String) get updateConfirmPassword => confirmPassword.sink.add;
   String msg;
 

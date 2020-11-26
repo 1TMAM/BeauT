@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/get_all_beutions.dart';
 import 'package:buty/Bolcs/get_category_bloc.dart';
 import 'package:buty/Bolcs/search_by_address_bloc.dart';
@@ -19,6 +18,7 @@ import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var logged =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-    print( "USER STATUS${logged  !=" "? false : true}");
+    print("USER STATUS${logged != " " ? false : true}");
   }
 
   @override
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             width: double.infinity,
-            height:  MediaQuery.of(context).size.width / 1.4,
+            height: MediaQuery.of(context).size.width / 1.4,
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                           value: (String val) {
                             searchByNameBloc.updateName(val);
                           },
-                          hint: allTranslations.text("search"),
+                          hint: translator.translate("search"),
                           icon: InkWell(
                               onTap: () {
                                 searchByNameBloc.add(Click());
@@ -104,15 +104,15 @@ class _HomePageState extends State<HomePage> {
                         bloc: searchByAddressBloc,
                         listener: (context, state) {
                           var data = state.model as SearchByCategoryResponse;
-                          if (state is Loading) showLoadingDialog(context);
+                          if (state is Loading)
+                            showLoadingDialog(context);
                           else if (state is ErrorLoading) {
                             Navigator.of(context).pop();
                             errorDialog(
                               context: context,
                               text: data.msg,
                             );
-                          }
-                         else if (state is Done) {
+                          } else if (state is Done) {
                             Navigator.of(context).pop();
                             Navigator.push(
                                 context,
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.4,
                             child: CustomTextField(
-                              hint: allTranslations.text("where"),
+                              hint: translator.translate("where"),
                               icon: Icon(Icons.location_on),
                               onSubmitted: (String val) {
                                 searchByAddressBloc.updateAddress(val);
@@ -173,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.4,
                             child: CustomTextField(
-                              hint: allTranslations.text("when"),
+                              hint: translator.translate("when"),
                               onSubmitted: (String val) {
                                 searchByTimeBloc.updateId(val);
                                 print(val);
@@ -200,21 +200,24 @@ class _HomePageState extends State<HomePage> {
                       return data == null
                           ? AppLoader()
                           : data.categories == null
-                              ? Center(child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 30),
-                                child: Text( data.msg == "الرمز المميز غير موجود"
-                                    ? "عفواً يرجي تسجيل الدخول اولاًً "
-                                    : data.msg == "الرمز المميز غير موجود"
-                                    ? "Authorization Token Not Found"
-                                    : "Sorry You Must Log In First" ,style: TextStyle(color: Colors.white),),
-                              ))
+                              ? Center(
+                                  child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 30),
+                                  child: Text(
+                                    data.msg == "الرمز المميز غير موجود"
+                                        ? "عفواً يرجي تسجيل الدخول اولاًً "
+                                        : data.msg == "الرمز المميز غير موجود"
+                                            ? "Authorization Token Not Found"
+                                            : "Sorry You Must Log In First",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ))
                               : AnimationLimiter(
                                   child: Container(
                                     height: 110,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
                                       itemCount: data.categories.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
@@ -228,9 +231,11 @@ class _HomePageState extends State<HomePage> {
                                             child: FadeInAnimation(
                                                 child: cat_item(
                                                     data.categories[index].icon,
-                                                   allTranslations.currentLanguage =="ar"? data.categories[index]
-                                                        .nameAr:data.categories[index]
-                                                       .nameEn,
+                                                    translator == "ar"
+                                                        ? data.categories[index]
+                                                            .nameAr
+                                                        : data.categories[index]
+                                                            .nameEn,
                                                     data.categories[index].id)),
                                           ),
                                         );

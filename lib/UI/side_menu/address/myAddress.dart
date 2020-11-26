@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/my_address_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -12,6 +11,7 @@ import 'package:buty/models/my_address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class MyAddresses extends StatefulWidget {
   @override
@@ -45,7 +45,7 @@ class _MyAddressesState extends State<MyAddresses> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("my_adresses"),
+            translator.translate("my_adresses"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: ListView(
@@ -101,8 +101,8 @@ class _MyAddressesState extends State<MyAddresses> {
                                               builder: (context) =>
                                                   AddNewLocation()));
                                     },
-                                    text: allTranslations
-                                        .text("add_new_location"),
+                                    text: translator
+                                        .translate("add_new_location"),
                                   )
                                 ],
                               ),

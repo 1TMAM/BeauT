@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/get_my_profile_bloc.dart';
 import 'package:buty/Bolcs/update_profile_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
@@ -52,7 +52,7 @@ class _EditProfileState extends State<EditProfile> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("edit_profile"),
+             translator.translate("edit_profile"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: BlocListener<GetMyProfileBloc, AppState>(
@@ -77,7 +77,7 @@ class _EditProfileState extends State<EditProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              allTranslations.text("edit_profile"),
+                               translator.translate("edit_profile"),
                               style: TextStyle(
                                   fontWeight: type == "data"
                                       ? FontWeight.bold
@@ -108,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              allTranslations.text("password"),
+                               translator.translate("password"),
                               style: TextStyle(
                                   fontWeight: type == "last"
                                       ? FontWeight.bold
@@ -176,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                         }
                       }
                     },
-                    text: allTranslations.text("change"),
+                    text:  translator.translate("change"),
                   ),
                 )
               ],
@@ -216,7 +216,7 @@ class _EditProfileState extends State<EditProfile> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.person, allTranslations.text("name")),
+            child: rowItem(Icons.person,  translator.translate("name")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -234,7 +234,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.phone, allTranslations.text("phone")),
+            child: rowItem(Icons.phone,  translator.translate("phone")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -252,7 +252,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.mail, allTranslations.text("email")),
+            child: rowItem(Icons.mail,  translator.translate("email")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -281,7 +281,7 @@ class _EditProfileState extends State<EditProfile> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child:
-                rowItem(Icons.lock, allTranslations.text("current_password")),
+                rowItem(Icons.lock,  translator.translate("current_password")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -300,7 +300,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.lock, allTranslations.text("new_password")),
+            child: rowItem(Icons.lock,  translator.translate("new_password")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -320,7 +320,7 @@ class _EditProfileState extends State<EditProfile> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: rowItem(
-                Icons.lock, allTranslations.text("confirm_new_password")),
+                Icons.lock,  translator.translate("confirm_new_password")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -348,10 +348,10 @@ class _EditProfileState extends State<EditProfile> {
 //     children: [
 //       SizedBox(),
 //       Text(
-//         allTranslations.text("confirm_change_phone"),
+//          translator.translate("confirm_change_phone"),
 //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
 //       ),
-//       Text(allTranslations.text("enter_code")),
+//       Text( translator.translate("enter_code")),
 //       Container(
 //           width: double.infinity,
 //           height: 100,
@@ -373,9 +373,9 @@ class _EditProfileState extends State<EditProfile> {
 //             ),
 //           )),
 //       CustomButton(
-//         text: allTranslations.text("confirm"),
+//         text:  translator.translate("confirm"),
 //       ),
-//       Text(allTranslations.text("resend_code")),
+//       Text( translator.translate("resend_code")),
 //       SizedBox(),
 //     ],
 //   );

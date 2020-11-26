@@ -1,6 +1,6 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class CallUs extends StatefulWidget {
   @override
@@ -28,7 +28,7 @@ class _CallUsState extends State<CallUs> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("call_us"),
+            translator.translate("call_us"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: Column(

@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/search_by_category_bloc.dart';
 import 'package:buty/UI/component/searchResultItem.dart';
 import 'package:buty/helpers/appEvent.dart';
@@ -7,6 +7,7 @@ import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 import 'CustomWidgets/AppLoader.dart';
 import 'CustomWidgets/EmptyItem.dart';
@@ -32,41 +33,42 @@ class _SearchResultState extends State<SearchResult> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-            onTap: () {
-              Navigator.pop(context);
+        appBar: AppBar(
+          leading: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              )),
+          title: Text(
+            "${translator.translate("result")}",
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+        ),
+        body: AnimationLimiter(
+          child: widget.beauticianServices == null ? Center(
+            child: Text("عفوا لا  يوجد  خبراء تجميل"),) : ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: widget.beauticianServices.length,
+            itemBuilder: (BuildContext context, int index) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 375),
+                child: SlideAnimation(
+                  verticalOffset: 50.0,
+                  child: FadeInAnimation(
+                      child: SearchReslutItem(
+                        beautic: widget.beauticianServices[index],
+                      )),
+                ),
+              );
             },
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )),
-        title: Text(
-          "${allTranslations.text("result")}",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
-      body: AnimationLimiter(
-        child:widget.beauticianServices==null ?Center(child: Text("عفوا لا  يوجد  خبراء تجميل"),): ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.beauticianServices.length,
-          itemBuilder: (BuildContext context, int index) {
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 375),
-              child: SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                    child: SearchReslutItem(
-                      beautic: widget.beauticianServices[index],
-                    )),
-              ),
-            );
-          },
-        ),
-      )
+          ),
+        )
     );
   }
 }

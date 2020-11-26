@@ -1,8 +1,6 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:flutter/material.dart';
-
-import '../../main.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ChangeLanguage extends StatefulWidget {
   @override
@@ -32,7 +30,7 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("change_language"),
+            translator.translate("change_language"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: ListView(
@@ -40,13 +38,15 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: InkWell(
-              onTap: ()  {
-                allTranslations.setNewLanguage("ar", true);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
+              onTap: () {
+                translator.setNewLanguage(
+                  context,
+                  newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
+                  remember: true,
+                  restart: false,
+                );
+                setState(() {
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
@@ -58,12 +58,12 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
                     children: [
                       Row(
                         children: [
-                         allTranslations.currentLanguage=="ar"
+                          translator.currentLanguage == "ar"
                               ? Icon(Icons.radio_button_checked)
                               : Icon(Icons.radio_button_unchecked),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(allTranslations.text("ar")),
+                            child: Text(translator.translate("ar")),
                           ),
                         ],
                       ),
@@ -83,14 +83,15 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: InkWell(
-              onTap: (){
-                allTranslations.setNewLanguage("en", true);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
-
+              onTap: () {
+                translator.setNewLanguage(
+                  context,
+                  newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
+                  remember: true,
+                  restart: false,
+                );
+                setState(() {
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
@@ -102,13 +103,12 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
                     children: [
                       Row(
                         children: [
-
-                          allTranslations.currentLanguage=="en"
+                          translator.currentLanguage == "en"
                               ? Icon(Icons.radio_button_checked)
                               : Icon(Icons.radio_button_unchecked),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(allTranslations.text("en")),
+                            child: Text(translator.translate("en")),
                           ),
                         ],
                       ),

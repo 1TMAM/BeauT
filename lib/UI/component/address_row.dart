@@ -1,7 +1,7 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/side_menu/address/EditAddresa.dart';
 import 'package:buty/models/my_address.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class AddressRow extends StatelessWidget {
   final Locations address;
@@ -43,7 +43,7 @@ class AddressRow extends StatelessWidget {
                             )));
               },
               child: Text(
-                allTranslations.text("edit"),
+                translator.translate("edit"),
                 style: TextStyle(fontSize: 13),
               ),
             ),

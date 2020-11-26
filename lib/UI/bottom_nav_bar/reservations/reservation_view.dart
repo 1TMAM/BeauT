@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/canselOrderBloc.dart';
 import 'package:buty/Bolcs/get_current_orders_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
@@ -15,6 +14,7 @@ import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class CurrentReservationView extends StatefulWidget {
   @override
@@ -42,11 +42,11 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
               : data.orders == null
                   ? Center(
                       child: EmptyItem(
-                      text:  data.msg == "الرمز المميز غير موجود"
+                      text: data.msg == "الرمز المميز غير موجود"
                           ? "عفواً يرجي تسجيل الدخول اولاًً "
                           : data.msg == "الرمز المميز غير موجود"
-                          ? "Authorization Token Not Found"
-                          : "Sorry You Must Log In First",
+                              ? "Authorization Token Not Found"
+                              : "Sorry You Must Log In First",
                     ))
                   : AnimationLimiter(
                       child: ListView.builder(
@@ -76,7 +76,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                         Row(
                                           children: [
                                             Text(
-                                                "${allTranslations.text("section")} "),
+                                                "${translator.translate("section")} "),
                                             Text(
                                               "${data.orders[index].services[0].category.nameAr}",
                                               style: TextStyle(
@@ -88,7 +88,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                         Row(
                                           children: [
                                             Text(
-                                                "${allTranslations.text("buty_name")}"),
+                                                "${translator.translate("buty_name")}"),
                                             Text(
                                               "${data.orders[index].beautician.beautName}",
                                               style: TextStyle(
@@ -100,7 +100,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                         Row(
                                           children: [
                                             Text(
-                                                "${allTranslations.text("time")} "),
+                                                "${translator.translate("time")} "),
                                             Text(
                                               " ${data.orders[index].time} ",
                                               style: TextStyle(
@@ -112,7 +112,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                         Row(
                                           children: [
                                             Text(
-                                                "${allTranslations.text("date")}"),
+                                                "${translator.translate("date")}"),
                                             Text(
                                               "${data.orders[index].date}",
                                               style: TextStyle(
@@ -124,9 +124,9 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                         Row(
                                           children: [
                                             Text(
-                                                "${allTranslations.text("details")}  "),
+                                                "${translator.translate("details")}  "),
                                             Text(
-                                              "${allTranslations.currentLanguage == "ar" ? data.orders[index].services[0].detailsAr : data.orders[index].services[0].detailsEn}",
+                                              "${translator == "ar" ? data.orders[index].services[0].detailsAr : data.orders[index].services[0].detailsEn}",
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor),
@@ -136,7 +136,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                         Row(
                                           children: [
                                             Text(
-                                                "${allTranslations.text("cost")} "),
+                                                "${translator.translate("cost")} "),
                                             Text(
                                               "  ${data.orders[index].cost}",
                                               style: TextStyle(
@@ -158,7 +158,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                           },
                                           child: CustomButton(
                                             text:
-                                                "${allTranslations.text("cansel")}",
+                                                "${translator.translate("cansel")}",
                                           ),
                                         )
                                       ],
@@ -200,7 +200,6 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 currentOrdersBloc.add(Hydrate());
-
               });
         }
       },
@@ -209,7 +208,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Text(
-              allTranslations.text("validate_cansel"),
+              translator.translate("validate_cansel"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -222,14 +221,14 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                   canselOrderbloc.add(Click());
                 },
                 width: MediaQuery.of(context).size.width / 2.8,
-                text: allTranslations.text("yes"),
+                text: translator.translate("yes"),
               ),
               CustomButton(
                 onBtnPress: () {
                   Navigator.pop(context);
                 },
                 width: MediaQuery.of(context).size.width / 2.8,
-                text: allTranslations.text("no"),
+                text: translator.translate("no"),
                 textColor: Colors.black,
                 color: Colors.white,
                 raduis: 1,

@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/AllPaymentMethodsResponse.dart';
@@ -16,7 +16,7 @@ class CardsRepo {
       'Authorization': token,
     };
     return NetworkUtil.internal().get(PaymentMethodsResponse(),
-        "users/methods/get-payment-method-card?lang=${allTranslations.currentLanguage}",
+        "users/methods/get-payment-method-card?lang=${translator.currentLanguage}",
         headers: headers);
   }
 
@@ -35,7 +35,7 @@ class CardsRepo {
       "cvv": cvv,
       "holder_name": holder_name,
       "exp_date": date == null ? null : "02/23",
-      "lang": allTranslations.currentLanguage
+      "lang": translator.currentLanguage
     });
 
     return NetworkUtil.internal().post(GeneralResponse(), "users/cards/store",
@@ -66,7 +66,7 @@ class CardsRepo {
       "cvv": cvv,
       "holder_name": holder_name,
       "exp_date": date == null ? null : "02/23",
-      "lang": allTranslations.currentLanguage
+      "lang": translator.currentLanguage
     });
 
     return NetworkUtil.internal().post(GeneralResponse(), "users/cards/update",

@@ -1,6 +1,6 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/bottom_nav_bar/reservations/reservation_view.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class Reservation extends StatefulWidget {
   @override
@@ -37,7 +37,7 @@ class _ReservationState extends State<Reservation> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          allTranslations.text("current"),
+                          translator.translate("current"),
                           style: TextStyle(
                               fontWeight: type == "current"
                                   ? FontWeight.bold
@@ -68,7 +68,7 @@ class _ReservationState extends State<Reservation> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          allTranslations.text("last"),
+                          translator.translate("last"),
                           style: TextStyle(
                               fontWeight: type == "last"
                                   ? FontWeight.bold

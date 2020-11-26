@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/add_new_locatoin.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -16,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class AddNewLocation extends StatefulWidget {
   @override
@@ -57,7 +57,7 @@ class _AddNewLocationState extends State<AddNewLocation> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("add_new_location"),
+            translator.translate("add_new_location"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: BlocListener(
@@ -88,7 +88,7 @@ class _AddNewLocationState extends State<AddNewLocation> {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             children: [
               Text(
-                allTranslations.text("choose_from_map"),
+                translator.translate("choose_from_map"),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Row(
@@ -101,7 +101,7 @@ class _AddNewLocationState extends State<AddNewLocation> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      allTranslations.text("location_details"),
+                      translator.translate("location_details"),
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
@@ -111,7 +111,7 @@ class _AddNewLocationState extends State<AddNewLocation> {
               CustomTextField(
                 validate: (String val) {
                   if (val.isEmpty) {
-                    return allTranslations.text("complete_data");
+                    return translator.translate("complete_data");
                   }
                 },
                 value: (String val) {
@@ -166,7 +166,7 @@ class _AddNewLocationState extends State<AddNewLocation> {
                       addNewAddressBloc.add(Click());
                     }
                   },
-                  text: allTranslations.text("add"),
+                  text: translator.translate("add"),
                 ),
               )
             ],

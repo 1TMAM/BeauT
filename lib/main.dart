@@ -1,39 +1,38 @@
 import 'package:buty/Base/Notifications.dart';
-import 'package:buty/Base/Translations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:notification_permissions/notification_permissions.dart';
-import 'Base/AllTranslation.dart';
+
 import 'UI/Auth/spash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await allTranslations.init();
-  runApp(MyApp());
+  await translator.init(
+    localeDefault: LocalizationDefaultType.device,
+    languagesList: <String>['ar', 'en'],
+    assetsDirectory: 'assets/langs/',
+    apiKeyGoogle: '<Key>', // NOT YET TESTED
+  ); // intialize
+
+  runApp(LocalizedApp(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
-  static restartApp(BuildContext context) {
-    final _MyAppState state =
-        context.ancestorStateOfType(const TypeMatcher<_MyAppState>());
-    state.restartApp();
-  }
 
   @override
   _MyAppState createState() => _MyAppState();
+
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState state = context.findAncestorStateOfType();
+    print(newLocale.languageCode);
+    // ignore: invalid_use_of_protected_member
+    state.setState(() => state.local = newLocale);
+  }
 }
 
 class _MyAppState extends State<MyApp> {
-  Key key = UniqueKey();
-
-  void restartApp() {
-    this.setState(() {
-      key = new UniqueKey();
-    });
-  }
-
+  Locale local;
   final GlobalKey<NavigatorState> navKey = GlobalKey();
-
   AppPushNotifications appPushNotifications = AppPushNotifications();
 
   @override
@@ -43,7 +42,7 @@ class _MyAppState extends State<MyApp> {
       appPushNotifications.notificationSetup(navKey);
     });
     Future<PermissionStatus> permissionStatus =
-    NotificationPermissions.getNotificationPermissionStatus();
+        NotificationPermissions.getNotificationPermissionStatus();
     permissionStatus.then((status) {
       print("======> $status");
     });
@@ -52,14 +51,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      locale: Locale(allTranslations.currentLanguage),
-      supportedLocales: allTranslations.supportedLocales(),
-      localizationsDelegates: [
-        TranslationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+      localizationsDelegates: translator.delegates,
+      locale: local,
+      supportedLocales: translator.locals(),
       navigatorKey: navKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

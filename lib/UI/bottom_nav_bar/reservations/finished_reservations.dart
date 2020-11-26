@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/canselOrderBloc.dart';
 import 'package:buty/Bolcs/get_current_orders_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
@@ -15,10 +14,12 @@ import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class FinishedReservationView extends StatefulWidget {
   @override
-  _FinishedReservationViewState createState() => _FinishedReservationViewState();
+  _FinishedReservationViewState createState() =>
+      _FinishedReservationViewState();
 }
 
 class _FinishedReservationViewState extends State<FinishedReservationView> {
@@ -40,137 +41,137 @@ class _FinishedReservationViewState extends State<FinishedReservationView> {
           return data == null
               ? AppLoader()
               : data.orders == null
-              ? Center(
-              child: EmptyItem(
-                text: data.msg,
-              ))
-              : AnimationLimiter(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: data.orders.length,
-              itemBuilder: (BuildContext context, int index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: double.infinity,
-                            height:
-                            MediaQuery.of(context).size.height / 2.6,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 10),
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${allTranslations.text("section")} "),
-                                      Text(
-                                        "${data.orders[index].services[0].category.nameAr}",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${allTranslations.text("buty_name")}"),
-                                      Text(
-                                        "${data.orders[index].beautician.beautName}",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${allTranslations.text("time")} "),
-                                      Text(
-                                        " ${data.orders[index].time} ",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${allTranslations.text("date")}"),
-                                      Text(
-                                        "${data.orders[index].date}",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${allTranslations.text("details")}  "),
-                                      Text(
-                                        "${allTranslations.currentLanguage == "ar" ? data.orders[index].services[0].detailsAr : data.orders[index].services[0].detailsEn}",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${allTranslations.text("cost")} "),
-                                      Text(
-                                        "  ${data.orders[index].cost}",
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .primaryColor),
-                                      ),
-                                    ],
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      CustomSheet(
-                                          context: context,
-                                          widget: cansel(
-                                              data.orders[index].id),
-                                          hight: MediaQuery.of(context)
-                                              .size
-                                              .height /
-                                              3.5);
-                                    },
-                                    child: CustomButton(
-                                      text:
-                                      "${allTranslations.text("cansel")}",
+                  ? Center(
+                      child: EmptyItem(
+                      text: data.msg,
+                    ))
+                  : AnimationLimiter(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: data.orders.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height / 2.6,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${translator.translate("section")} "),
+                                            Text(
+                                              "${data.orders[index].services[0].category.nameAr}",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${translator.translate("buty_name")}"),
+                                            Text(
+                                              "${data.orders[index].beautician.beautName}",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${translator.translate("time")} "),
+                                            Text(
+                                              " ${data.orders[index].time} ",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${translator.translate("date")}"),
+                                            Text(
+                                              "${data.orders[index].date}",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${translator.translate("details")}  "),
+                                            Text(
+                                              "${translator == "ar" ? data.orders[index].services[0].detailsAr : data.orders[index].services[0].detailsEn}",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${translator.translate("cost")} "),
+                                            Text(
+                                              "  ${data.orders[index].cost}",
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                            ),
+                                          ],
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            CustomSheet(
+                                                context: context,
+                                                widget: cansel(
+                                                    data.orders[index].id),
+                                                hight: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    3.5);
+                                          },
+                                          child: CustomButton(
+                                            text:
+                                                "${translator.translate("cansel")}",
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.grey[500]),
+                                      borderRadius: BorderRadius.circular(10)),
+                                ),
+                              )),
                             ),
-                            decoration: BoxDecoration(
-                                border:
-                                Border.all(color: Colors.grey[500]),
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                        )),
-                  ),
-                );
-              },
-            ),
-          );
+                          );
+                        },
+                      ),
+                    );
         },
       ),
     );
@@ -195,7 +196,6 @@ class _FinishedReservationViewState extends State<FinishedReservationView> {
                 Navigator.pop(context);
                 Navigator.pop(context);
                 currentOrdersBloc.add(Hydrate());
-
               });
         }
       },
@@ -204,7 +204,7 @@ class _FinishedReservationViewState extends State<FinishedReservationView> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Text(
-              allTranslations.text("validate_cansel"),
+              translator.translate("validate_cansel"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -217,14 +217,14 @@ class _FinishedReservationViewState extends State<FinishedReservationView> {
                   canselOrderbloc.add(Click());
                 },
                 width: MediaQuery.of(context).size.width / 2.8,
-                text: allTranslations.text("yes"),
+                text: translator.translate("yes"),
               ),
               CustomButton(
                 onBtnPress: () {
                   Navigator.pop(context);
                 },
                 width: MediaQuery.of(context).size.width / 2.8,
-                text: allTranslations.text("no"),
+                text: translator.translate("no"),
                 textColor: Colors.black,
                 color: Colors.white,
                 raduis: 1,

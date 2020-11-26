@@ -1,8 +1,9 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/bottom_nav_bar/hom_page.dart';
 import 'package:buty/UI/bottom_nav_bar/reservations/reservations.dart';
 import 'package:buty/UI/component/drawer.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 import 'more.dart';
 import 'notifications.dart';
@@ -27,6 +28,28 @@ class _MainPageState extends State<MainPage> {
     More(),
   ];
 
+  bool isLogged = false;
+
+  void getFromCash() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var logged =
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+
+    if (logged == "") {
+      setState(() {
+        isLogged = false;
+      });
+    } else {
+      setState(() {
+        isLogged = true;
+      });
+    }
+    print(
+        "Valuee ===>  ${mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN)}");
+
+    print("USER STATUS    ======> ${isLogged == true ? "User" : "Geust"}");
+  }
+
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   void _onItemTapped(int index) {
@@ -39,6 +62,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
+    getFromCash();
     if (widget.index == null) {
       setState(() {
         selectedPageIndex = 0;
@@ -52,12 +76,14 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        endDrawer: MyDrawer(),
+        endDrawer: MyDrawer(
+          isLogged: isLogged,
+        ),
         key: _drawerKey,
         bottomNavigationBar: BottomNavigationBar(
             showUnselectedLabels: true,
-            selectedIconTheme: IconThemeData(
-                size: 26, color: Theme.of(context).primaryColor),
+            selectedIconTheme:
+                IconThemeData(size: 26, color: Theme.of(context).primaryColor),
             unselectedIconTheme: IconThemeData(size: 20, color: Colors.grey),
             showSelectedLabels: true,
             type: BottomNavigationBarType.shifting,
@@ -74,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                     size: 30,
                     color: Theme.of(context).primaryColor,
                   ),
-                  title: Text(allTranslations.text("home"),
+                  title: Text(translator.translate("home"),
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 11,
@@ -90,12 +116,11 @@ class _MainPageState extends State<MainPage> {
                     size: 30,
                     color: Theme.of(context).primaryColor,
                   ),
-                  title: Text(allTranslations.text("notifications"),
+                  title: Text(translator.translate("notifications"),
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 11,
                       ))),
-
               BottomNavigationBarItem(
                   icon: Icon(
                     Icons.calendar_today,
@@ -107,7 +132,7 @@ class _MainPageState extends State<MainPage> {
                     size: 30,
                     color: Theme.of(context).primaryColor,
                   ),
-                  title: Text(allTranslations.text("reservation"),
+                  title: Text(translator.translate("reservation"),
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 11,
@@ -123,7 +148,7 @@ class _MainPageState extends State<MainPage> {
                     size: 30,
                     color: Theme.of(context).primaryColor,
                   ),
-                  title: Text(allTranslations.text("more"),
+                  title: Text(translator.translate("more"),
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 11,

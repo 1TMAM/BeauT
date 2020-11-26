@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/buty_details/payment.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel, EventList;
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ChooseDate extends StatefulWidget {
   final List<MyList> servicseList;
@@ -71,7 +71,7 @@ class _ChooseDateState extends State<ChooseDate> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("choose_time"),
+            translator.translate("choose_time"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: ListView(
@@ -164,12 +164,12 @@ class _ChooseDateState extends State<ChooseDate> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${allTranslations.text("service_name")}  :  ${allTranslations.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                "${translator.translate("service_name")}  :  ${translator == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                "${allTranslations.text("persons")}  :  ${widget.servicseList[index].count}  ",
+                                "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.bold),
                               ),
@@ -179,12 +179,12 @@ class _ChooseDateState extends State<ChooseDate> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${widget.servicseList[index].price} ${allTranslations.text("sar")}  ",
+                                "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
                                 style: TextStyle(
                                     fontSize: 13, fontWeight: FontWeight.w400),
                               ),
                               Text(
-                                "${widget.servicseList[index].estimatedTime} ${allTranslations.text("min")} ",
+                                "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
                                 style: TextStyle(fontSize: 13),
                               ),
                             ],
@@ -199,7 +199,7 @@ class _ChooseDateState extends State<ChooseDate> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              allTranslations.text("address"),
+              translator.translate("address"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -232,7 +232,7 @@ class _ChooseDateState extends State<ChooseDate> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          allTranslations.text("at_home"),
+                          translator.translate("at_home"),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -294,7 +294,7 @@ class _ChooseDateState extends State<ChooseDate> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          allTranslations.text("at_buty"),
+                          translator.translate("at_buty"),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -339,7 +339,7 @@ class _ChooseDateState extends State<ChooseDate> {
             },
             child: CustomButton(
               text:
-                  "${allTranslations.text("pay_now")}  ${widget.total} ريال  ",
+                  "${translator.translate("pay_now")}  ${widget.total} ريال  ",
             ),
           )
         ],

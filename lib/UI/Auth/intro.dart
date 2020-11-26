@@ -1,10 +1,9 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/UI/Auth/sign_up.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:flutter/material.dart';
-
-import 'login.dart';
+ import 'login.dart';
 
 class Intro extends StatelessWidget {
   @override
@@ -27,7 +26,7 @@ class Intro extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 20),
             child: Text(
-              allTranslations.text("intro_text"),
+               translator.translate("intro_text"),
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
@@ -40,7 +39,7 @@ class Intro extends StatelessWidget {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => SignUp()));
             },
-            text: allTranslations.text("sign_up"),
+            text:  translator.translate("sign_up"),
           ),
           InkWell(
             onTap: (){
@@ -49,7 +48,7 @@ class Intro extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: CustomButton(
-                text: allTranslations.text("login"),
+                text:  translator.translate("login"),
               ),
             ),
           ),
@@ -62,7 +61,7 @@ class Intro extends StatelessWidget {
                           index: 0,
                         )));
               },
-              child: Text(allTranslations.text("skip")))
+              child: Text( translator.translate("skip")))
         ],
       ),
     );

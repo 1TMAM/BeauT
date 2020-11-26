@@ -1,5 +1,5 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/reset_password_bloc.dart';
+import 'package:buty/UI/Auth/login.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
@@ -10,6 +10,7 @@ import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ResetPassword extends StatefulWidget {
   @override
@@ -62,6 +63,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             );
           }
           if (state is Done) {
+            Navigator.pop(context);
             CustomSheet(
                 context: context,
                 widget: Column(
@@ -85,9 +87,17 @@ class _ResetPasswordState extends State<ResetPassword> {
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    Text(allTranslations.text("change_done")),
+                    Text(translator.translate("change_done")),
                     CustomButton(
-                      text: allTranslations.text("login"),
+                      text: translator.translate("login"),
+                      onBtnPress: (){
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ),
+                                (Route<dynamic> route) => false);
+                      },
                     ),
                   ],
                 ));
@@ -98,45 +108,31 @@ class _ResetPasswordState extends State<ResetPassword> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             children: [
-              rowItem(Icons.lock, allTranslations.text("newPassword")),
+              rowItem(Icons.lock, translator.translate("newPassword")),
               CustomTextField(
                 value: (String val) {
-                  resetPasswordBloc.updateConfirmPassword(val);
+                  resetPasswordBloc.updatePassword(val);
+                  print(val);
                 },
                 validate: (String val) {
                   if (val.length < 8) {
                     return "الرجاء ادخال كلمة مرور صحيحة";
                   }
                 },
-                suffix: InkWell(
-                  onTap: () {
-                    changeNew();
-                    print(seeNew);
-                  },
-                  child: seeNew == false
-                      ? Icon(Icons.visibility_off)
-                      : Icon(Icons.visibility),
-                ),
                 secureText: seeNew,
                 hint: "**********",
               ),
-              rowItem(Icons.lock, allTranslations.text("confirm_newPassword")),
+              rowItem(Icons.lock, translator.translate("confirm_newPassword")),
               CustomTextField(
                 validate: (String val) {
                   if (val.length < 8) {
                     return "الرجاء ادخال كلمة مرور صحيحة";
                   }
                 },
-                suffix: InkWell(
-                  onTap: () {
-                    changeConfirm();
-                  },
-                  child: seeConfirm == false
-                      ? Icon(Icons.visibility_off)
-                      : Icon(Icons.visibility),
-                ),
                 value: (String val) {
                   resetPasswordBloc.updateConfirmPassword(val);
+                  print(val);
+
                 },
                 secureText: seeConfirm,
                 hint: "**********",
@@ -149,7 +145,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     resetPasswordBloc.add(Click());
                   }
                 },
-                text: allTranslations.text("change"),
+                text: translator.translate("change"),
               )
             ],
           ),

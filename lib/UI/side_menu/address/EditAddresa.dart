@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/EditAddress.dart';
 import 'package:buty/Bolcs/add_new_locatoin.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
@@ -96,7 +96,7 @@ class _EditAddressState extends State<EditAddress> {
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             children: [
               Text(
-                allTranslations.text("choose_from_map"),
+                 translator.translate("choose_from_map"),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               Row(
@@ -109,7 +109,7 @@ class _EditAddressState extends State<EditAddress> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      allTranslations.text("location_details"),
+                       translator.translate("location_details"),
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
@@ -119,7 +119,7 @@ class _EditAddressState extends State<EditAddress> {
               CustomTextField(
                 validate: (String val) {
                   if (val.isEmpty) {
-                    return allTranslations.text("complete_data");
+                    return  translator.translate("complete_data");
                   }
                 },
                 value: (String val) {
@@ -174,7 +174,7 @@ class _EditAddressState extends State<EditAddress> {
                       editAddressBloc.add(Click());
                     }
                   },
-                  text: allTranslations.text("edit"),
+                  text:  translator.translate("edit"),
                 ),
               )
             ],

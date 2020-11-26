@@ -1,10 +1,9 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/UI/Auth/intro.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
+import 'package:buty/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../main.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class Languages extends StatefulWidget {
   final GlobalKey navKey;
@@ -16,7 +15,6 @@ class Languages extends StatefulWidget {
 }
 
 class _LanguagesState extends State<Languages> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,32 +36,27 @@ class _LanguagesState extends State<Languages> {
               height: 50,
             ),
             Text(
-              allTranslations.text("welcome"),
+              translator.translate("welcome"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40 ,vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: Center(
                   child: Text(
-                allTranslations.text("quot"),
+                translator.translate("quot"),
                 textAlign: TextAlign.center,
               )),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                allTranslations.text("choose_lang"),
+                translator.translate("choose_lang"),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             InkWell(
-              onTap: () {
-                allTranslations.setNewLanguage("ar", true);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
+              onTap: () async {
+                changeLang("ar");
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
@@ -75,13 +68,12 @@ class _LanguagesState extends State<Languages> {
                     children: [
                       Row(
                         children: [
-
-                          allTranslations.currentLanguage=="ar"
+                          translator.currentLanguage == "ar"
                               ? Icon(Icons.radio_button_checked)
                               : Icon(Icons.radio_button_unchecked),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(allTranslations.text("ar")),
+                            child: Text(translator.translate("ar")),
                           ),
                         ],
                       ),
@@ -98,15 +90,7 @@ class _LanguagesState extends State<Languages> {
               ),
             ),
             InkWell(
-              onTap: () {
-                allTranslations.setNewLanguage("en", true);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyApp()),
-                        (Route<dynamic> route) => false);
-
-              },
+              onTap: () => changeLang("en"),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Container(
@@ -117,13 +101,12 @@ class _LanguagesState extends State<Languages> {
                     children: [
                       Row(
                         children: [
-
-                          allTranslations.currentLanguage=="en"
+                          translator.currentLanguage == "en"
                               ? Icon(Icons.radio_button_checked)
                               : Icon(Icons.radio_button_unchecked),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(allTranslations.text("en")),
+                            child: Text(translator.translate("en")),
                           ),
                         ],
                       ),
@@ -146,12 +129,23 @@ class _LanguagesState extends State<Languages> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Intro()));
                 },
-                text: allTranslations.text("confirm"),
+                text: translator.translate("confirm"),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void changeLang(String lang) async {
+    translator.setNewLanguage(
+      context,
+      newLanguage: '${lang}',
+      remember: true,
+      restart: false,
+    );
+    MyApp.setLocale(context, Locale('${lang}'));
+
   }
 }

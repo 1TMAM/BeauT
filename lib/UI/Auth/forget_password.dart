@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/forget_password_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
@@ -9,8 +9,7 @@ import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'check_code.dart';
+ import 'check_code.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
@@ -64,8 +63,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   ),
                 ),
               ),
-              Center(child: Text(allTranslations.text("forget_password"))),
-              rowItem(Icons.mail, allTranslations.text("email")),
+              Center(child: Text( translator.translate("forget_password"))),
+              rowItem(Icons.mail,  translator.translate("email")),
               CustomTextField(
                 hint: "example@gmail.com",
                 validate: (String val) {
@@ -88,7 +87,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     forgetPasswordBloc.add(Click());
                   }
                 },
-                text: allTranslations.text("send"),
+                text:  translator.translate("send"),
               ),
             ],
           ),

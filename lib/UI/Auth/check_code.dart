@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/check_code_bloc.dart';
 import 'package:buty/UI/Auth/reset_passeord.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
@@ -8,7 +8,7 @@ import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pin_code_text_field/pin_code_text_field.dart';
+ import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 class CheckCode extends StatefulWidget {
   final String email;
@@ -64,7 +64,7 @@ class CheckCodeState extends State<CheckCode> {
               padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 70),
               child: Center(
                   child: Text(
-                allTranslations.text("enter_code"),
+                 translator.translate("enter_code"),
                 textAlign: TextAlign.center,
               )),
             ),

@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/add_new_card_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -47,7 +47,7 @@ class _AddNewCardState extends State<AddNewCard> {
               )),
           centerTitle: true,
           title: Text(
-            allTranslations.text("add_new_card"),
+             translator.translate("add_new_card"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
       body: BlocListener(
@@ -75,7 +75,7 @@ class _AddNewCardState extends State<AddNewCard> {
                             color: Theme.of(context).primaryColor),
                       ),
                     ),
-                    Text(allTranslations.text("done_add_card")),
+                    Text( translator.translate("done_add_card")),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Icon(
@@ -91,7 +91,7 @@ class _AddNewCardState extends State<AddNewCard> {
                             MaterialPageRoute(builder: (context) => MyCards()));
                       },
                       child: CustomButton(
-                        text: allTranslations.text("back"),
+                        text:  translator.translate("back"),
                       ),
                     )
                   ],
@@ -109,7 +109,7 @@ class _AddNewCardState extends State<AddNewCard> {
                     exampleContainer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(allTranslations.text("card_number")),
+                      child: Text( translator.translate("card_number")),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -137,7 +137,7 @@ class _AddNewCardState extends State<AddNewCard> {
                         children: [
                           Column(
                             children: [
-                              Text(allTranslations.text("expireDate")),
+                              Text( translator.translate("expireDate")),
                               Container(
                                   width:
                                       MediaQuery.of(context).size.width / 2.5,
@@ -189,7 +189,7 @@ class _AddNewCardState extends State<AddNewCard> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(allTranslations.text("card_holder")),
+                      child: Text( translator.translate("card_holder")),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -218,7 +218,7 @@ class _AddNewCardState extends State<AddNewCard> {
                           }
                         },
                         child: CustomButton(
-                          text: "${allTranslations.text("add")}",
+                          text: "${ translator.translate("add")}",
                         )),
                   ],
                 ),

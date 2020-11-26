@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,11 +20,9 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  final String language = allTranslations.currentLanguage;
 
   @override
   void initState() {
-    print(language);
     _loadData();
     super.initState();
   }

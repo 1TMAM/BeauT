@@ -11,6 +11,7 @@ import 'package:buty/models/general_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 import 'active_account.dart';
 
@@ -60,23 +61,24 @@ class _SignUpState extends State<SignUp> {
             }
           },
           child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: Form(
               key: key,
               child: Column(
                 children: [
-                  rowItem(Icons.person, allTranslations.text("name")),
+                  rowItem(Icons.person, translator.translate("name")),
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
                         return "     ";
                       }
                     },
-                    hint: allTranslations.text("write_name"),
+                    hint: translator.translate("write_name"),
                     value: (String val) {
                       signUpBloc.updateName(val);
                     },
                   ),
-                  rowItem(Icons.phone, allTranslations.text("phone")),
+                  rowItem(Icons.phone, translator.translate("phone")),
                   CustomTextField(
                     validate: (String val) {
                       if (val.length < 10) {
@@ -89,7 +91,7 @@ class _SignUpState extends State<SignUp> {
                       signUpBloc.updateMobile(val);
                     },
                   ),
-                  rowItem(Icons.mail, allTranslations.text("email")),
+                  rowItem(Icons.mail, translator.translate("email")),
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
@@ -102,19 +104,19 @@ class _SignUpState extends State<SignUp> {
                       signUpBloc.updateEmail(val);
                     },
                   ),
-                  rowItem(Icons.location_on, allTranslations.text("address")),
+                  rowItem(Icons.location_on, translator.translate("address")),
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
                         return "     ";
                       }
                     },
-                    hint: allTranslations.text("write_address"),
+                    hint: translator.translate("write_address"),
                     value: (String val) {
                       signUpBloc.updateAddress(val);
                     },
                   ),
-                  rowItem(Icons.lock, allTranslations.text("password")),
+                  rowItem(Icons.lock, translator.translate("password")),
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
@@ -130,42 +132,42 @@ class _SignUpState extends State<SignUp> {
                   SizedBox(
                     height: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            allTranslations.text("add_depet_card"),
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(
-                              allTranslations.text("default"),
-                              style: TextStyle(color: Colors.grey[500]),
+                  InkWell(
+                    onTap: (){
+                      setState(() {
+                        showVisa =!showVisa;
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(width: 10,),
+
+                            Text(
+                              translator.translate("add_depet_card"),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ],
-                      ),
-                      showVisa == false
-                          ? InkWell(
-                              onTap: () {
-                                setState(() {
-                                  showVisa = true;
-                                });
-                              },
-                              child: Icon(Icons.keyboard_arrow_up))
-                          : InkWell(
-                              onTap: () {
-                                setState(() {
-                                  showVisa = false;
-                                });
-                              },
-                              child: Icon(Icons.keyboard_arrow_down)),
-                    ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                translator.translate("default"),
+                                style: TextStyle(color: Colors.grey[500]),
+                              ),
+                            ),
+                          ],
+                        ),
+                        showVisa == false
+                            ? Icon(Icons.keyboard_arrow_up)
+                            : Icon(Icons.keyboard_arrow_down),
+                      ],
+                    ),
                   ),
                   showVisa == false ? Visa() : SizedBox(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   InkWell(
                     onTap: () {
                       if (!key.currentState.validate()) {
@@ -175,7 +177,7 @@ class _SignUpState extends State<SignUp> {
                       }
                     },
                     child: CustomButton(
-                      text: allTranslations.text("register"),
+                      text: translator.translate("register"),
                     ),
                   ),
                   InkWell(
@@ -184,7 +186,7 @@ class _SignUpState extends State<SignUp> {
                             MaterialPageRoute(builder: (context) => Login()));
                       },
                       child: Center(
-                          child: Text(allTranslations.text("have_acc")))),
+                          child: Text(translator.translate("have_acc")))),
                 ],
               ),
             ),
@@ -193,85 +195,62 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget Visa() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(allTranslations.text("card_number")),
-        CustomTextField(
-          hint: allTranslations.text("card_number"),
-          inputType: TextInputType.number,
-          value: (String val) {
-            signUpBloc.updateNumber(val);
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text("expireDate"),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    child: CustomTextField(
-                      hint: "Exp Date",
-                      inputType: TextInputType.number,
-                      value: (String val) {
-                        signUpBloc.updateExpDate(val);
-                      },
-                    )),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text("CVV"),
-                ),
-                Container(
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    child: CustomTextField(
-                      hint: "CVV",
-                      inputType: TextInputType.number,
-                      value: (String val) {
-                        signUpBloc.updateCvv(val);
-                      },
-                    )),
-              ],
-            ),
-          ],
-        ),
-        Text(allTranslations.text("card_holder")),
-        CustomTextField(
-          hint: "User Name",
-          value: (String val) {
-            signUpBloc.updateHolderName(val);
-          },
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(translator.translate("card_number") ,
+      style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),),
+          CustomTextField(
+            hint: translator.translate("card_number"),
+            inputType: TextInputType.number,
+            value: (String val) {
+              signUpBloc.updateNumber(val);
+            },
+          ),
+          Text(translator.translate("expireDate"),
+            style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),),
+          CustomTextField(
+            hint: translator.translate("expireDate"),
+            inputType: TextInputType.number,
+            value: (String val) {
+              signUpBloc.updateExpDate(val);
+            },
+          ),
+          Text(translator.translate("card_holder"),
+            style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),),
+          CustomTextField(
+            hint: translator.translate("card_holder"),
+            value: (String val) {
+              signUpBloc.updateHolderName(val);
+            },
+          ),
+        ],
+      ),
     );
   }
 
   Widget rowItem(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          color: Theme.of(context).primaryColor,
-          size: 25,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 13),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 3 ,horizontal: 10),
+      child: Row(
+        children: [
+          SizedBox(width: 2,),
+          Icon(
+            icon,
+            color: Theme.of(context).primaryColor,
+            size: 20,
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

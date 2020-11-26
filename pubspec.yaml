@@ -21,10 +21,9 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 dependencies:
   cupertino_icons: ^0.1.2
-  flutter_localizations:
-    sdk: flutter
   flutter:
     sdk: flutter
+  intl: ^0.16.1
   flutter_bloc: ^3.2.0
   rxdart: ^0.23.0
   shared_preferences: ^0.5.3+4
@@ -45,6 +44,9 @@ dependencies:
   flutter_svg: ^0.18.1
   fluttertoast: ^7.1.1
   tinycolor: ^1.0.2
+  localize_and_translate: ^3.0.2
+  flutter_localizations:
+    sdk: flutter
 
 
 
@@ -62,7 +64,7 @@ dev_dependencies:
 
 
 flutter:
-
+  generate: true
   uses-material-design: true
   assets:
     - assets/images/

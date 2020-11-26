@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/search_by_address_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/helpers/appEvent.dart';
@@ -39,7 +39,7 @@ class _SearchByAddressState extends State<SearchByAddress> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5)),
                 child: CustomTextField(
-                  hint: "${allTranslations.text("enter_location")}",
+                  hint: "${ translator.translate("enter_location")}",
                   value: (String val) {
                     print(val);
                     searchByAddressBloc.updateAddress(val);

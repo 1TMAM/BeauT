@@ -1,4 +1,4 @@
-import 'package:buty/Base/AllTranslation.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/all_providers_response.dart';
@@ -20,7 +20,7 @@ class UserJourny {
     Map<String, String> headers = {
       'Authorization': token,
     };
-    return NetworkUtil.internal().get(CategoriesResponse(), "user/categories/get-all-categories?lang=${allTranslations.currentLanguage}", headers: headers);
+    return NetworkUtil.internal().get(CategoriesResponse(), "user/categories/get-all-categories?lang=${translator.currentLanguage}", headers: headers);
   }
 
 //------------------------------------------------------------------------------/
@@ -51,7 +51,7 @@ class UserJourny {
       'Authorization': token,
     };
     return NetworkUtil.internal().get(CategoriesResponse(),
-        "user/categories/get-all-categories?lang=${allTranslations.currentLanguage}",
+        "user/categories/get-all-categories?lang=${translator.currentLanguage}",
         headers: headers);
   }
 
@@ -187,7 +187,7 @@ class UserJourny {
     print("coupon ======>  ${coupon}");
     print("location_id  ======> ${location_id}");
     FormData data = FormData.fromMap({
-      "lang": allTranslations.currentLanguage,
+      "lang": translator.currentLanguage,
       "date": date,
       "time": "10:00",
       "location_type": location_type,

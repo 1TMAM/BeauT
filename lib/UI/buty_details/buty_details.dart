@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/Bolcs/getBeauticianDetailsBloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
@@ -16,6 +15,7 @@ import 'package:buty/models/BeauticianDetails.dart';
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ButyDetails extends StatefulWidget {
   final int id;
@@ -116,7 +116,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                         child: Row(
                           children: [
                             Text(
-                              "${allTranslations.text("services")} : ",
+                              "${translator.translate("services")} : ",
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width - 100,
@@ -154,12 +154,12 @@ class _ButyDetailsState extends State<ButyDetails> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                            "${allTranslations.text("location")}  : ${data.beautician[0].address}  "),
+                            "${translator.translate("location")}  : ${data.beautician[0].address}  "),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          "${allTranslations.text("services")}  ",
+                          "${translator.translate("services")}  ",
                         ),
                       ),
                       ListView.builder(
@@ -176,7 +176,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                               if (servicesList.isEmpty) {
                                 errorDialog(
                                     context: context,
-                                    text: allTranslations.text("enter_items"));
+                                    text: translator.translate("enter_items"));
                               } else {
                                 Navigator.push(
                                     context,
@@ -188,7 +188,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                               }
                             } else {
                               errorDialog(
-                                  text: allTranslations.currentLanguage == "ar"
+                                  text: translator == "ar"
                                       ? "يرجي تسجيل الدخول اولاًً "
                                       : " You Must Login Frist",
                                   context: context);
@@ -196,7 +196,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                           },
                           child: CustomButton(
                             text:
-                                "${allTranslations.text("choose_time")} ${total} ريال",
+                                "${translator.translate("choose_time")} ${total} ${translator.translate("sar")}",
                           ))
                     ],
                   );
@@ -220,7 +220,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                 child: Row(
                   children: [
                     Text(
-                      "${allTranslations.currentLanguage == "ar" ? list[index].nameAr : list[index].nameEn}",
+                      "${translator == "ar" ? list[index].nameAr : list[index].nameEn}",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -232,7 +232,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      allTranslations.text("persons"),
+                      translator.translate("persons"),
                     ),
                     Row(
                       children: [
@@ -278,7 +278,7 @@ class _ButyDetailsState extends State<ButyDetails> {
               Container(
                 width: MediaQuery.of(context).size.width / 3.5,
                 child: Text(
-                  "${allTranslations.currentLanguage == "ar" ? list[index].detailsAr : list[index].detailsEn}  ",
+                  "${translator == "ar" ? list[index].detailsAr : list[index].detailsEn}  ",
                   style: TextStyle(fontSize: 10),
                 ),
               ),
@@ -292,7 +292,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                       child: Column(
                         children: [
                           Text(
-                            "${list[index].price} ريال",
+                            "${list[index].price} ${translator.translate("sar")}",
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
@@ -325,12 +325,15 @@ class _ButyDetailsState extends State<ButyDetails> {
                             print(json.encode(servicesList));
                           }
                         },
-                        child:  Container(
-                          decoration: BoxDecoration(color: Theme.of(context).primaryColor ,borderRadius: BorderRadius.circular(5)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(5)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20 ,vertical: 1),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 1),
                             child: Text(
-                              allTranslations.text("reserve"),
+                              translator.translate("reserve"),
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
