@@ -1,7 +1,4 @@
-import 'package:localize_and_translate/localize_and_translate.dart';
-import 'package:buty/Bolcs/get_my_profile_bloc.dart';
 import 'package:buty/Bolcs/update_profile_bloc.dart';
-import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
@@ -12,9 +9,10 @@ import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/general_response.dart';
-import 'package:buty/models/user_profile_response.dart';
+import 'package:buty/models/updateProfileResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -26,165 +24,169 @@ class _EditProfileState extends State<EditProfile> {
   GlobalKey<FormState> dataKey = GlobalKey();
   GlobalKey<FormState> passKey = GlobalKey();
 
+  String name, email, phone;
+
+  getFromCash() async {
+    String _name, _email, _phone;
+
+    var mSharedPreferenceManager = SharedPreferenceManager();
+
+    _email = await mSharedPreferenceManager.readString(CachingKey.EMAIL);
+    _phone = await mSharedPreferenceManager.readString(CachingKey.MOBILE_NUMBER);
+    _name = await mSharedPreferenceManager.readString(CachingKey.USER_NAME);
+    setState(() {
+      name = _name;
+      email = _email;
+      phone = _phone;
+    });
+  }
+
   @override
   void initState() {
-    getMyProfileBloc.add(Hydrate());
+    getFromCash();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainPage(
-                              index: 0,
-                            )));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: Text(
-             translator.translate("edit_profile"),
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          )),
-      body: BlocListener<GetMyProfileBloc, AppState>(
-        bloc: getMyProfileBloc,
-        listener: (context, state) {},
-        child: BlocBuilder(
-          bloc: getMyProfileBloc,
-          builder: (context, state) {
-            var date = state.model as UserProfileResoonse;
-            return date ==null ?AppLoader(): ListView(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainPage(
+                                index: 0,
+                              )));
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            title: Text(
+              translator.translate("edit_profile"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )),
+        body: ListView(
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          type = "data";
-                        });
-                      },
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                               translator.translate("edit_profile"),
-                              style: TextStyle(
-                                  fontWeight: type == "data"
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4,
-                              height: 2,
-                              color: type == "data"
-                                  ? Colors.black
-                                  : Colors.grey[200],
-                            )
-                          ],
-                        ),
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: 40,
-                        color: Colors.grey[200],
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          type = "last";
-                        });
-                      },
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                               translator.translate("password"),
-                              style: TextStyle(
-                                  fontWeight: type == "last"
-                                      ? FontWeight.bold
-                                      : FontWeight.normal),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4,
-                              height: 2,
-                              color: type == "last"
-                                  ? Colors.black
-                                  : Colors.grey[200],
-                            )
-                          ],
-                        ),
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: 40,
-                        color: Colors.grey[200],
-                      ),
-                    ),
-                  ],
-                ),
-                type == "data" ? editDataView(date.user) : passView(),
-                BlocListener(
-                  bloc: updateProfileBloc,
-                  listener: (context, state) {
-                    var data = state.model as GeneralResponse;
-                    if (state is Loading) {
-                      showLoadingDialog(context);
-                    } else if (state is ErrorLoading) {
-                      Navigator.pop(context);
-                      errorDialog(
-                        context: context,
-                        text: data.msg,
-                      );
-                      print("Dialoggg");
-                    } else if (state is Done) {
-                      onDoneDialog(
-                          context: context,
-                          text: data.msg,
-                          function: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MainPage(
-                                    index: 0,
-                                  ),
-                                ),
-                                (Route<dynamic> route) => false);
-                          });
-                    }
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      type = "data";
+                    });
                   },
-                  child: CustomButton(
-                    onBtnPress: () {
-                      if (type == "data") {
-                        if (!dataKey.currentState.validate()) {
-                          return;
-                        } else {
-                          updateProfileBloc.add(Click());
-                        }
-                      } else {
-                        if (!passKey.currentState.validate()) {
-                          return;
-                        } else {
-                          updateProfileBloc.add(Click());
-                        }
-                      }
-                    },
-                    text:  translator.translate("change"),
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          translator.translate("edit_profile"),
+                          style: TextStyle(
+                              fontWeight: type == "data"
+                                  ? FontWeight.bold
+                                  : FontWeight.normal),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 4,
+                          height: 2,
+                          color:
+                              type == "data" ? Colors.black : Colors.grey[200],
+                        )
+                      ],
+                    ),
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 40,
+                    color: Colors.grey[200],
                   ),
-                )
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      type = "last";
+                    });
+                  },
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          translator.translate("password"),
+                          style: TextStyle(
+                              fontWeight: type == "last"
+                                  ? FontWeight.bold
+                                  : FontWeight.normal),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width / 4,
+                          height: 2,
+                          color:
+                              type == "last" ? Colors.black : Colors.grey[200],
+                        )
+                      ],
+                    ),
+                    width: MediaQuery.of(context).size.width / 2,
+                    height: 40,
+                    color: Colors.grey[200],
+                  ),
+                ),
               ],
-            );
-          },
-        ),
-      ),
-    );
+            ),
+            type == "data" ? editDataView(name, email, phone) : passView(),
+            BlocListener(
+              bloc: updateProfileBloc,
+              listener: (context, state) {
+                var data = state.model as UpadteProfileResponse;
+                if (state is Loading) {
+                  showLoadingDialog(context);
+                } else if (state is ErrorLoading) {
+                  Navigator.pop(context);
+                  errorDialog(
+                    context: context,
+                    text: data.msg,
+                  );
+                  print("Dialoggg");
+                } else if (state is Done) {
+                  onDoneDialog(
+                      context: context,
+                      text: data.msg,
+                      function: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainPage(
+                                index: 0,
+                              ),
+                            ),
+                            (Route<dynamic> route) => false);
+                      });
+                }
+              },
+              child: CustomButton(
+                onBtnPress: () {
+                  if (type == "data") {
+                    if (!dataKey.currentState.validate()) {
+                      return;
+                    } else {
+                      updateProfileBloc.add(Click());
+                    }
+                  } else {
+                    if (!passKey.currentState.validate()) {
+                      return;
+                    } else {
+                      updateProfileBloc.add(Click());
+                    }
+                  }
+                },
+                text: translator.translate("change"),
+              ),
+            )
+          ],
+        ));
   }
 
   Widget rowItem(IconData icon, String text) {
@@ -209,14 +211,14 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Widget editDataView(User data) {
+  Widget editDataView(String name, String email, String phone) {
     return Form(
       key: dataKey,
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.person,  translator.translate("name")),
+            child: rowItem(Icons.person, translator.translate("name")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -229,12 +231,12 @@ class _EditProfileState extends State<EditProfile> {
                   return "      ";
                 }
               },
-              hint: "${data.name}",
+              hint: "${name ?? " "}",
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.phone,  translator.translate("phone")),
+            child: rowItem(Icons.phone, translator.translate("phone")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -247,12 +249,12 @@ class _EditProfileState extends State<EditProfile> {
                   return "      ";
                 }
               },
-              hint: "+${data.mobile}",
+              hint: "+${phone ?? ""}",
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.mail,  translator.translate("email")),
+            child: rowItem(Icons.mail, translator.translate("email")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -265,7 +267,7 @@ class _EditProfileState extends State<EditProfile> {
                   return "      ";
                 }
               },
-              hint: "${data.email}",
+              hint: "${email}",
             ),
           ),
         ],
@@ -281,7 +283,7 @@ class _EditProfileState extends State<EditProfile> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child:
-                rowItem(Icons.lock,  translator.translate("current_password")),
+                rowItem(Icons.lock, translator.translate("current_password")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -300,7 +302,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: rowItem(Icons.lock,  translator.translate("new_password")),
+            child: rowItem(Icons.lock, translator.translate("new_password")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -320,7 +322,7 @@ class _EditProfileState extends State<EditProfile> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: rowItem(
-                Icons.lock,  translator.translate("confirm_new_password")),
+                Icons.lock, translator.translate("confirm_new_password")),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),

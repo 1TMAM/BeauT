@@ -75,7 +75,7 @@ class _FinishedReservationViewState extends State<FinishedReservationView> {
                                             Text(
                                                 "${translator.translate("section")} "),
                                             Text(
-                                              "${data.orders[index].services[0].category.nameAr}",
+                                              "${data.orders[index].services[0].nameAr}",
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor),

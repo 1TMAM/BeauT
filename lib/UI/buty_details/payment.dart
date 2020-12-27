@@ -127,7 +127,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +420,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          translator == "ar"
+                          translator.currentLanguage == "ar"
                               ? data.paymentMethods[index].nameAr
                               : data.paymentMethods[index].nameEn,
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -458,7 +457,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(children: [
-              Icon(Icons.location_on_sharp,
+              Icon(Icons.location_on,
                   color: Theme.of(context).primaryColor),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),

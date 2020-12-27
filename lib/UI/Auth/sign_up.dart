@@ -70,7 +70,7 @@ class _SignUpState extends State<SignUp> {
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
-                        return "     ";
+                        return "${translator.translate("name_validator")}";
                       }
                     },
                     hint: translator.translate("write_name"),
@@ -82,7 +82,7 @@ class _SignUpState extends State<SignUp> {
                   CustomTextField(
                     validate: (String val) {
                       if (val.length < 10) {
-                        return "     ";
+                        return "${translator.translate("phone_validator")}";
                       }
                     },
                     hint: "+966210025500",
@@ -95,7 +95,7 @@ class _SignUpState extends State<SignUp> {
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
-                        return "     ";
+                        return "${translator.translate("email_validator")}";
                       }
                     },
                     hint: "example@gmail.com",
@@ -108,7 +108,7 @@ class _SignUpState extends State<SignUp> {
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
-                        return "     ";
+                        return "${translator.translate("address_validator")}";
                       }
                     },
                     hint: translator.translate("write_address"),
@@ -120,7 +120,7 @@ class _SignUpState extends State<SignUp> {
                   CustomTextField(
                     validate: (String val) {
                       if (val.isEmpty) {
-                        return "     ";
+                        return "${translator.translate("password_validator")}";
                       }
                     },
                     hint: "************",

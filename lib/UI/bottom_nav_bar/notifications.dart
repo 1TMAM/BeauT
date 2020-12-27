@@ -40,19 +40,6 @@ class _NotificationsState extends State<Notifications> {
         body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 10),
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Text(
-            //        translator.translate("notifications"),
-            //       style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            //     ),
-            //     Text(
-            //       " مسح جميع الاشعارات ",
-            //       style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            //     ),
-            //   ],
-            // ),
             BlocListener<NotificationBloc, AppState>(
               bloc: notificationBloc,
               listener: (context, state) {},
@@ -69,7 +56,7 @@ class _NotificationsState extends State<Notifications> {
                                   ? "عفواً يرجي تسجيل الدخول اولاًً "
                                   : data.msg == "الرمز المميز غير موجود"
                                       ? "Authorization Token Not Found"
-                                      : "Sorry You Must Log In First",
+                                      : "${data.msg}",
                             ))
                           : AnimationLimiter(
                               child: ListView.builder(

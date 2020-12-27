@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel, EventList;
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ChooseDate extends StatefulWidget {
@@ -22,6 +23,8 @@ class _ChooseDateState extends State<ChooseDate> {
   DateTime _currentDate = DateTime.now();
   CalendarCarousel _calendarCarousel;
   bool isHouse = true;
+
+  String order_time;
 
   @override
   void initState() {
@@ -74,276 +77,289 @@ class _ChooseDateState extends State<ChooseDate> {
             translator.translate("choose_time"),
             style: TextStyle(color: Colors.white, fontSize: 14),
           )),
-      body: ListView(
+      body: Stack(
         children: [
-          _calendarCarousel,
-          Container(
-            height: 40,
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.1,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[200]),
-                        borderRadius: BorderRadius.circular(2)),
-                    child: Center(
-                      child: Text(
-                        "9:30  PM",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.1,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[200]),
-                        borderRadius: BorderRadius.circular(2)),
-                    child: Center(
-                      child: Text(
-                        "10:00  PM",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.1,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[200]),
-                        borderRadius: BorderRadius.circular(2)),
-                    child: Center(
-                      child: Text(
-                        "10:30  PM",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 3.1,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[200]),
-                        borderRadius: BorderRadius.circular(2)),
-                    child: Center(
-                      child: Text(
-                        "11:00  PM",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(),
-          ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: widget.servicseList.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
+          ListView(
+            children: [
+              _calendarCarousel,
+              show_time == false
+                  ? OutlineButton(
+                child: Text(order_time ?? "order_time"),
+                onPressed: () {
+                  setState(() {
+                    show_time = true;
+                  });
+                },
+              )
+                  : SizedBox(),          Divider(),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: widget.servicseList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "${translator.translate("service_name")}  :  ${translator == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${translator.translate("service_name")}  :  ${translator == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                    style: TextStyle(
+                                        fontSize: 13, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
+                                    style: TextStyle(
+                                        fontSize: 13, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
+                                    style: TextStyle(
+                                        fontSize: 13, fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w400),
+                          Divider()
+                        ],
+                      ),
+                    );
+                  }),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  translator.translate("address"),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isHouse = true;
+                  });
+                  createOrderBloc.updateLocationType(0);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200], shape: BoxShape.circle),
+                            child: Center(
+                              child: Icon(
+                                Icons.home,
+                                color: Theme.of(context).primaryColor,
                               ),
-                              Text(
-                                "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              translator.translate("at_home"),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
-                      Divider()
-                    ],
-                  ),
-                );
-              }),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              translator.translate("address"),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                isHouse = true;
-              });
-              createOrderBloc.updateLocationType(0);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200], shape: BoxShape.circle),
-                        child: Center(
-                          child: Icon(
-                            Icons.home,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          translator.translate("at_home"),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "130 ريال",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      isHouse == true
-                          ? Icon(
-                              Icons.check_circle,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
-                            )
-                          : Icon(
-                              Icons.check_circle_outline,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              "130 ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                isHouse = false;
-              });
-              createOrderBloc.updateLocationType(1);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            color: Colors.grey[200], shape: BoxShape.circle),
-                        child: Center(
-                          child: Image.asset(
-                            "assets/images/car.png",
-                            width: 25,
-                            height: 25,
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          translator.translate("at_buty"),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                          isHouse == true
+                              ? Icon(
+                                  Icons.check_circle,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 25,
+                                )
+                              : Icon(
+                                  Icons.check_circle_outline,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 25,
+                                ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "100 ريال",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      isHouse == false
-                          ? Icon(
-                              Icons.check_circle,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
-                            )
-                          : Icon(
-                              Icons.check_circle_outline,
-                              color: Theme.of(context).primaryColor,
-                              size: 25,
-                            ),
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isHouse = false;
+                  });
+                  createOrderBloc.updateLocationType(1);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200], shape: BoxShape.circle),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/images/car.png",
+                                width: 25,
+                                height: 25,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              translator.translate("at_buty"),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              "100 ريال",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          isHouse == false
+                              ? Icon(
+                                  Icons.check_circle,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 25,
+                                )
+                              : Icon(
+                                  Icons.check_circle_outline,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 25,
+                                ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentScreen(
+                                servicseList: widget.servicseList,
+                                address: isHouse,
+                                total: widget.total.toString(),
+                              )));
+                },
+                child: CustomButton(
+                  text:
+                      "${translator.translate("pay_now")}  ${widget.total} ريال  ",
+                ),
+              )
+            ],
           ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PaymentScreen(
-                            servicseList: widget.servicseList,
-                            address: isHouse,
-                            total: widget.total.toString(),
-                          )));
-            },
-            child: CustomButton(
-              text:
-                  "${translator.translate("pay_now")}  ${widget.total} ريال  ",
+          show_time == true
+              ? Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.black.withOpacity(0.9),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                SizedBox(
+                  height: 120,
+                ),
+                TimePicker(),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      show_time = false;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20),
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Theme.of(context).primaryColor),
+                      child: Center(
+                        child: Text(
+                          translator.translate("done"),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 120,
+                )
+              ],
             ),
           )
+              : SizedBox(),
         ],
       ),
     );
   }
+
+  bool show_time = false;
+
+  Widget TimePicker() {
+    return TimePickerSpinner(
+      is24HourMode: false,
+      normalTextStyle: TextStyle(fontSize: 24, color: Colors.white),
+      highlightedTextStyle:
+      TextStyle(fontSize: 24, color: Theme.of(context).primaryColor),
+      spacing: 10,
+      itemHeight: 50,
+      isForce2Digits: true,
+      onTimeChange: (time) {
+       createOrderBloc.updateTime(time.toString().substring(10 ,16));
+
+       setState(() {
+         order_time =time.toString().substring(10 ,16);
+       });
+        print("TIMEEEEEEEEEEE" + time.toString());
+      },
+    );
+  }
+
+
+
+
+
 }

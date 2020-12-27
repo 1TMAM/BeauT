@@ -1,22 +1,22 @@
 {
   "user": "User",
-  "name": "name",
-  "email": "email",
+  "name": "Name",
+  "email": "Nmail",
   "password": "Password",
   "newPassword": "New Password",
   "confirm_newPassword": "Confirm new Password",
   "login": "Login",
-  "sign_up": "create a new account",
-  "phone": "mobile number",
+  "sign_up": "Create a new account",
+  "phone": "Mobile Number",
   "country": "Country",
   "city": "City",
-  "welcome": "Welcome to Buet  App ! ",
-  "quot": "perfect app to find the best beauty services ,hair,makeup and nails",
+  "welcome": "Welcome to BeauT  App ! ",
+  "quot": "Perfect App To Find The best beauty services ,hair,makeup and nails",
   "choose_lang": "choose language",
   "ar": "Arabic language",
   "en": "English language",
-  "confirm": "confirm",
-  "intro_text": "you can now create a new account or log in",
+  "confirm": "Confirm",
+  "intro_text": "You Can Now Create a new Account or Log In",
   "skip": "Continue As Guest",
   "write_name": "write your name here",
   "write_address": "write your name here",
@@ -103,8 +103,11 @@
   "confimPay": "Confirm Pay ",
   "result": "Search Result",
   "min" : "Minute",
-  "service_name" : "Service Name "
+  "service_name" : "Service Name ",
 
-
-
+  "name_validator": "please enter a valid name",
+  "email_validator": "please enter correct mail",
+  "phone_validator": "please enter a valid mobile number",
+  "password_validator": "please enter a password of at least 8 characters",
+  "address_validator": "please enter the address from the map correctly"
 }

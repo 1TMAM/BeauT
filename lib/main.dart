@@ -8,11 +8,8 @@ import 'UI/Auth/spash.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await translator.init(
-    localeDefault: LocalizationDefaultType.device,
-    languagesList: <String>['ar', 'en'],
     assetsDirectory: 'assets/langs/',
-    apiKeyGoogle: '<Key>', // NOT YET TESTED
-  ); // intialize
+  );
 
   runApp(LocalizedApp(child: MyApp()));
 }
@@ -57,7 +54,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        //------------------make iphone back with swipe-----------------
+        //------------------ make iphone  back  with swipe -----------------
         pageTransitionsTheme: PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),

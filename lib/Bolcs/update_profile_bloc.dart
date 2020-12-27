@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/repo/user_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
@@ -44,7 +45,16 @@ class UpdateProfileBloc extends Bloc<AppEvent, AppState> {
           NewpasswordConfirmation.value);
       print("Update Response ResPonse" + userResponee.msg);
       if (userResponee.status == true) {
+        SharedPreferenceManager preferenceManager = SharedPreferenceManager();
+        preferenceManager.writeData(CachingKey.IS_LOGGED_IN, true);
+        preferenceManager.writeData(CachingKey.USER_NAME, userResponee.user.name);
+        preferenceManager.writeData(CachingKey.EMAIL, userResponee.user.email);
+        preferenceManager.writeData(CachingKey.MOBILE_NUMBER, userResponee.user.mobile);
+
         yield Done(userResponee);
+
+
+
       } else if (userResponee.status == false) {
         print("Message   ");
         yield ErrorLoading(userResponee);

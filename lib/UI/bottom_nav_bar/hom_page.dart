@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                                 print(val);
                                 searchByTimeBloc.add(Click());
                               },
-                              icon: Icon(Icons.lock_clock),
+                              icon: Icon(Icons.lock),
                               inputType: TextInputType.number,
                               value: (String val) {
                                 print("=====" + val);
@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                                             child: FadeInAnimation(
                                                 child: cat_item(
                                                     data.categories[index].icon,
-                                                    translator == "ar"
+                                                    translator.currentLanguage == "ar"
                                                         ? data.categories[index]
                                                             .nameAr
                                                         : data.categories[index]
@@ -309,14 +309,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Container(
               height: 80,
-              // child: Center(
-              //   child: Image.network(
-              //     image,
-              //     fit: BoxFit.cover,
-              //     width: 50,
-              //     height: 50,
-              //   ),
-              // ),
+              width: 80,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,

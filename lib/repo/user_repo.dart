@@ -1,3 +1,4 @@
+import 'package:buty/models/updateProfileResponse.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
@@ -117,7 +118,7 @@ class UserDataRepo {
   }
 
 //-------------------------------------------------------------------------------
-  static Future<GeneralResponse> UpdateProfileApi(
+  static Future<UpadteProfileResponse> UpdateProfileApi(
       String name,
       String email,
       String newPassword,
@@ -142,7 +143,7 @@ class UserDataRepo {
       "current_password": currentPassword,
       "lang": translator.currentLanguage
     });
-    return NetworkUtil.internal().post(GeneralResponse(), "users/user/update",
+    return NetworkUtil.internal().post(UpadteProfileResponse(), "users/user/update",
         body: data, headers: headers);
   }
 
@@ -207,7 +208,7 @@ class UserDataRepo {
       'Authorization': token,
     };
     return NetworkUtil.internal().get(
-        NotificationResponse(), "users/user/get-user-notifications",
+        NotificationResponse(), "users/user/get-user-notifications?lang=${translator.currentLanguage}",
         headers: headers);
   }
 

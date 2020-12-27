@@ -78,7 +78,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                             Text(
                                                 "${translator.translate("section")} "),
                                             Text(
-                                              "${data.orders[index].services[0].category.nameAr}",
+                                              "${translator.currentLanguage == "ar" ? data.orders[index].services[0].nameAr : data.orders[index].services[0].nameEn}",
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor),

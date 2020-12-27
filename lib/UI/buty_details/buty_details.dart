@@ -15,6 +15,7 @@ import 'package:buty/models/BeauticianDetails.dart';
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ButyDetails extends StatefulWidget {
