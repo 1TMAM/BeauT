@@ -113,5 +113,8 @@
   "whats": "Whats App",
   "twitter": "Twitter",
   "e_mail":"E- Mail",
-  "call_us_on": "Contact Us On "
+  "call_us_on": "Contact Us On ",
+  "done": "Search",
+  "choose_location": "Choose Location"
+
 }

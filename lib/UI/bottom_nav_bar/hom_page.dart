@@ -8,6 +8,7 @@ import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/component/single_provider_item_row.dart';
+import 'package:buty/UI/pic_location.dart';
 import 'package:buty/UI/searchBy_cat_id.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
@@ -83,7 +84,9 @@ class _HomePageState extends State<HomePage> {
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10)),
                         child: CustomTextField(
-                          onSubmitted: (String val ){
+                          onSubmitted: (String val) {
+                            searchByNameBloc.updateName(val);
+                            print("Submittteed  Val===> ${val}");
                             searchByNameBloc.add(Click());
                           },
                           value: (String val) {
@@ -132,6 +135,13 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.1,
                             child: CustomTextField(
+                              onTab: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ChooseLocation()));
+                              },
                               hint: translator.translate("where"),
                               icon: Icon(Icons.location_on),
                               onSubmitted: (String val) {
@@ -176,9 +186,7 @@ class _HomePageState extends State<HomePage> {
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.2,
                             child: CustomTextField(
-                              onTab: (){
-
-                              },
+                              onTab: () {},
                               hint: translator.translate("when"),
                               onSubmitted: (String val) {
                                 searchByTimeBloc.updateId(val);
@@ -221,7 +229,6 @@ class _HomePageState extends State<HomePage> {
                                 ))
                               : AnimationLimiter(
                                   child: Container(
-
                                     height: 110,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
@@ -238,7 +245,8 @@ class _HomePageState extends State<HomePage> {
                                             child: FadeInAnimation(
                                                 child: cat_item(
                                                     data.categories[index].icon,
-                                                    translator.currentLanguage == "ar"
+                                                    translator.currentLanguage ==
+                                                            "ar"
                                                         ? data.categories[index]
                                                             .nameAr
                                                         : data.categories[index]
