@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                                 print(val);
                                 searchByTimeBloc.add(Click());
                               },
-                              icon: Icon(Icons.lock),
+                              icon: Icon(Icons.timer),
                               inputType: TextInputType.number,
                               value: (String val) {
                                 print("=====" + val);

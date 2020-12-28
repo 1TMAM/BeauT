@@ -24,6 +24,7 @@ class _AddNewCardState extends State<AddNewCard> {
   String cardHolder = "Enter your Name";
 
   String cvv = "1234";
+  String date = "${DateTime.now().toString().substring(0,10)}";
   GlobalKey<FormState> key = GlobalKey();
 
   @override
@@ -116,7 +117,7 @@ class _AddNewCardState extends State<AddNewCard> {
                       child: CustomTextField(
                         validate: (String val) {
                           if (val.length < 16) {
-                            return "Complete Data";
+                            return "Card Must Be 16 Number";
                           }
                         },
                         hint: card_num,
@@ -151,7 +152,7 @@ class _AddNewCardState extends State<AddNewCard> {
                                     inputType: TextInputType.number,
                                     value: (String val) {
                                       setState(() {
-                                        cvv = val;
+                                        date = val;
                                       });
                                       print(val);
                                       addCreditCardBloc.updateDate(val);
@@ -276,7 +277,7 @@ class _AddNewCardState extends State<AddNewCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(cvv),
-                      Text("${DateTime.now().toString().substring(0, 10)}"),
+                      Text(date),
                     ],
                   ),
                 ),

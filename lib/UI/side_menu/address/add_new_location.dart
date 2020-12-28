@@ -111,13 +111,15 @@ class _AddNewLocationState extends State<AddNewLocation> {
               CustomTextField(
                 validate: (String val) {
                   if (val.isEmpty) {
-                    return translator.translate("complete_data");
+                    return translator.translate("address_validator");
                   }
                 },
                 value: (String val) {
                   addNewAddressBloc.updateAddress(val);
                 },
-                hint: "        ",
+                hint: translator.currentLanguage == "ar"
+                    ? "اكتب تفاصيل العنوان (رقم العقار و رقم المنزل)"
+                    : " Write  Details For Your Address ",
               ),
               isloading == true
                   ? AppLoader()

@@ -24,7 +24,7 @@ class _EditProfileState extends State<EditProfile> {
   GlobalKey<FormState> passKey = GlobalKey();
 
   String name, email, phone;
-  bool IsLogged;
+  String IsLogged;
 
   getFromCash() async {
     String _name, _email, _phone;
@@ -34,13 +34,13 @@ class _EditProfileState extends State<EditProfile> {
         await mSharedPreferenceManager.readString(CachingKey.MOBILE_NUMBER);
     _name = await mSharedPreferenceManager.readString(CachingKey.USER_NAME);
     var logged =
-        await mSharedPreferenceManager.readBoolean(CachingKey.AUTH_TOKEN);
+        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print("USER STATUS${logged != null ? false : true}");
     setState(() {
       name = _name;
       email = _email;
       phone = _phone;
-      IsLogged = logged;
+      IsLogged = logged.toString();
     });
   }
 
@@ -154,16 +154,8 @@ class _EditProfileState extends State<EditProfile> {
                     bloc: updateProfileBloc,
                     listener: (context, state) {
                       var data = state.model as UpadteProfileResponse;
-                      if (state is Loading) {
-                        showLoadingDialog(context);
-                      } else if (state is ErrorLoading) {
-                        Navigator.pop(context);
-                        errorDialog(
-                          context: context,
-                          text: data.msg,
-                        );
-                        print("Dialoggg");
-                      } else if (state is Done) {
+                    if (state is Done) {
+                      Navigator.pop(context);
                         onDoneDialog(
                             context: context,
                             text: data.msg,
@@ -181,6 +173,7 @@ class _EditProfileState extends State<EditProfile> {
                     },
                     child: CustomButton(
                       onBtnPress: () {
+                        showLoadingDialog(context);
                         if (type == "data") {
                           if (!dataKey.currentState.validate()) {
                             return;

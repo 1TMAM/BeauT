@@ -69,7 +69,7 @@ class CardsRepo {
       "lang": translator.currentLanguage
     });
 
-    return NetworkUtil.internal().post(GeneralResponse(), "users/cards/update",
+    return NetworkUtil.internal().put(GeneralResponse(), "users/cards/update",
         headers: headers, body: data);
   }
 }

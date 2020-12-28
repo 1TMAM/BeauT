@@ -124,7 +124,7 @@ class Services {
   String location;
   int beauticianId;
   int categoryId;
-  Null category;
+  Category category;
 
   Services(
       {this.id,
@@ -154,7 +154,9 @@ class Services {
     location = json['location'];
     beauticianId = json['beautician_id'];
     categoryId = json['category_id'];
-    category = json['category'];
+    category = json['category'] != null
+        ? new Category.fromJson(json['category'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -171,7 +173,31 @@ class Services {
     data['location'] = this.location;
     data['beautician_id'] = this.beauticianId;
     data['category_id'] = this.categoryId;
-    data['category'] = this.category;
+    if (this.category != null) {
+      data['category'] = this.category.toJson();
+    }
+    return data;
+  }
+}
+
+class Category {
+  int id;
+  String nameEn;
+  String icon;
+
+  Category({this.id, this.nameEn, this.icon});
+
+  Category.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nameEn = json['name_en'];
+    icon = json['icon'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name_en'] = this.nameEn;
+    data['icon'] = this.icon;
     return data;
   }
 }
