@@ -102,12 +102,16 @@
   "enter_items": "Please Choose Services",
   "confimPay": "Confirm Pay ",
   "result": "Search Result",
-  "min" : "Minute",
-  "service_name" : "Service Name ",
-
+  "min": "Minute",
+  "service_name": "Service Name ",
   "name_validator": "please enter a valid name",
   "email_validator": "please enter correct mail",
   "phone_validator": "please enter a valid mobile number",
   "password_validator": "please enter a password of at least 8 characters",
-  "address_validator": "please enter the address from the map correctly"
+  "address_validator": "please enter the address from the map correctly",
+  "phonee": "Mobile Phone",
+  "whats": "Whats App",
+  "twitter": "Twitter",
+  "e_mail":"E- Mail",
+  "call_us_on": "Contact Us On "
 }

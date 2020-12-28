@@ -34,7 +34,7 @@ class _CallUsState extends State<CallUs> {
       body: Column(
         children: [
           call_row(
-            "Phone",
+            translator.translate("phonee"),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Image.asset(
@@ -45,7 +45,7 @@ class _CallUsState extends State<CallUs> {
             ),
           ),
           call_row(
-            "WhatsApp",
+            translator.translate("whats"),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Image.asset(
@@ -56,7 +56,7 @@ class _CallUsState extends State<CallUs> {
             ),
           ),
           call_row(
-            "Twitter",
+            translator.translate("twitter"),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Image.asset(
@@ -67,7 +67,7 @@ class _CallUsState extends State<CallUs> {
             ),
           ),
           call_row(
-            "E-Mail",
+            translator.translate("e_mail"),
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Icon(
@@ -87,7 +87,8 @@ class _CallUsState extends State<CallUs> {
         children: [
           image,
           Text(
-            "Contact  Us On ${social}",
+            "${            translator.translate("call_us_on")
+              } ${social}",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ],

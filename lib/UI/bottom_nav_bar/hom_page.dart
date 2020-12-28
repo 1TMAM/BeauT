@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                           }
                         },
                         child: Container(
-                            width: MediaQuery.of(context).size.width / 2.4,
+                            width: MediaQuery.of(context).size.width / 2.1,
                             child: CustomTextField(
                               hint: translator.translate("where"),
                               icon: Icon(Icons.location_on),
@@ -171,8 +171,11 @@ class _HomePageState extends State<HomePage> {
                           }
                         },
                         child: Container(
-                            width: MediaQuery.of(context).size.width / 2.4,
+                            width: MediaQuery.of(context).size.width / 2.2,
                             child: CustomTextField(
+                              onTab: (){
+
+                              },
                               hint: translator.translate("when"),
                               onSubmitted: (String val) {
                                 searchByTimeBloc.updateId(val);
@@ -215,6 +218,7 @@ class _HomePageState extends State<HomePage> {
                                 ))
                               : AnimationLimiter(
                                   child: Container(
+
                                     height: 110,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
@@ -304,7 +308,7 @@ class _HomePageState extends State<HomePage> {
                     )));
       },
       child: Container(
-        width: MediaQuery.of(context).size.width / 3.3,
+        width: MediaQuery.of(context).size.width / 3,
         child: Column(
           children: [
             Container(

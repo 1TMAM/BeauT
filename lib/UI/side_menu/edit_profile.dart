@@ -8,7 +8,6 @@ import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
-import 'package:buty/models/general_response.dart';
 import 'package:buty/models/updateProfileResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,19 +24,23 @@ class _EditProfileState extends State<EditProfile> {
   GlobalKey<FormState> passKey = GlobalKey();
 
   String name, email, phone;
+  bool IsLogged;
 
   getFromCash() async {
     String _name, _email, _phone;
-
     var mSharedPreferenceManager = SharedPreferenceManager();
-
     _email = await mSharedPreferenceManager.readString(CachingKey.EMAIL);
-    _phone = await mSharedPreferenceManager.readString(CachingKey.MOBILE_NUMBER);
+    _phone =
+        await mSharedPreferenceManager.readString(CachingKey.MOBILE_NUMBER);
     _name = await mSharedPreferenceManager.readString(CachingKey.USER_NAME);
+    var logged =
+        await mSharedPreferenceManager.readBoolean(CachingKey.AUTH_TOKEN);
+    print("USER STATUS${logged != null ? false : true}");
     setState(() {
       name = _name;
       email = _email;
       phone = _phone;
+      IsLogged = logged;
     });
   }
 
@@ -70,123 +73,133 @@ class _EditProfileState extends State<EditProfile> {
               translator.translate("edit_profile"),
               style: TextStyle(color: Colors.white, fontSize: 14),
             )),
-        body: ListView(
-          children: [
-            Row(
-              children: [
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      type = "data";
-                    });
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          translator.translate("edit_profile"),
-                          style: TextStyle(
-                              fontWeight: type == "data"
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 4,
-                          height: 2,
-                          color:
-                              type == "data" ? Colors.black : Colors.grey[200],
-                        )
-                      ],
-                    ),
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 40,
-                    color: Colors.grey[200],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      type = "last";
-                    });
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          translator.translate("password"),
-                          style: TextStyle(
-                              fontWeight: type == "last"
-                                  ? FontWeight.bold
-                                  : FontWeight.normal),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 4,
-                          height: 2,
-                          color:
-                              type == "last" ? Colors.black : Colors.grey[200],
-                        )
-                      ],
-                    ),
-                    width: MediaQuery.of(context).size.width / 2,
-                    height: 40,
-                    color: Colors.grey[200],
-                  ),
-                ),
-              ],
-            ),
-            type == "data" ? editDataView(name, email, phone) : passView(),
-            BlocListener(
-              bloc: updateProfileBloc,
-              listener: (context, state) {
-                var data = state.model as UpadteProfileResponse;
-                if (state is Loading) {
-                  showLoadingDialog(context);
-                } else if (state is ErrorLoading) {
-                  Navigator.pop(context);
-                  errorDialog(
-                    context: context,
-                    text: data.msg,
-                  );
-                  print("Dialoggg");
-                } else if (state is Done) {
-                  onDoneDialog(
-                      context: context,
-                      text: data.msg,
-                      function: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainPage(
-                                index: 0,
+        body: IsLogged == false
+            ? Center(
+                child: Text(translator.currentLanguage == "ar"
+                    ? "الرجاء تسجيل الدخول اولاً"
+                    : "Please Log In First"),
+              )
+            : ListView(
+                children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            type = "data";
+                          });
+                        },
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                translator.translate("edit_profile"),
+                                style: TextStyle(
+                                    fontWeight: type == "data"
+                                        ? FontWeight.bold
+                                        : FontWeight.normal),
                               ),
-                            ),
-                            (Route<dynamic> route) => false);
-                      });
-                }
-              },
-              child: CustomButton(
-                onBtnPress: () {
-                  if (type == "data") {
-                    if (!dataKey.currentState.validate()) {
-                      return;
-                    } else {
-                      updateProfileBloc.add(Click());
-                    }
-                  } else {
-                    if (!passKey.currentState.validate()) {
-                      return;
-                    } else {
-                      updateProfileBloc.add(Click());
-                    }
-                  }
-                },
-                text: translator.translate("change"),
-              ),
-            )
-          ],
-        ));
+                              Container(
+                                width: MediaQuery.of(context).size.width / 4,
+                                height: 2,
+                                color: type == "data"
+                                    ? Colors.black
+                                    : Colors.grey[200],
+                              )
+                            ],
+                          ),
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: 40,
+                          color: Colors.grey[200],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            type = "last";
+                          });
+                        },
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                translator.translate("password"),
+                                style: TextStyle(
+                                    fontWeight: type == "last"
+                                        ? FontWeight.bold
+                                        : FontWeight.normal),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 4,
+                                height: 2,
+                                color: type == "last"
+                                    ? Colors.black
+                                    : Colors.grey[200],
+                              )
+                            ],
+                          ),
+                          width: MediaQuery.of(context).size.width / 2,
+                          height: 40,
+                          color: Colors.grey[200],
+                        ),
+                      ),
+                    ],
+                  ),
+                  type == "data"
+                      ? editDataView(name, email, phone)
+                      : passView(),
+                  BlocListener(
+                    bloc: updateProfileBloc,
+                    listener: (context, state) {
+                      var data = state.model as UpadteProfileResponse;
+                      if (state is Loading) {
+                        showLoadingDialog(context);
+                      } else if (state is ErrorLoading) {
+                        Navigator.pop(context);
+                        errorDialog(
+                          context: context,
+                          text: data.msg,
+                        );
+                        print("Dialoggg");
+                      } else if (state is Done) {
+                        onDoneDialog(
+                            context: context,
+                            text: data.msg,
+                            function: () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                      index: 0,
+                                    ),
+                                  ),
+                                  (Route<dynamic> route) => false);
+                            });
+                      }
+                    },
+                    child: CustomButton(
+                      onBtnPress: () {
+                        if (type == "data") {
+                          if (!dataKey.currentState.validate()) {
+                            return;
+                          } else {
+                            updateProfileBloc.add(Click());
+                          }
+                        } else {
+                          if (!passKey.currentState.validate()) {
+                            return;
+                          } else {
+                            updateProfileBloc.add(Click());
+                          }
+                        }
+                      },
+                      text: translator.translate("change"),
+                    ),
+                  )
+                ],
+              ));
   }
 
   Widget rowItem(IconData icon, String text) {
