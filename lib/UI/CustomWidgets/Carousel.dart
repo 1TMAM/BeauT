@@ -12,9 +12,6 @@ class CustomCarousel extends StatefulWidget {
 }
 
 class _CustomCarouselState extends State<CustomCarousel> {
-  List empty = [
-    "https://www.freeiconspng.com/uploads/warning-error-icon-png-33.png"
-  ];
 
   int _current = 0;
 
@@ -29,7 +26,7 @@ class _CustomCarouselState extends State<CustomCarousel> {
                 height: 400,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(item.photo), fit: BoxFit.cover)),
+                        image: NetworkImage(item.photo), fit: BoxFit.fitWidth)),
               );
             }).toList(),
             options: CarouselOptions(

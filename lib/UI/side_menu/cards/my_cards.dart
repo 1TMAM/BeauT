@@ -104,16 +104,16 @@ class _MyCardsState extends State<MyCards> {
                                                           .symmetric(
                                                       horizontal: 10),
                                                   child: Text(
-                                                    translator ==
+                                                    translator.currentLanguage ==
                                                             "ar"
                                                         ? data
                                                             .paymentMethods[
                                                                 index]
-                                                            .nameAr
+                                                            .nameAr??""
                                                         : data
                                                             .paymentMethods[
                                                                 index]
-                                                            .nameEn,
+                                                            .nameEn??"",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),

@@ -83,6 +83,9 @@ class _HomePageState extends State<HomePage> {
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10)),
                         child: CustomTextField(
+                          onSubmitted: (String val ){
+                            searchByNameBloc.add(Click());
+                          },
                           value: (String val) {
                             searchByNameBloc.updateName(val);
                           },
