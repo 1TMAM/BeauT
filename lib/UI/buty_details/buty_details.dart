@@ -260,9 +260,13 @@ class _ButyDetailsState extends State<ButyDetails> {
                         ),
                         InkWell(
                           onTap: () {
-                            setState(() {
-                              list[index].count--;
-                            });
+                         if(list[index].count == 0){
+                           print("LLLLL");
+                         }else{
+                           setState(() {
+                             list[index].count--;
+                           });
+                         }
                           },
                           child: Icon(
                             Icons.remove,
