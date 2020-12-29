@@ -10,72 +10,76 @@ class CallUs extends StatefulWidget {
 class _CallUsState extends State<CallUs> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainPage(
-                              index: 0,
-                            )));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: Text(
-            translator.translate("call_us"),
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          )),
-      body: Column(
-        children: [
-          call_row(
-            translator.translate("phonee"),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Image.asset(
-                "assets/images/call_phone.png",
-                width: 20,
-                height: 20,
-              ),
-            ),
-          ),
-          call_row(
-            translator.translate("whats"),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Image.asset(
-                "assets/images/whats.png",
-                width: 20,
-                height: 20,
-              ),
-            ),
-          ),
-          call_row(
-            translator.translate("twitter"),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Image.asset(
-                "assets/images/twii.png",
-                width: 20,
-                height: 20,
-              ),
-            ),
-          ),
-          call_row(
-            translator.translate("e_mail"),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+
+      child: Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainPage(
+                                index: 0,
+                              )));
+                },
                 child: Icon(
-                  Icons.mail,
-                  color: Theme.of(context).primaryColor,
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
                 )),
-          ),
-        ],
+            centerTitle: true,
+            title: Text(
+              translator.translate("call_us"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )),
+        body: Column(
+          children: [
+            call_row(
+              translator.translate("phonee"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(
+                  "assets/images/call_phone.png",
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+            ),
+            call_row(
+              translator.translate("whats"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(
+                  "assets/images/whats.png",
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+            ),
+            call_row(
+              translator.translate("twitter"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Image.asset(
+                  "assets/images/twii.png",
+                  width: 20,
+                  height: 20,
+                ),
+              ),
+            ),
+            call_row(
+              translator.translate("e_mail"),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Icon(
+                    Icons.mail,
+                    color: Theme.of(context).primaryColor,
+                  )),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -10,7 +10,7 @@ import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/component/single_provider_item_row.dart';
 import 'package:buty/UI/pic_location.dart';
-import 'package:buty/UI/searchBy_cat_id.dart';
+import 'package:buty/UI/SearchResult.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
@@ -51,11 +51,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 3,
+            height: MediaQuery.of(context).size.height / 2.8,
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BlocListener(
                   bloc: searchByNameBloc,
@@ -79,32 +78,25 @@ class _HomePageState extends State<HomePage> {
                                   )));
                     }
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: CustomTextField(
-                          onSubmitted: (String val) {
-                            searchByNameBloc.updateName(val);
-                            print("Submittteed  Val===> ${val}");
-                            searchByNameBloc.add(Click());
-                          },
-                          value: (String val) {
-                            searchByNameBloc.updateName(val);
-                          },
-                          hint: translator.translate("search"),
-                          icon: InkWell(
-                              onTap: () {
-                                searchByNameBloc.add(Click());
-                              },
-                              child: Icon(Icons.search)),
-                        )),
+                  child: CustomTextField(
+                    onSubmitted: (String val) {
+                      searchByNameBloc.updateName(val);
+                      print("Submittteed  Val===> ${val}");
+                      searchByNameBloc.add(Click());
+                    },
+                    value: (String val) {
+                      searchByNameBloc.updateName(val);
+                    },
+                    hint: translator.translate("search"),
+                    icon: InkWell(
+                        onTap: () {
+                          searchByNameBloc.add(Click());
+                        },
+                        child: Icon(Icons.search)),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20 , vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -117,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.3,
-                            height: 50,
+                            height: 40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(5)),
@@ -143,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.3,
-                            height: 50,
+                            height: 40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(5)),
@@ -179,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                               ? Center(
                                   child: Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 30),
+                                      const EdgeInsets.symmetric(vertical: 15),
                                   child: Text(
                                     data.msg == "الرمز المميز غير موجود"
                                         ? "عفواً يرجي تسجيل الدخول اولاًً "
@@ -191,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                                 ))
                               : AnimationLimiter(
                                   child: Container(
-                                    height: 110,
+                                    height: 120,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemCount: data.categories.length,

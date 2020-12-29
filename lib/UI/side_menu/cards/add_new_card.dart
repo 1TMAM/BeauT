@@ -29,203 +29,207 @@ class _AddNewCardState extends State<AddNewCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainPage(
-                              index: 0,
-                            )));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: Text(
-             translator.translate("add_new_card"),
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          )),
-      body: BlocListener(
-        bloc: addCreditCardBloc,
-        listener: (context, state) {
-          var data = state.model as GeneralResponse;
-          if (state is Loading) {
-            showLoadingDialog(context);
-          } else if (state is ErrorLoading) {
-            Navigator.pop(context);
-            errorDialog(text: data.msg, context: context);
-          } else if (state is Done) {
-            Navigator.pop(context);
-            CustomSheet(
-                context: context,
-                widget: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Container(
-                        width: 60,
-                        height: 10,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    ),
-                    Text( translator.translate("done_add_card")),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Icon(
-                        Icons.check_circle,
-                        size: 125,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => MyCards()));
-                      },
-                      child: CustomButton(
-                        text:  translator.translate("back"),
-                      ),
-                    )
-                  ],
-                ));
-          }
-        },
-        child: BlocBuilder(
-          bloc: addCreditCardBloc,
-          builder: (context, state) {
-            return Form(
-              key: key,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    exampleContainer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text( translator.translate("card_number")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: CustomTextField(
-                        validate: (String val) {
-                          if (val.length < 16) {
-                            return "Card Must Be 16 Number";
-                          }
-                        },
-                        hint: card_num,
-                        inputType: TextInputType.number,
-                        value: (String val) {
-                          setState(() {
-                            card_num = val;
-                          });
-                          print(val);
-                          addCreditCardBloc.updateNumber(val);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Text( translator.translate("expireDate")),
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  child: CustomTextField(
-                                    validate: (String val) {
-                                      if (val.length < 5) {
-                                        return "Complete Data";
-                                      }
-                                    },
-                                    hint: "02/20",
-                                    inputType: TextInputType.number,
-                                    value: (String val) {
-                                      setState(() {
-                                        date = val;
-                                      });
-                                      print(val);
-                                      addCreditCardBloc.updateDate(val);
-                                    },
-                                  )),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text("CVV"),
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  child: CustomTextField(
-                                    hint: "CVV",
-                                    inputType: TextInputType.number,
-                                    validate: (String val){
-                                      if(val.length <3){
-                                        return "يرجي اكمال البيانات";
-                                      }
-                                    },
-                                    value: (String val) {
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
 
-                                      setState(() {
-                                        cvv = val;
-                                      });
-                                      print(val);
-                                      addCreditCardBloc.updateCvv(val);
-                                    },
-                                  )),
-                            ],
-                          ),
-                        ],
+      child: Scaffold(
+        appBar: AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainPage(
+                                index: 0,
+                              )));
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            title: Text(
+               translator.translate("add_new_card"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )),
+        body: BlocListener(
+          bloc: addCreditCardBloc,
+          listener: (context, state) {
+            var data = state.model as GeneralResponse;
+            if (state is Loading) {
+              showLoadingDialog(context);
+            } else if (state is ErrorLoading) {
+              Navigator.pop(context);
+              errorDialog(text: data.msg, context: context);
+            } else if (state is Done) {
+              Navigator.pop(context);
+              CustomSheet(
+                  context: context,
+                  widget: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          width: 60,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).primaryColor),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text( translator.translate("card_holder")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: CustomTextField(
-                        hint: "User Name",
-                        validate: (String val){
-                          if(val.isEmpty){
-                            return "يرجي اكمال البيانات";
-                          }
-                        },
-                        value: (String val) {
-                          setState(() {
-                            cardHolder = val;
-                          });
-                          print(val);
-                          addCreditCardBloc.updateName(val);
-                        },
+                      Text( translator.translate("done_add_card")),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Icon(
+                          Icons.check_circle,
+                          size: 125,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
-                    ),
-                    InkWell(
+                      InkWell(
                         onTap: () {
-                          if (!key.currentState.validate()) {
-                            return;
-                          } else {
-                            addCreditCardBloc.add(Click());
-                          }
+                          Navigator.pop(context);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => MyCards()));
                         },
                         child: CustomButton(
-                          text: "${ translator.translate("add")}",
-                        )),
-                  ],
-                ),
-              ),
-            );
+                          text:  translator.translate("back"),
+                        ),
+                      )
+                    ],
+                  ));
+            }
           },
+          child: BlocBuilder(
+            bloc: addCreditCardBloc,
+            builder: (context, state) {
+              return Form(
+                key: key,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      exampleContainer(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text( translator.translate("card_number")),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CustomTextField(
+                          validate: (String val) {
+                            if (val.length < 16) {
+                              return "Card Must Be 16 Number";
+                            }
+                          },
+                          hint: card_num,
+                          inputType: TextInputType.number,
+                          value: (String val) {
+                            setState(() {
+                              card_num = val;
+                            });
+                            print(val);
+                            addCreditCardBloc.updateNumber(val);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                Text( translator.translate("expireDate")),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.5,
+                                    child: CustomTextField(
+                                      validate: (String val) {
+                                        if (val.length < 5) {
+                                          return "Complete Data";
+                                        }
+                                      },
+                                      hint: "02/20",
+                                      inputType: TextInputType.number,
+                                      value: (String val) {
+                                        setState(() {
+                                          date = val;
+                                        });
+                                        print(val);
+                                        addCreditCardBloc.updateDate(val);
+                                      },
+                                    )),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text("CVV"),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.5,
+                                    child: CustomTextField(
+                                      hint: "CVV",
+                                      inputType: TextInputType.number,
+                                      validate: (String val){
+                                        if(val.length <3){
+                                          return "يرجي اكمال البيانات";
+                                        }
+                                      },
+                                      value: (String val) {
+
+                                        setState(() {
+                                          cvv = val;
+                                        });
+                                        print(val);
+                                        addCreditCardBloc.updateCvv(val);
+                                      },
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text( translator.translate("card_holder")),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CustomTextField(
+                          hint: "User Name",
+                          validate: (String val){
+                            if(val.isEmpty){
+                              return "يرجي اكمال البيانات";
+                            }
+                          },
+                          value: (String val) {
+                            setState(() {
+                              cardHolder = val;
+                            });
+                            print(val);
+                            addCreditCardBloc.updateName(val);
+                          },
+                        ),
+                      ),
+                      InkWell(
+                          onTap: () {
+                            if (!key.currentState.validate()) {
+                              return;
+                            } else {
+                              addCreditCardBloc.add(Click());
+                            }
+                          },
+                          child: CustomButton(
+                            text: "${ translator.translate("add")}",
+                          )),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

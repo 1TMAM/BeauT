@@ -75,86 +75,89 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        endDrawer: MyDrawer(
-          isLogged: isLogged,
-        ),
-        key: _drawerKey,
-        bottomNavigationBar: BottomNavigationBar(
-            showUnselectedLabels: true,
-            selectedIconTheme:
-                IconThemeData(size: 26, color: Theme.of(context).primaryColor),
-            unselectedIconTheme: IconThemeData(size: 20, color: Colors.grey),
-            showSelectedLabels: true,
-            type: BottomNavigationBarType.shifting,
-            currentIndex: selectedPageIndex,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  activeIcon: Icon(
-                    Icons.home,
-                    size: 30,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(translator.translate("home"),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11,
-                      ))),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.notifications,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  activeIcon: Icon(
-                    Icons.notifications,
-                    size: 30,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(translator.translate("notifications"),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11,
-                      ))),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.calendar_today,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  activeIcon: Icon(
-                    Icons.calendar_today,
-                    size: 30,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(translator.translate("reservation"),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11,
-                      ))),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.person,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  activeIcon: Icon(
-                    Icons.person,
-                    size: 30,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(translator.translate("more"),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11,
-                      ))),
-            ],
-            onTap: _onItemTapped),
-        body: pages[selectedPageIndex]);
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      child: Scaffold(
+          endDrawer: MyDrawer(
+            isLogged: isLogged,
+          ),
+          key: _drawerKey,
+          bottomNavigationBar: BottomNavigationBar(
+              showUnselectedLabels: true,
+              selectedIconTheme:
+                  IconThemeData(size: 26, color: Theme.of(context).primaryColor),
+              unselectedIconTheme: IconThemeData(size: 20, color: Colors.grey),
+              showSelectedLabels: true,
+              type: BottomNavigationBarType.shifting,
+              currentIndex: selectedPageIndex,
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.home,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                    activeIcon: Icon(
+                      Icons.home,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(translator.translate("home"),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11,
+                        ))),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.notifications,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                    activeIcon: Icon(
+                      Icons.notifications,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(translator.translate("notifications"),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11,
+                        ))),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.calendar_today,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                    activeIcon: Icon(
+                      Icons.calendar_today,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(translator.translate("reservation"),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11,
+                        ))),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Colors.grey,
+                    ),
+                    activeIcon: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(translator.translate("more"),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11,
+                        ))),
+              ],
+              onTap: _onItemTapped),
+          body: pages[selectedPageIndex]),
+    );
   }
 }

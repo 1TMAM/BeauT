@@ -27,90 +27,93 @@ class _MyAddressesState extends State<MyAddresses> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainPage(
-                              index: 0,
-                            )));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: Text(
-            translator.translate("my_adresses"),
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          )),
-      body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          children: [
-            BlocListener<MyAdressBloc, AppState>(
-              bloc: myAdressBloc,
-              listener: (context, state) {},
-              child: BlocBuilder(
-                bloc: myAdressBloc,
-                builder: (context, state) {
-                  var data = state.model as MyAddressResponse;
-                  return data == null
-                      ? AppLoader()
-                      : data.locations == null
-                          ? Center(
-                              child: EmptyItem(
-                              text: data.msg == "الرمز المميز غير موجود"
-                                  ? "عفواً يرجي تسجيل الدخول اولاًً "
-                                  : data.msg == "الرمز المميز غير موجود"
-                                      ? "Authorization Token Not Found"
-                                      : "Sorry You Must Log In First",
-                            ))
-                          : AnimationLimiter(
-                              child: Column(
-                                children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: data.locations.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return AnimationConfiguration
-                                          .staggeredList(
-                                        position: index,
-                                        duration:
-                                            const Duration(milliseconds: 375),
-                                        child: SlideAnimation(
-                                          verticalOffset: 50.0,
-                                          child: FadeInAnimation(
-                                              child: AddressRow(
-                                            address: data.locations[index],
-                                          )),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  CustomButton(
-                                    onBtnPress: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddNewLocation()));
-                                    },
-                                    text: translator
-                                        .translate("add_new_location"),
-                                  )
-                                ],
-                              ),
-                            );
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainPage(
+                                index: 0,
+                              )));
                 },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            title: Text(
+              translator.translate("my_adresses"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )),
+        body: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            children: [
+              BlocListener<MyAdressBloc, AppState>(
+                bloc: myAdressBloc,
+                listener: (context, state) {},
+                child: BlocBuilder(
+                  bloc: myAdressBloc,
+                  builder: (context, state) {
+                    var data = state.model as MyAddressResponse;
+                    return data == null
+                        ? AppLoader()
+                        : data.locations == null
+                            ? Center(
+                                child: EmptyItem(
+                                text: data.msg == "الرمز المميز غير موجود"
+                                    ? "عفواً يرجي تسجيل الدخول اولاًً "
+                                    : data.msg == "الرمز المميز غير موجود"
+                                        ? "Authorization Token Not Found"
+                                        : "Sorry You Must Log In First",
+                              ))
+                            : AnimationLimiter(
+                                child: Column(
+                                  children: [
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: data.locations.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return AnimationConfiguration
+                                            .staggeredList(
+                                          position: index,
+                                          duration:
+                                              const Duration(milliseconds: 375),
+                                          child: SlideAnimation(
+                                            verticalOffset: 50.0,
+                                            child: FadeInAnimation(
+                                                child: AddressRow(
+                                              address: data.locations[index],
+                                            )),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    CustomButton(
+                                      onBtnPress: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddNewLocation()));
+                                      },
+                                      text: translator
+                                          .translate("add_new_location"),
+                                    )
+                                  ],
+                                ),
+                              );
+                  },
+                ),
               ),
-            ),
-          ]),
+            ]),
+      ),
     );
   }
 }

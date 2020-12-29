@@ -24,82 +24,85 @@ class ActiveAccountState extends State<ActiveAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Image.asset(
-            "assets/images/header.png",
-            fit: BoxFit.contain,
-            width: 100,
-            height: 30,
-          )),
-      body: BlocListener(
-        bloc: activeAccount,
-        listener: (context, state) {
-          var data = state.model as GeneralResponse;
-          if (state is Loading) showLoadingDialog(context);
-          if (state is ErrorLoading) {
-            Navigator.of(context).pop();
-            errorDialog(
-              context: context,
-              text: data.msg,
-            );
-          }
-          if (state is Done) {
-            onDoneDialog(context: context, text: data.msg, function: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Login()));
-            });
-          }
-        },
-        child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 70),
-              child: Center(
-                  child: Text(
-                     translator.translate("enter_code"),
-                    textAlign: TextAlign.center,
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 40,
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: Image.asset(
+              "assets/images/header.png",
+              fit: BoxFit.contain,
+              width: 100,
+              height: 30,
+            )),
+        body: BlocListener(
+          bloc: activeAccount,
+          listener: (context, state) {
+            var data = state.model as GeneralResponse;
+            if (state is Loading) showLoadingDialog(context);
+            if (state is ErrorLoading) {
+              Navigator.of(context).pop();
+              errorDialog(
+                context: context,
+                text: data.msg,
+              );
+            }
+            if (state is Done) {
+              onDoneDialog(context: context, text: data.msg, function: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Login()));
+              });
+            }
+          },
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 70),
+                child: Center(
+                    child: Text(
+                       translator.translate("enter_code"),
+                      textAlign: TextAlign.center,
+                    )),
               ),
-              child: Container(
-                  width: double.infinity,
-                  height: 100,
-                  child: Center(
-                    child: PinCodeTextField(
-                      pinBoxWidth: 60,
-                      pinBoxHeight: 60,
-                      pinBoxColor: Colors.white,
-                      onDone: (String value) {
-                        activeAccount.updateEmail(value);
-                        print(value);
-                        activeAccount.add(Click());
-                      },
-                      defaultBorderColor: Theme
-                          .of(context)
-                          .primaryColor,
-                      pinBoxRadius: 5,
-                      highlightPinBoxColor: Colors.grey[50],
-                      hasTextBorderColor: Theme
-                          .of(context)
-                          .primaryColor,
-                      controller: code,
-                      pinTextStyle: TextStyle(
-                          color: Theme
-                              .of(context)
-                              .primaryColor, fontSize: 18),
-                      textDirection: TextDirection.ltr,
-                      keyboardType: TextInputType.phone,
-                    ),
-                  )),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 40,
+                ),
+                child: Container(
+                    width: double.infinity,
+                    height: 100,
+                    child: Center(
+                      child: PinCodeTextField(
+                        pinBoxWidth: 60,
+                        pinBoxHeight: 60,
+                        pinBoxColor: Colors.white,
+                        onDone: (String value) {
+                          activeAccount.updateEmail(value);
+                          print(value);
+                          activeAccount.add(Click());
+                        },
+                        defaultBorderColor: Theme
+                            .of(context)
+                            .primaryColor,
+                        pinBoxRadius: 5,
+                        highlightPinBoxColor: Colors.grey[50],
+                        hasTextBorderColor: Theme
+                            .of(context)
+                            .primaryColor,
+                        controller: code,
+                        pinTextStyle: TextStyle(
+                            color: Theme
+                                .of(context)
+                                .primaryColor, fontSize: 18),
+                        textDirection: TextDirection.ltr,
+                        keyboardType: TextInputType.phone,
+                      ),
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );

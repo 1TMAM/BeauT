@@ -26,172 +26,176 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: Image.asset(
-              "assets/images/header.png",
-              fit: BoxFit.contain,
-              width: 150,
-              height: 30,
-            )),
-        body: BlocListener<SignUpBloc, AppState>(
-          bloc: signUpBloc,
-          listener: (context, state) {
-            var data = state.model as GeneralResponse;
-            if (state is Loading) {
-              showLoadingDialog(context);
-            }
-            if (state is ErrorLoading) {
-              Navigator.of(context).pop();
-              errorDialog(
-                context: context,
-                text: data.msg,
-              );
-              print("Dialoggg");
-            }
-            if (state is Done) {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ActiveAccount(),
-                  ),
-                  (Route<dynamic> route) => false);
-            }
-          },
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Form(
-              key: key,
-              child: Column(
-                children: [
-                  rowItem(Icons.person, translator.translate("name")),
-                  CustomTextField(
-                    validate: (String val) {
-                      if (val.isEmpty) {
-                        return "${translator.translate("name_validator")}";
-                      }
-                    },
-                    hint: translator.translate("write_name"),
-                    value: (String val) {
-                      signUpBloc.updateName(val);
-                    },
-                  ),
-                  rowItem(Icons.phone, translator.translate("phone")),
-                  CustomTextField(
-                    validate: (String val) {
-                      if (val.length < 10) {
-                        return "${translator.translate("phone_validator")}";
-                      }
-                    },
-                    hint: "966210025500",
-                    inputType: TextInputType.phone,
-                    value: (String val) {
-                      signUpBloc.updateMobile(val);
-                    },
-                  ),
-                  rowItem(Icons.mail, translator.translate("email")),
-                  CustomTextField(
-                    validate: (String val) {
-                      if (val.isEmpty) {
-                        return "${translator.translate("email_validator")}";
-                      }
-                    },
-                    hint: "Example@gmail.com",
-                    inputType: TextInputType.emailAddress,
-                    value: (String val) {
-                      signUpBloc.updateEmail(val);
-                    },
-                  ),
-                  rowItem(Icons.location_on, translator.translate("address")),
-                  CustomTextField(
-                    validate: (String val) {
-                      if (val.isEmpty) {
-                        return "${translator.translate("address_validator")}";
-                      }
-                    },
-                    hint: translator.translate("write_address"),
-                    value: (String val) {
-                      signUpBloc.updateAddress(val);
-                    },
-                  ),
-                  rowItem(Icons.lock, translator.translate("password")),
-                  CustomTextField(
-                    validate: (String val) {
-                      if (val.isEmpty) {
-                        return "${translator.translate("password_validator")}";
-                      }
-                    },
-                    hint: "************",
-                    secureText: true,
-                    value: (String val) {
-                      signUpBloc.updatePassword(val);
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: (){
-                      setState(() {
-                        showVisa =!showVisa;
-                      });
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(width: 10,),
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
 
-                            Text(
-                              translator.translate("add_depet_card"),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                translator.translate("default"),
-                                style: TextStyle(color: Colors.grey[500]),
-                              ),
-                            ),
-                          ],
-                        ),
-                        showVisa == false
-                            ? Icon(Icons.keyboard_arrow_up)
-                            : Icon(Icons.keyboard_arrow_down),
-                      ],
+      child: Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: Image.asset(
+                "assets/images/header.png",
+                fit: BoxFit.contain,
+                width: 150,
+                height: 30,
+              )),
+          body: BlocListener<SignUpBloc, AppState>(
+            bloc: signUpBloc,
+            listener: (context, state) {
+              var data = state.model as GeneralResponse;
+              if (state is Loading) {
+                showLoadingDialog(context);
+              }
+              if (state is ErrorLoading) {
+                Navigator.of(context).pop();
+                errorDialog(
+                  context: context,
+                  text: data.msg,
+                );
+                print("Dialoggg");
+              }
+              if (state is Done) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ActiveAccount(),
                     ),
-                  ),
-                  showVisa == false ? Visa() : SizedBox(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (!key.currentState.validate()) {
-                        return;
-                      } else {
-                        signUpBloc.add(Click());
-                      }
-                    },
-                    child: CustomButton(
-                      text: translator.translate("register"),
-                    ),
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login()));
+                    (Route<dynamic> route) => false);
+              }
+            },
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Form(
+                key: key,
+                child: Column(
+                  children: [
+                    rowItem(Icons.person, translator.translate("name")),
+                    CustomTextField(
+                      validate: (String val) {
+                        if (val.isEmpty) {
+                          return "${translator.translate("name_validator")}";
+                        }
                       },
-                      child: Center(
-                          child: Text(translator.translate("have_acc")))),
-                ],
+                      hint: translator.translate("write_name"),
+                      value: (String val) {
+                        signUpBloc.updateName(val);
+                      },
+                    ),
+                    rowItem(Icons.phone, translator.translate("phone")),
+                    CustomTextField(
+                      validate: (String val) {
+                        if (val.length < 10) {
+                          return "${translator.translate("phone_validator")}";
+                        }
+                      },
+                      hint: "966210025500",
+                      inputType: TextInputType.phone,
+                      value: (String val) {
+                        signUpBloc.updateMobile(val);
+                      },
+                    ),
+                    rowItem(Icons.mail, translator.translate("email")),
+                    CustomTextField(
+                      validate: (String val) {
+                        if (val.isEmpty) {
+                          return "${translator.translate("email_validator")}";
+                        }
+                      },
+                      hint: "Example@gmail.com",
+                      inputType: TextInputType.emailAddress,
+                      value: (String val) {
+                        signUpBloc.updateEmail(val);
+                      },
+                    ),
+                    rowItem(Icons.location_on, translator.translate("address")),
+                    CustomTextField(
+                      validate: (String val) {
+                        if (val.isEmpty) {
+                          return "${translator.translate("address_validator")}";
+                        }
+                      },
+                      hint: translator.translate("write_address"),
+                      value: (String val) {
+                        signUpBloc.updateAddress(val);
+                      },
+                    ),
+                    rowItem(Icons.lock, translator.translate("password")),
+                    CustomTextField(
+                      validate: (String val) {
+                        if (val.isEmpty) {
+                          return "${translator.translate("password_validator")}";
+                        }
+                      },
+                      hint: "************",
+                      secureText: true,
+                      value: (String val) {
+                        signUpBloc.updatePassword(val);
+                      },
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          showVisa =!showVisa;
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(width: 10,),
+
+                              Text(
+                                translator.translate("add_depet_card"),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(
+                                  translator.translate("default"),
+                                  style: TextStyle(color: Colors.grey[500]),
+                                ),
+                              ),
+                            ],
+                          ),
+                          showVisa == false
+                              ? Icon(Icons.keyboard_arrow_up)
+                              : Icon(Icons.keyboard_arrow_down),
+                        ],
+                      ),
+                    ),
+                    showVisa == false ? Visa() : SizedBox(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        if (!key.currentState.validate()) {
+                          return;
+                        } else {
+                          signUpBloc.add(Click());
+                        }
+                      },
+                      child: CustomButton(
+                        text: translator.translate("register"),
+                      ),
+                    ),
+                    InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Login()));
+                        },
+                        child: Center(
+                            child: Text(translator.translate("have_acc")))),
+                  ],
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 
   Widget Visa() {

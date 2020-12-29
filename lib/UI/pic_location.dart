@@ -1,6 +1,6 @@
 import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/search_by_address_bloc.dart';
-import 'package:buty/UI/searchBy_cat_id.dart';
+import 'package:buty/UI/SearchResult.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/search_by_category.dart';

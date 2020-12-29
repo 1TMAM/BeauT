@@ -52,147 +52,151 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            leading: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainPage(
-                                index: 0,
-                              )));
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                )),
-            centerTitle: true,
-            title: Text(
-              translator.translate("edit_profile"),
-              style: TextStyle(color: Colors.white, fontSize: 14),
-            )),
-        body: IsLogged == false
-            ? Center(
-                child: Text(translator.currentLanguage == "ar"
-                    ? "الرجاء تسجيل الدخول اولاً"
-                    : "Please Log In First"),
-              )
-            : ListView(
-                children: [
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            type = "data";
-                          });
-                        },
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                translator.translate("edit_profile"),
-                                style: TextStyle(
-                                    fontWeight: type == "data"
-                                        ? FontWeight.bold
-                                        : FontWeight.normal),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width / 4,
-                                height: 2,
-                                color: type == "data"
-                                    ? Colors.black
-                                    : Colors.grey[200],
-                              )
-                            ],
-                          ),
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 40,
-                          color: Colors.grey[200],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            type = "last";
-                          });
-                        },
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                translator.translate("password"),
-                                style: TextStyle(
-                                    fontWeight: type == "last"
-                                        ? FontWeight.bold
-                                        : FontWeight.normal),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width / 4,
-                                height: 2,
-                                color: type == "last"
-                                    ? Colors.black
-                                    : Colors.grey[200],
-                              )
-                            ],
-                          ),
-                          width: MediaQuery.of(context).size.width / 2,
-                          height: 40,
-                          color: Colors.grey[200],
-                        ),
-                      ),
-                    ],
-                  ),
-                  type == "data"
-                      ? editDataView(name, email, phone)
-                      : passView(),
-                  BlocListener(
-                    bloc: updateProfileBloc,
-                    listener: (context, state) {
-                      var data = state.model as UpadteProfileResponse;
-                    if (state is Done) {
-                      Navigator.pop(context);
-                        onDoneDialog(
-                            context: context,
-                            text: data.msg,
-                            function: () {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MainPage(
-                                      index: 0,
-                                    ),
-                                  ),
-                                  (Route<dynamic> route) => false);
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+
+      child: Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              leading: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MainPage(
+                                  index: 0,
+                                )));
+                  },
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  )),
+              centerTitle: true,
+              title: Text(
+                translator.translate("edit_profile"),
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              )),
+          body: IsLogged == false
+              ? Center(
+                  child: Text(translator.currentLanguage == "ar"
+                      ? "الرجاء تسجيل الدخول اولاً"
+                      : "Please Log In First"),
+                )
+              : ListView(
+                  children: [
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              type = "data";
                             });
-                      }
-                    },
-                    child: CustomButton(
-                      onBtnPress: () {
-                        showLoadingDialog(context);
-                        if (type == "data") {
-                          if (!dataKey.currentState.validate()) {
-                            return;
-                          } else {
-                            updateProfileBloc.add(Click());
-                          }
-                        } else {
-                          if (!passKey.currentState.validate()) {
-                            return;
-                          } else {
-                            updateProfileBloc.add(Click());
-                          }
+                          },
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  translator.translate("edit_profile"),
+                                  style: TextStyle(
+                                      fontWeight: type == "data"
+                                          ? FontWeight.bold
+                                          : FontWeight.normal),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  height: 2,
+                                  color: type == "data"
+                                      ? Colors.black
+                                      : Colors.grey[200],
+                                )
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 40,
+                            color: Colors.grey[200],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              type = "last";
+                            });
+                          },
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  translator.translate("password"),
+                                  style: TextStyle(
+                                      fontWeight: type == "last"
+                                          ? FontWeight.bold
+                                          : FontWeight.normal),
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  height: 2,
+                                  color: type == "last"
+                                      ? Colors.black
+                                      : Colors.grey[200],
+                                )
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 40,
+                            color: Colors.grey[200],
+                          ),
+                        ),
+                      ],
+                    ),
+                    type == "data"
+                        ? editDataView(name, email, phone)
+                        : passView(),
+                    BlocListener(
+                      bloc: updateProfileBloc,
+                      listener: (context, state) {
+                        var data = state.model as UpadteProfileResponse;
+                      if (state is Done) {
+                        Navigator.pop(context);
+                          onDoneDialog(
+                              context: context,
+                              text: data.msg,
+                              function: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MainPage(
+                                        index: 0,
+                                      ),
+                                    ),
+                                    (Route<dynamic> route) => false);
+                              });
                         }
                       },
-                      text: translator.translate("change"),
-                    ),
-                  )
-                ],
-              ));
+                      child: CustomButton(
+                        onBtnPress: () {
+                          showLoadingDialog(context);
+                          if (type == "data") {
+                            if (!dataKey.currentState.validate()) {
+                              return;
+                            } else {
+                              updateProfileBloc.add(Click());
+                            }
+                          } else {
+                            if (!passKey.currentState.validate()) {
+                              return;
+                            } else {
+                              updateProfileBloc.add(Click());
+                            }
+                          }
+                        },
+                        text: translator.translate("change"),
+                      ),
+                    )
+                  ],
+                )),
+    );
   }
 
   Widget rowItem(IconData icon, String text) {

@@ -93,7 +93,10 @@ class _ReservationState extends State<Reservation> {
                 ? CurrentReservationView()
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 150),
-                    child: Center(child: Text("No Reservations")),
+                    child: Center(
+                        child: Text(translator.currentLanguage == "en"
+                            ? "No Reservations"
+                            : "ليس لديك حجوزات منتهية حتي الان")),
                   ),
           ],
         ));

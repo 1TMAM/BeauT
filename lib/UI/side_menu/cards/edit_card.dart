@@ -40,167 +40,170 @@ class _EditCardState extends State<EditCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyCards()));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: Text(
-            translator.translate("add_new_card"),
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          )),
-      body: BlocListener(
-        bloc: editCardBloc,
-        listener: (context, state) {
-          var data = state.model as GeneralResponse;
-          if (state is Loading) {
-            showLoadingDialog(context);
-          } else if (state is ErrorLoading) {
-            Navigator.pop(context);
-            errorDialog(text: data.msg, context: context);
-          } else if (state is Done) {
-            Navigator.pop(context);
-            CustomSheet(
-                context: context,
-                widget: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Container(
-                        width: 60,
-                        height: 10,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).primaryColor),
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyCards()));
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            title: Text(
+              translator.translate("add_new_card"),
+              style: TextStyle(color: Colors.white, fontSize: 14),
+            )),
+        body: BlocListener(
+          bloc: editCardBloc,
+          listener: (context, state) {
+            var data = state.model as GeneralResponse;
+            if (state is Loading) {
+              showLoadingDialog(context);
+            } else if (state is ErrorLoading) {
+              Navigator.pop(context);
+              errorDialog(text: data.msg, context: context);
+            } else if (state is Done) {
+              Navigator.pop(context);
+              CustomSheet(
+                  context: context,
+                  widget: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          width: 60,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Theme.of(context).primaryColor),
+                        ),
                       ),
-                    ),
-                    Text(translator.translate("done_add_card")),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Icon(
-                        Icons.check_circle,
-                        size: 125,
-                        color: Theme.of(context).primaryColor,
+                      Text(translator.translate("done_add_card")),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Icon(
+                          Icons.check_circle,
+                          size: 125,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => MyCards()));
+                        },
+                        child: CustomButton(
+                          text: translator.translate("back"),
+                        ),
+                      )
+                    ],
+                  ));
+            }
+          },
+          child: BlocBuilder(
+            bloc: editCardBloc,
+            builder: (context, state) {
+              return ListView(
+                children: [
+                  exampleContainer(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(translator.translate("card_number")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: CustomTextField(
+                      hint: widget.card.number.toString(),
+                      inputType: TextInputType.number,
+                      value: (String val) {
+                        setState(() {
+                          card_num = val;
+                        });
+                        print(val);
+                        editCardBloc.updateNumber(val);
+                      },
                     ),
-                    InkWell(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(translator.translate("expireDate")),
+                            Container(
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                child: CustomTextField(
+                                  hint: "${widget.card.expDate}",
+                                  inputType: TextInputType.number,
+                                  value: (String val) {
+                                    setState(() {
+                                      cvv = val;
+                                    });
+                                    print(val);
+                                    editCardBloc.updateDate(val);
+                                  },
+                                )),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text("CVV"),
+                            Container(
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                child: CustomTextField(
+                                  hint: "${widget.card.cvv}",
+                                  inputType: TextInputType.number,
+                                  value: (String val) {
+                                    setState(() {
+                                      cvv = val;
+                                    });
+                                    print(val);
+                                    editCardBloc.updateCvv(val);
+                                  },
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(translator.translate("card_holder")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: CustomTextField(
+                      hint: "User Name",
+                      value: (String val) {
+                        setState(() {
+                          cardHolder = val;
+                        });
+                        print(val);
+                        editCardBloc.updateName(val);
+                      },
+                    ),
+                  ),
+                  InkWell(
                       onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => MyCards()));
+                        editCardBloc.add(Click());
                       },
                       child: CustomButton(
-                        text: translator.translate("back"),
-                      ),
-                    )
-                  ],
-                ));
-          }
-        },
-        child: BlocBuilder(
-          bloc: editCardBloc,
-          builder: (context, state) {
-            return ListView(
-              children: [
-                exampleContainer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(translator.translate("card_number")),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CustomTextField(
-                    hint: widget.card.number.toString(),
-                    inputType: TextInputType.number,
-                    value: (String val) {
-                      setState(() {
-                        card_num = val;
-                      });
-                      print(val);
-                      editCardBloc.updateNumber(val);
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(translator.translate("expireDate")),
-                          Container(
-                              width: MediaQuery.of(context).size.width / 2.5,
-                              child: CustomTextField(
-                                hint: "${widget.card.expDate}",
-                                inputType: TextInputType.number,
-                                value: (String val) {
-                                  setState(() {
-                                    cvv = val;
-                                  });
-                                  print(val);
-                                  editCardBloc.updateDate(val);
-                                },
-                              )),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text("CVV"),
-                          Container(
-                              width: MediaQuery.of(context).size.width / 2.5,
-                              child: CustomTextField(
-                                hint: "${widget.card.cvv}",
-                                inputType: TextInputType.number,
-                                value: (String val) {
-                                  setState(() {
-                                    cvv = val;
-                                  });
-                                  print(val);
-                                  editCardBloc.updateCvv(val);
-                                },
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(translator.translate("card_holder")),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: CustomTextField(
-                    hint: "User Name",
-                    value: (String val) {
-                      setState(() {
-                        cardHolder = val;
-                      });
-                      print(val);
-                      editCardBloc.updateName(val);
-                    },
-                  ),
-                ),
-                InkWell(
-                    onTap: () {
-                      editCardBloc.add(Click());
-                    },
-                    child: CustomButton(
-                      text: "${translator.translate("add")}",
-                    )),
-              ],
-            );
-          },
+                        text: "${translator.translate("add")}",
+                      )),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );

@@ -68,140 +68,143 @@ class _ButyDetailsState extends State<ButyDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MainPage(
-                              index: 0,
-                            )));
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: Text(
-            widget.name ?? "Buty Name",
-            style: TextStyle(color: Colors.white, fontSize: 17),
-          )),
-      body: BlocListener<GetBeauticianDetailsBloc, AppState>(
-        bloc: getBeauticianDetailsBloc,
-        listener: (context, state) {
-          SharedPreferenceManager pref = SharedPreferenceManager();
-        },
-        child: BlocBuilder(
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainPage(
+                                index: 0,
+                              )));
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            title: Text(
+              widget.name ?? "Buty Name",
+              style: TextStyle(color: Colors.white, fontSize: 17),
+            )),
+        body: BlocListener<GetBeauticianDetailsBloc, AppState>(
           bloc: getBeauticianDetailsBloc,
-          builder: (context, state) {
-            var data = state.model as BeauticianDetailsResponse;
-            return data == null
-                ? AppLoader()
-                : ListView(
-                    children: [
-                      CustomCarousel(
-                        img: data.beautician[0].gallery,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "${widget.name}",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          children: [
-                            Text(
-                              "${translator.translate("services")} : ",
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width - 100,
-                              height: 50,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: data.beautician[0].services.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5),
-                                      child: Container(
-                                        width: 35,
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(data
-                                                    .beautician[0]
-                                                    .services[index]
-                                                    .icon),
-                                                fit: BoxFit.cover),
-                                            color: Colors.grey[200],
-                                            shape: BoxShape.circle),
-                                      ),
-                                    );
-                                  }),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                            "${translator.translate("location")}  : ${data.beautician[0].address}  "),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "${translator.translate("services")}  ",
-                        ),
-                      ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: data.beautician[0].services.length,
-                          itemBuilder: (context, index) {
-                            return serviceRow(
-                                data.beautician[0].services, index);
-                          }),
-                      InkWell(
-                          onTap: () {
-                            if (isLogged == true) {
-                              if (servicesList.isEmpty) {
-                                errorDialog(
-                                    context: context,
-                                    text: translator.translate("enter_items"));
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ChooseDate(
-                                              total: total,
-                                              servicseList: servicesList,
-                                            )));
-                              }
-                            } else {
-                              errorDialog(
-                                  text: translator.currentLanguage == "ar"
-                                      ? "يرجي تسجيل الدخول اولاًً "
-                                      : " You Must Login Frist",
-                                  context: context);
-                            }
-                          },
-                          child: CustomButton(
-                            text:
-                                "${translator.translate("choose_time")} ${total} ${translator.translate("sar")}",
-                          ))
-                    ],
-                  );
+          listener: (context, state) {
+            SharedPreferenceManager pref = SharedPreferenceManager();
           },
+          child: BlocBuilder(
+            bloc: getBeauticianDetailsBloc,
+            builder: (context, state) {
+              var data = state.model as BeauticianDetailsResponse;
+              return data == null
+                  ? AppLoader()
+                  : ListView(
+                      children: [
+                        CustomCarousel(
+                          img: data.beautician[0].gallery,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "${widget.name}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                "${translator.translate("services")} : ",
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width - 100,
+                                height: 50,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: data.beautician[0].services.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 5),
+                                        child: Container(
+                                          width: 35,
+                                          height: 35,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(data
+                                                      .beautician[0]
+                                                      .services[index]
+                                                      .icon),
+                                                  fit: BoxFit.cover),
+                                              color: Colors.grey[200],
+                                              shape: BoxShape.circle),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                              "${translator.translate("location")}  : ${data.beautician[0].address}  "),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "${translator.translate("services")}  ",
+                          ),
+                        ),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: data.beautician[0].services.length,
+                            itemBuilder: (context, index) {
+                              return serviceRow(
+                                  data.beautician[0].services, index);
+                            }),
+                        InkWell(
+                            onTap: () {
+                              if (isLogged == true) {
+                                if (servicesList.isEmpty) {
+                                  errorDialog(
+                                      context: context,
+                                      text: translator.translate("enter_items"));
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ChooseDate(
+                                                total: total,
+                                                servicseList: servicesList,
+                                              )));
+                                }
+                              } else {
+                                errorDialog(
+                                    text: translator.currentLanguage == "ar"
+                                        ? "يرجي تسجيل الدخول اولاًً "
+                                        : " You Must Login Frist",
+                                    context: context);
+                              }
+                            },
+                            child: CustomButton(
+                              text:
+                                  "${translator.translate("choose_time")} ${total} ${translator.translate("sar")}",
+                            ))
+                      ],
+                    );
+            },
+          ),
         ),
       ),
     );

@@ -21,75 +21,79 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Image.asset(
-            "assets/images/header.png",
-            fit: BoxFit.contain,
-            width: 100,
-            height: 30,
-          )),
-      body: BlocListener(
-        bloc: forgetPasswordBloc,
-        listener: (context, state) {
-          var data = state.model as GeneralResponse;
-          if (state is Loading) showLoadingDialog(context);
-          if (state is ErrorLoading) {
-            Navigator.of(context).pop();
-            errorDialog(
-              context: context,
-              text: data.msg,
-            );
-          }
-          if (state is Done) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => CheckCode()));
-          }
-        },
-        child: Form(
-          key: key,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Center(
-                  child: Icon(
-                    Icons.lock,
-                    size: 40,
-                    color: Theme.of(context).primaryColor,
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+
+      child: Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: Image.asset(
+              "assets/images/header.png",
+              fit: BoxFit.contain,
+              width: 100,
+              height: 30,
+            )),
+        body: BlocListener(
+          bloc: forgetPasswordBloc,
+          listener: (context, state) {
+            var data = state.model as GeneralResponse;
+            if (state is Loading) showLoadingDialog(context);
+            if (state is ErrorLoading) {
+              Navigator.of(context).pop();
+              errorDialog(
+                context: context,
+                text: data.msg,
+              );
+            }
+            if (state is Done) {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => CheckCode()));
+            }
+          },
+          child: Form(
+            key: key,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Center(
+                    child: Icon(
+                      Icons.lock,
+                      size: 40,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
                 ),
-              ),
-              Center(child: Text( translator.translate("forget_password"))),
-              rowItem(Icons.mail,  translator.translate("email")),
-              CustomTextField(
-                hint: "example@gmail.com",
-                validate: (String val) {
-                  if (val.isEmpty) {
-                    return " البريد الالكتروني غير صحيح";
-                  }
-                },
-                value: (String val) {
-                  forgetPasswordBloc.updateEmail(val);
-                },
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              CustomButton(
-                onBtnPress: () {
-                  if (!key.currentState.validate()) {
-                    return "Invalid Email";
-                  } else {
-                    forgetPasswordBloc.add(Click());
-                  }
-                },
-                text:  translator.translate("send"),
-              ),
-            ],
+                Center(child: Text( translator.translate("forget_password"))),
+                rowItem(Icons.mail,  translator.translate("email")),
+                CustomTextField(
+                  hint: "example@gmail.com",
+                  validate: (String val) {
+                    if (val.isEmpty) {
+                      return " البريد الالكتروني غير صحيح";
+                    }
+                  },
+                  value: (String val) {
+                    forgetPasswordBloc.updateEmail(val);
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                CustomButton(
+                  onBtnPress: () {
+                    if (!key.currentState.validate()) {
+                      return "Invalid Email";
+                    } else {
+                      forgetPasswordBloc.add(Click());
+                    }
+                  },
+                  text:  translator.translate("send"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

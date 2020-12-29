@@ -22,99 +22,103 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: Image.asset(
-              "assets/images/header.png",
-              fit: BoxFit.contain,
-              width: 150,
-              height: 30,
-            )),
-        body: BlocListener(
-            bloc: logInBloc,
-            listener: (context, state) {
-              var data = state.model as UserResponse;
-              if (state is Loading) showLoadingDialog(context);
-              if (state is ErrorLoading) {
-                Navigator.of(context).pop();
-                errorDialog(
-                  context: context,
-                  text: data.msg,
-                );
-              }
-              if (state is Done) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainPage(),
-                    ),
-                    (Route<dynamic> route) => false);
-              }
-            },
-            child: Form(
-              key: key,
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                children: [
-                  rowItem(Icons.mail,  translator.translate("email")),
-                  CustomTextField(
-                    hint: "example@gmail.com",
-                    validate: (String val) {
-                      if (val.isEmpty) {
-                        return " البريد الالكتروني غير صحيح";
-                      }
-                    },
-                    value: (String val) {
-                      logInBloc.updateEmail(val);
-                    },
-                  ),
-                  rowItem(Icons.lock,  translator.translate("password")),
-                  CustomTextField(
-                    secureText: true,
-                    validate: (String val) {
-                      if (val.length < 8) {
-                        return "الرقم السري غير صحيح";
-                      }
-                    },
-                    value: (String val) {
-                      logInBloc.updatePassword(val);
-                    },
-                    hint: "************",
-                  ),
-                  CustomButton(
-                    onBtnPress: () {
-                      if (!key.currentState.validate()) {
-                        return;
-                      } else {
-                        logInBloc.add(Click());
-                      }
-                    },
-                    text:  translator.translate("login"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgetPassword()));
+    return Directionality(
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+
+      child: Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: Image.asset(
+                "assets/images/header.png",
+                fit: BoxFit.contain,
+                width: 150,
+                height: 30,
+              )),
+          body: BlocListener(
+              bloc: logInBloc,
+              listener: (context, state) {
+                var data = state.model as UserResponse;
+                if (state is Loading) showLoadingDialog(context);
+                if (state is ErrorLoading) {
+                  Navigator.of(context).pop();
+                  errorDialog(
+                    context: context,
+                    text: data.msg,
+                  );
+                }
+                if (state is Done) {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainPage(),
+                      ),
+                      (Route<dynamic> route) => false);
+                }
+              },
+              child: Form(
+                key: key,
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  children: [
+                    rowItem(Icons.mail,  translator.translate("email")),
+                    CustomTextField(
+                      hint: "example@gmail.com",
+                      validate: (String val) {
+                        if (val.isEmpty) {
+                          return " البريد الالكتروني غير صحيح";
+                        }
                       },
-                      child: Center(
-                          child: Text( translator.translate("forget_password"))),
-                    ),
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignUp()));
+                      value: (String val) {
+                        logInBloc.updateEmail(val);
                       },
-                      child: Center(child: Text( translator.translate("no_acc")))),
-                ],
-              ),
-            )));
+                    ),
+                    rowItem(Icons.lock,  translator.translate("password")),
+                    CustomTextField(
+                      secureText: true,
+                      validate: (String val) {
+                        if (val.length < 8) {
+                          return "الرقم السري غير صحيح";
+                        }
+                      },
+                      value: (String val) {
+                        logInBloc.updatePassword(val);
+                      },
+                      hint: "************",
+                    ),
+                    CustomButton(
+                      onBtnPress: () {
+                        if (!key.currentState.validate()) {
+                          return;
+                        } else {
+                          logInBloc.add(Click());
+                        }
+                      },
+                      text:  translator.translate("login"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ForgetPassword()));
+                        },
+                        child: Center(
+                            child: Text( translator.translate("forget_password"))),
+                      ),
+                    ),
+                    InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => SignUp()));
+                        },
+                        child: Center(child: Text( translator.translate("no_acc")))),
+                  ],
+                ),
+              ))),
+    );
   }
 
   Widget rowItem(IconData icon, String text) {
