@@ -20,87 +20,84 @@ class SingleProviderItemRow extends StatelessWidget {
                       name: beautic.beautName,
                     )));
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage(beautic.photo))),
-              height: 200,
-            ),
-            Text(
-              "${beautic.beautName}",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Row(
-              children: [
-                Text(
-                  "${translator.translate("services")} : ",
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 100,
-                  height: 50,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: beautic.services.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        beautic.services[index].icon),
-                                    fit: BoxFit.cover),
-                                color: Colors.grey[200],
-                                shape: BoxShape.circle),
-                          ),
-                        );
-                      }),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${translator.translate("service_address")} : ",
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200], shape: BoxShape.circle),
-                      child: Center(
-                          child: Icon(
-                        Icons.home,
-                        color: Theme.of(context).primaryColor,
-                      )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                image: DecorationImage(
+                    fit: BoxFit.cover, image: NetworkImage(beautic.photo))),
+            height: 200,
+          ),
+          Text(
+            "${beautic.beautName}",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Row(
+            children: [
+              Text(
+                "${translator.translate("services")} : ",
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width - 100,
+                height: 50,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: beautic.services.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      beautic.services[index].icon),
+                                  fit: BoxFit.cover),
+                              color: Colors.grey[200],
+                              shape: BoxShape.circle),
+                        ),
+                      );
+                    }),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "${translator.translate("service_address")} : ",
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 35,
+                    height: 35,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200], shape: BoxShape.circle),
+                    child: Center(
+                        child: Icon(
+                      Icons.home,
+                      color: Theme.of(context).primaryColor,
+                    )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      "${beautic.services[0].location}",
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "${beautic.services[0].location}",
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
-        ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

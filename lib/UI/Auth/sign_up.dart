@@ -85,7 +85,7 @@ class _SignUpState extends State<SignUp> {
                         return "${translator.translate("phone_validator")}";
                       }
                     },
-                    hint: "+966210025500",
+                    hint: "966210025500",
                     inputType: TextInputType.phone,
                     value: (String val) {
                       signUpBloc.updateMobile(val);
@@ -98,7 +98,7 @@ class _SignUpState extends State<SignUp> {
                         return "${translator.translate("email_validator")}";
                       }
                     },
-                    hint: "example@gmail.com",
+                    hint: "Example@gmail.com",
                     inputType: TextInputType.emailAddress,
                     value: (String val) {
                       signUpBloc.updateEmail(val);

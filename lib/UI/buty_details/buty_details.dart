@@ -189,7 +189,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                               }
                             } else {
                               errorDialog(
-                                  text: translator == "ar"
+                                  text: translator.currentLanguage == "ar"
                                       ? "يرجي تسجيل الدخول اولاًً "
                                       : " You Must Login Frist",
                                   context: context);
