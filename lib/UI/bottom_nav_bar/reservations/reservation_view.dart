@@ -64,8 +64,8 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
                                   width: double.infinity,
-                                  height:
-                                      MediaQuery.of(context).size.height / 2.6,
+                                  // height:
+                                  //     MediaQuery.of(context).size.height / 2.6,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 10),

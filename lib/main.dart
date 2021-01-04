@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         //---------------------------------------------------------------
         primaryColor: Color(0xFFDBB2D2),
         scaffoldBackgroundColor: Colors.white,
-        fontFamily: 'Cairo',
+        fontFamily:translator.currentLanguage=="en"? 'Elmessiri':'Cairo',
       ),
       home: Splash(
         navKey: navKey,

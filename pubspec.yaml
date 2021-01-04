@@ -57,3 +57,6 @@ flutter:
     - family: Cairo
       fonts:
         - asset: assets/fonts/Cairo-Regular.ttf
+    - family: Elmessiri
+      fonts:
+        - asset: assets/fonts/ElMessiry.ttf

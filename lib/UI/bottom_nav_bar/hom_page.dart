@@ -4,13 +4,10 @@ import 'package:buty/Bolcs/search_by_name_bloc.dart';
 import 'package:buty/Bolcs/search_by_time_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
-import 'package:buty/UI/CustomWidgets/CustomButton.dart';
-import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
-import 'package:buty/UI/component/single_provider_item_row.dart';
-import 'package:buty/UI/pic_location.dart';
 import 'package:buty/UI/SearchResult.dart';
+import 'package:buty/UI/component/single_provider_item_row.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
@@ -20,8 +17,9 @@ import 'package:buty/models/search_by_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+
+import '../pic_location.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -43,6 +41,33 @@ class _HomePageState extends State<HomePage> {
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print("USER STATUS${logged != " " ? false : true}");
   }
+
+  List<String> timeList = [
+    "10 : 00",
+    "10 : 30",
+    "11 : 00",
+    "11 : 30",
+    "12 : 00",
+    "12 : 30",
+    "01 : 00",
+    "01 : 30",
+    "02 : 00",
+    "02 : 30",
+    "03 : 00",
+    "03 : 30",
+    "04 : 00",
+    "04 : 30",
+    "05 : 00",
+    "05 : 30",
+    "06 : 00",
+    "06 : 30",
+    "07 : 00",
+    "07 : 30",
+    "08 : 00",
+    "08 : 30",
+    "09 : 00",
+    "09 : 30",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -78,34 +103,85 @@ class _HomePageState extends State<HomePage> {
                                   )));
                     }
                   },
-                  child: CustomTextField(
-                    onSubmitted: (String val) {
-                      searchByNameBloc.updateName(val);
-                      print("Submittteed  Val===> ${val}");
-                      searchByNameBloc.add(Click());
-                    },
-                    value: (String val) {
-                      searchByNameBloc.updateName(val);
-                    },
-                    hint: translator.translate("search"),
-                    icon: InkWell(
-                        onTap: () {
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(25)),
+                      child: TextField(
+                        onChanged: (String val) {
+                          print(val);
+                          searchByNameBloc.updateName(val);
+                        },
+                        onSubmitted: (v) {
                           searchByNameBloc.add(Click());
                         },
-                        child: Icon(Icons.search)),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: "${translator.translate("search")}",
+                          border: OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(10 ?? 10.0),
+                            borderSide: new BorderSide(
+                                color: Theme.of(context).primaryColor,
+                                width: 1),
+                          ),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20 , vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChooseLocation()));
+                          CustomSheet(
+                              context: context,
+                              hight: MediaQuery.of(context).size.height / 3,
+                              widget: Column(
+                                children: [
+                                  InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChooseLocation()));
+                                      },
+                                      child: Text(
+                                        "${translator.translate("at_home")}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    child: Divider(),
+                                  ),
+                                  InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChooseLocation()));
+                                      },
+                                      child: Text(
+                                        "${translator.translate("at_buty")}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      )),
+                                ],
+                              ));
                         },
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.3,
@@ -115,15 +191,21 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(5)),
                             child: Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 40),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 40),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Icon(
                                       Icons.add_location,
                                       color: Theme.of(context).primaryColor,
                                     ),
-                                    Text(translator.translate("where"), style: TextStyle(fontWeight: FontWeight.bold),),
+                                    Text(
+                                      translator.translate("where"),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -141,15 +223,21 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(5)),
                             child: Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 40),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 40),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Icon(
                                       Icons.timer,
                                       color: Theme.of(context).primaryColor,
                                     ),
-                                    Text(translator.translate("when") , style: TextStyle(fontWeight: FontWeight.bold),),
+                                    Text(
+                                      translator.translate("when"),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -294,63 +382,56 @@ class _HomePageState extends State<HomePage> {
   void timeDialog() {
     CustomSheet(
         context: context,
-        hight: MediaQuery.of(context).size.height / 3,
-        widget: Column(
-          children: [
-            Text(
-              translator.translate("enter_time"),
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-            TimePicker(),
-            BlocListener(
-                bloc: searchByTimeBloc,
-                listener: (context, state) {
-                  var data = state.model as SearchByCategoryResponse;
-                  if (state is Loading) showLoadingDialog(context);
-                  if (state is ErrorLoading) {
-                    Navigator.of(context).pop();
-                    errorDialog(
-                      context: context,
-                      text: data.msg,
-                    );
-                  }
-                  if (state is Done) {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SearchResult(
-                                  beauticianServices:
-                                      data.data.beauticianServices == null
-                                          ? null
-                                          : data.data.beauticianServices,
-                                )));
-                  }
-                },
-                child: CustomButton(
-                  onBtnPress: () {
-                    Navigator.pop(context);
+        hight: MediaQuery.of(context).size.height / 2.3,
+        widget: BlocListener(
+          bloc: searchByTimeBloc,
+          listener: (context, state) {
+            var data = state.model as SearchByCategoryResponse;
+            if (state is Loading) showLoadingDialog(context);
+            if (state is ErrorLoading) {
+              Navigator.of(context).pop();
+              errorDialog(
+                context: context,
+                text: data.msg,
+              );
+            }
+            if (state is Done) {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchResult(
+                            beauticianServices:
+                                data.data.beauticianServices == null
+                                    ? null
+                                    : data.data.beauticianServices,
+                          )));
+            }
+          },
+          child: ListView.builder(
+              itemCount: timeList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    print(timeList[index]);
+                    searchByTimeBloc.updateId(timeList[index]);
                     searchByTimeBloc.add(Click());
                   },
-                  text: "${translator.translate("done")}",
-                ))
-          ],
+                  child: Column(
+                    children: [
+                      Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: Text(
+                            "${timeList[index]}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          )),
+                      Divider(),
+                    ],
+                  ),
+                );
+              }),
         ));
-  }
-
-  Widget TimePicker() {
-    return new TimePickerSpinner(
-      is24HourMode: false,
-      normalTextStyle: TextStyle(fontSize: 18, color: Colors.black),
-      highlightedTextStyle:
-          TextStyle(fontSize: 18, color: Theme.of(context).primaryColor),
-      spacing: 30,
-      itemHeight: 50,
-      isForce2Digits: true,
-      onTimeChange: (time) {
-        searchByTimeBloc.updateId(time.toString().substring(10, 16));
-      },
-    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:buty/Bolcs/forget_password_bloc.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/check_code_bloc.dart';
 import 'package:buty/UI/Auth/reset_passeord.dart';
@@ -99,6 +100,39 @@ class CheckCodeState extends State<CheckCode> {
                       ),
                     )),
               ),
+              BlocListener(
+                bloc: forgetPasswordBloc,
+                listener: (context, state) {
+                  var data = state.model as GeneralResponse;
+                  if (state is Loading) showLoadingDialog(context);
+                  if (state is ErrorLoading) {
+                    Navigator.of(context).pop();
+                    errorDialog(
+                      context: context,
+                      text: data.msg,
+                    );
+                  }
+                  if (state is Done) {
+                   Navigator.pop(context);
+                  }
+                },
+                child: InkWell(
+                  onTap: (){
+                    forgetPasswordBloc.updateEmail(widget.email);
+                    forgetPasswordBloc.add(Click());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 70),
+                    child: Center(
+                        child: Text(
+                          translator.translate("resend_code"),
+                          textAlign: TextAlign.center,
+                        )),
+                  ),
+                ),
+              ),
+
+
             ],
           ),
         ),

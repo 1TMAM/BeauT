@@ -65,7 +65,7 @@ class UserDataRepo {
   }
 
 //-------------------------------------------------------------------------------
-  static Future<GeneralResponse> CheckCode(String code) async {
+  static Future<GeneralResponse>  CheckCode(String code) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var email = await mSharedPreferenceManager.readString(CachingKey.EMAIL);
     print(email);
