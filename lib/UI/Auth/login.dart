@@ -129,13 +129,13 @@ class _LoginState extends State<Login> {
           Icon(
             icon,
             color: Theme.of(context).primaryColor,
-            size: 20,
+            size: 28,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               text,
-              style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16 , fontWeight: FontWeight.bold),
             ),
           )
         ],

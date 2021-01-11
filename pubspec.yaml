@@ -31,6 +31,7 @@ dependencies:
   tinycolor: ^1.0.2
   localize_and_translate: ^3.0.2
   flutter_time_picker_spinner: ^1.0.6+1
+  table_calendar: ^2.3.2
 
 
 

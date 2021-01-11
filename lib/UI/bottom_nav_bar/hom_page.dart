@@ -7,6 +7,7 @@ import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/SearchResult.dart';
+import 'package:buty/UI/bottom_nav_bar/searchBytime.dart';
 import 'package:buty/UI/component/single_provider_item_row.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
@@ -94,6 +95,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                     if (state is Done) {
+                      Navigator.of(context).pop();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -213,7 +215,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       InkWell(
                         onTap: () {
-                          timeDialog();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchByTime()));
                         },
                         child: Container(
                             width: MediaQuery.of(context).size.width / 2.3,

@@ -64,7 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 ),
               ),
               errorStyle: TextStyle(fontSize: 10.0),
-              contentPadding: EdgeInsets.all(5),
+              contentPadding: EdgeInsets.symmetric(horizontal: 10 , vertical: 5),
               border: OutlineInputBorder(
                 borderRadius: new BorderRadius.circular(widget.raduis ?? 10.0),
                 borderSide: new BorderSide(color: Theme.of(context).primaryColor , width: 1),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 void showLoadingDialog(BuildContext mcontext) {
   showDialog(
@@ -22,7 +23,7 @@ void showLoadingDialog(BuildContext mcontext) {
                   Padding(
                     padding: EdgeInsets.only(right: 20),
                     child: Text(
-                      "جاري التحميل",
+                      "${translator.translate("loading")}",
                       style: TextStyle(color: Theme.of(mcontext).primaryColor),
                     ),
                   )

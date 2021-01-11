@@ -1,7 +1,7 @@
 {
   "user": "User",
   "name": "Name",
-  "email": "Nmail",
+  "email": "Email",
   "password": "Password",
   "newPassword": "New Password",
   "confirm_newPassword": "Confirm new Password",
@@ -115,6 +115,8 @@
   "e_mail":"E- Mail",
   "call_us_on": "Contact Us On ",
   "done": "Search",
-  "choose_location": "Choose Location"
+  "choose_location": "Choose Location",
+  "loading": "Loading",
+  "order_time": "Choose Order Time"
 
 }

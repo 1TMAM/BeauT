@@ -1,4 +1,3 @@
-import 'package:buty/Base/AllTranslation.dart';
 import 'package:buty/Bolcs/signupBloc.dart';
 import 'package:buty/UI/Auth/login.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -27,8 +26,9 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
-
+      textDirection: translator.currentLanguage == "ar"
+          ? TextDirection.rtl
+          : TextDirection.ltr,
       child: Scaffold(
           appBar: AppBar(
               automaticallyImplyLeading: false,
@@ -136,9 +136,9 @@ class _SignUpState extends State<SignUp> {
                       height: 20,
                     ),
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         setState(() {
-                          showVisa =!showVisa;
+                          showVisa = !showVisa;
                         });
                       },
                       child: Row(
@@ -146,14 +146,16 @@ class _SignUpState extends State<SignUp> {
                         children: [
                           Row(
                             children: [
-                              SizedBox(width: 10,),
-
+                              SizedBox(
+                                width: 10,
+                              ),
                               Text(
                                 translator.translate("add_depet_card"),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
                                   translator.translate("default"),
                                   style: TextStyle(color: Colors.grey[500]),
@@ -204,8 +206,13 @@ class _SignUpState extends State<SignUp> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(translator.translate("card_number") ,
-      style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              translator.translate("card_number"),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+          ),
           CustomTextField(
             hint: translator.translate("card_number"),
             inputType: TextInputType.number,
@@ -213,8 +220,13 @@ class _SignUpState extends State<SignUp> {
               signUpBloc.updateNumber(val);
             },
           ),
-          Text(translator.translate("expireDate"),
-            style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              translator.translate("expireDate"),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+          ),
           CustomTextField(
             hint: translator.translate("expireDate"),
             inputType: TextInputType.number,
@@ -222,8 +234,13 @@ class _SignUpState extends State<SignUp> {
               signUpBloc.updateExpDate(val);
             },
           ),
-          Text(translator.translate("card_holder"),
-            style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              translator.translate("card_holder"),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            ),
+          ),
           CustomTextField(
             hint: translator.translate("card_holder"),
             value: (String val) {
@@ -237,10 +254,12 @@ class _SignUpState extends State<SignUp> {
 
   Widget rowItem(IconData icon, String text) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3 ,horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
       child: Row(
         children: [
-          SizedBox(width: 2,),
+          SizedBox(
+            width: 2,
+          ),
           Icon(
             icon,
             color: Theme.of(context).primaryColor,
@@ -250,7 +269,7 @@ class _SignUpState extends State<SignUp> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               text,
-              style: TextStyle(fontSize: 13 , fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           )
         ],

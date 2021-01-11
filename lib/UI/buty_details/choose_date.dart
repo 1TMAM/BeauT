@@ -86,7 +86,7 @@ class _ChooseDateState extends State<ChooseDate> {
                 _calendarCarousel,
                 show_time == false
                     ? OutlineButton(
-                  child: Text(order_time ?? "order_time"),
+                  child: Text(order_time ?? ""),
                   onPressed: () {
                     setState(() {
                       show_time = true;
