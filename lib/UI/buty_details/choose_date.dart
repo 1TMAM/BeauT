@@ -62,7 +62,9 @@ class _ChooseDateState extends State<ChooseDate> {
       todayBorderColor: Theme.of(context).primaryColor,
     );
     return Directionality(
-      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      textDirection: translator.currentLanguage == "ar"
+          ? TextDirection.rtl
+          : TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -84,16 +86,35 @@ class _ChooseDateState extends State<ChooseDate> {
             ListView(
               children: [
                 _calendarCarousel,
-                show_time == false
-                    ? OutlineButton(
-                  child: Text(order_time ?? ""),
-                  onPressed: () {
-                    setState(() {
-                      show_time = true;
-                    });
-                  },
-                )
-                    : SizedBox(),          Divider(),
+                Container(
+                    height: 40,
+                    child: ListView.builder(
+                        itemCount: timeList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: (){
+                              createOrderBloc.updateTime(timeList[index]);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: Container(
+                                color: Colors.grey,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Text(
+                                      timeList[index],
+                                      textDirection: TextDirection.ltr,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        })),
+                Divider(),
                 ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -103,6 +124,25 @@ class _ChooseDateState extends State<ChooseDate> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
+                            InkWell(
+                              onTap: () {
+                                if (widget.servicseList.isEmpty) {
+                                  Navigator.pop(context);
+                                } else {
+                                  setState(() {
+                                    widget.servicseList.removeAt(index);
+                                  });
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.close),
+                                  SizedBox(),
+                                ],
+                              ),
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -110,14 +150,16 @@ class _ChooseDateState extends State<ChooseDate> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "${translator.translate("service_name")}  :  ${translator == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                      "${translator.translate("service_name")}  :  ${translator.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
                                       style: TextStyle(
-                                          fontSize: 13, fontWeight: FontWeight.bold),
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
                                       style: TextStyle(
-                                          fontSize: 13, fontWeight: FontWeight.bold),
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -127,7 +169,8 @@ class _ChooseDateState extends State<ChooseDate> {
                                     Text(
                                       "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
                                       style: TextStyle(
-                                          fontSize: 13, fontWeight: FontWeight.w400),
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400),
                                     ),
                                     Text(
                                       "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
@@ -167,7 +210,8 @@ class _ChooseDateState extends State<ChooseDate> {
                               width: 35,
                               height: 35,
                               decoration: BoxDecoration(
-                                  color: Colors.grey[200], shape: BoxShape.circle),
+                                  color: Colors.grey[200],
+                                  shape: BoxShape.circle),
                               child: Center(
                                 child: Icon(
                                   Icons.home,
@@ -176,7 +220,8 @@ class _ChooseDateState extends State<ChooseDate> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 translator.translate("at_home"),
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -187,7 +232,8 @@ class _ChooseDateState extends State<ChooseDate> {
                         Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 "130 ",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -228,7 +274,8 @@ class _ChooseDateState extends State<ChooseDate> {
                               width: 35,
                               height: 35,
                               decoration: BoxDecoration(
-                                  color: Colors.grey[200], shape: BoxShape.circle),
+                                  color: Colors.grey[200],
+                                  shape: BoxShape.circle),
                               child: Center(
                                 child: Image.asset(
                                   "assets/images/car.png",
@@ -238,7 +285,8 @@ class _ChooseDateState extends State<ChooseDate> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 translator.translate("at_buty"),
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -249,9 +297,10 @@ class _ChooseDateState extends State<ChooseDate> {
                         Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
-                                "100 ريال",
+                                "100 ${translator.translate("sar")}",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -290,49 +339,6 @@ class _ChooseDateState extends State<ChooseDate> {
                 )
               ],
             ),
-            show_time == true
-                ? Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.black.withOpacity(0.9),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    height: 120,
-                  ),
-                  TimePicker(),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        show_time = false;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20),
-                      child: Container(
-                        width: double.infinity,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).primaryColor),
-                        child: Center(
-                          child: Text(
-                            translator.translate("done"),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 120,
-                  )
-                ],
-              ),
-            )
-                : SizedBox(),
           ],
         ),
       ),
@@ -346,23 +352,45 @@ class _ChooseDateState extends State<ChooseDate> {
       is24HourMode: false,
       normalTextStyle: TextStyle(fontSize: 24, color: Colors.white),
       highlightedTextStyle:
-      TextStyle(fontSize: 24, color: Theme.of(context).primaryColor),
+          TextStyle(fontSize: 24, color: Theme.of(context).primaryColor),
       spacing: 10,
       itemHeight: 50,
       isForce2Digits: true,
       onTimeChange: (time) {
-       createOrderBloc.updateTime(time.toString().substring(10 ,16));
+        createOrderBloc.updateTime(time.toString().substring(10, 16));
 
-       setState(() {
-         order_time =time.toString().substring(10 ,16);
-       });
+        setState(() {
+          order_time = time.toString().substring(10, 16);
+        });
         print("TIMEEEEEEEEEEE" + time.toString());
       },
     );
   }
 
-
-
-
-
+  List<String> timeList = [
+    "10 : 00",
+    "10 : 30",
+    "11 : 00",
+    "11 : 30",
+    "12 : 00",
+    "12 : 30",
+    "01 : 00",
+    "01 : 30",
+    "02 : 00",
+    "02 : 30",
+    "03 : 00",
+    "03 : 30",
+    "04 : 00",
+    "04 : 30",
+    "05 : 00",
+    "05 : 30",
+    "06 : 00",
+    "06 : 30",
+    "07 : 00",
+    "07 : 30",
+    "08 : 00",
+    "08 : 30",
+    "09 : 00",
+    "09 : 30",
+  ];
 }

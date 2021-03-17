@@ -14,9 +14,9 @@ class BeauticianDetailsResponse extends BaseMappable {
     status = json['status'];
     errNum = json['errNum'];
     msg = json['msg'];
-    if (json['beautician_'] != null) {
+    if (json['beautician'] != null) {
       beautician = new List<Beautician>();
-      json['beautician_'].forEach((v) {
+      json['beautician'].forEach((v) {
         beautician.add(new Beautician.fromJson(v));
       });
     }

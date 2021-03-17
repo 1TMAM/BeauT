@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/Bolcs/getBeauticianDetailsBloc.dart';
+import 'package:buty/UI/Auth/login.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/Carousel.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
@@ -15,7 +16,6 @@ import 'package:buty/models/BeauticianDetails.dart';
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
 class ButyDetails extends StatefulWidget {
@@ -69,7 +69,9 @@ class _ButyDetailsState extends State<ButyDetails> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      textDirection: translator.currentLanguage == "ar"
+          ? TextDirection.rtl
+          : TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -89,6 +91,7 @@ class _ButyDetailsState extends State<ButyDetails> {
             centerTitle: true,
             title: Text(
               widget.name ?? "Buty Name",
+              textDirection: TextDirection.ltr,
               style: TextStyle(color: Colors.white, fontSize: 17),
             )),
         body: BlocListener<GetBeauticianDetailsBloc, AppState>(
@@ -111,6 +114,8 @@ class _ButyDetailsState extends State<ButyDetails> {
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
                             "${widget.name}",
+                            textDirection: TextDirection.ltr,
+
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -127,7 +132,8 @@ class _ButyDetailsState extends State<ButyDetails> {
                                 child: ListView.builder(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: data.beautician[0].services.length,
+                                    itemCount:
+                                        data.beautician[0].services.length,
                                     itemBuilder: (context, index) {
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -179,7 +185,8 @@ class _ButyDetailsState extends State<ButyDetails> {
                                 if (servicesList.isEmpty) {
                                   errorDialog(
                                       context: context,
-                                      text: translator.translate("enter_items"));
+                                      text:
+                                          translator.translate("enter_items"));
                                 } else {
                                   Navigator.push(
                                       context,
@@ -194,7 +201,11 @@ class _ButyDetailsState extends State<ButyDetails> {
                                     text: translator.currentLanguage == "ar"
                                         ? "يرجي تسجيل الدخول اولاًً "
                                         : " You Must Login Frist",
-                                    context: context);
+                                    context: context,
+                                    function: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login())));
                               }
                             },
                             child: CustomButton(
@@ -223,9 +234,12 @@ class _ButyDetailsState extends State<ButyDetails> {
                 width: MediaQuery.of(context).size.width / 4,
                 child: Row(
                   children: [
-                    Text(
-                      "${translator == "ar" ? list[index].nameAr : list[index].nameEn}",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Container(
+                      width: MediaQuery.of(context).size.width/4,
+                      child: Text(
+                        "${translator.currentLanguage == "ar" ? list[index].nameAr : list[index].nameEn}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
@@ -244,7 +258,50 @@ class _ButyDetailsState extends State<ButyDetails> {
                           onTap: () {
                             setState(() {
                               list[index].count++;
+                              total = total + (int.parse(list[index].price));
                             });
+
+                            if (servicesList.isEmpty) {
+                              servicesList.add(new MyList(
+                                  id: list[index].id,
+                                  price: list[index].price,
+                                  nameAr: list[index].nameAr,
+                                  nameEn: list[index].nameEn,
+                                  estimatedTime: list[index].estimatedTime,
+                                  count: list[index].count));
+                              print(json.encode(servicesList));
+                            }
+                            else {
+                              for (int i = 0; i < servicesList.length; i++) {
+                                if (servicesList[i].id == list[index].id) {
+                                  print("Edited");
+                                  print("SERVICE ID ==> ${servicesList[i].id}");
+                                  print("LIST ID ===> ${list[index].id}");
+                                  print(list[index].count);
+                                  servicesList.removeAt(i);
+                                  servicesList.add(new MyList(
+                                      id: list[index].id,
+                                      price: list[index].price,
+                                      nameAr: list[index].nameAr,
+                                      nameEn: list[index].nameEn,
+                                      estimatedTime: list[index].estimatedTime,
+                                      count: list[index].count));
+                                  print(json.encode(servicesList));
+                                } else {
+                                  print("New");
+                                  servicesList.add(new MyList(
+                                      id: list[index].id,
+                                      price: list[index].price,
+                                      nameAr: list[index].nameAr,
+                                      nameEn: list[index].nameEn,
+                                      estimatedTime: list[index].estimatedTime,
+                                      count: list[index].count));
+
+                                  print(json.encode(servicesList));
+                                  break;
+                                }
+                              }
+                            }
                           },
                           child: Icon(
                             Icons.add,
@@ -260,13 +317,14 @@ class _ButyDetailsState extends State<ButyDetails> {
                         ),
                         InkWell(
                           onTap: () {
-                         if(list[index].count == 0){
-                           print("LLLLL");
-                         }else{
-                           setState(() {
-                             list[index].count--;
-                           });
-                         }
+                            if (list[index].count == 0) {
+                              print("LLLLL");
+                            } else {
+                              setState(() {
+                                list[index].count--;
+                                total = total - (int.parse(list[index].price));
+                              });
+                            }
                           },
                           child: Icon(
                             Icons.remove,
@@ -286,7 +344,7 @@ class _ButyDetailsState extends State<ButyDetails> {
               Container(
                 width: MediaQuery.of(context).size.width / 3.5,
                 child: Text(
-                  "${translator == "ar" ? list[index].detailsAr : list[index].detailsEn}  ",
+                  "${translator.currentLanguage == "ar" ? list[index].detailsAr : list[index].detailsEn}  ",
                   style: TextStyle(fontSize: 10),
                 ),
               ),
@@ -304,50 +362,38 @@ class _ButyDetailsState extends State<ButyDetails> {
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
-                            "${list[index].estimatedTime} دقيقة",
+                            "${list[index].estimatedTime} ${translator.translate("min")}",
                             style: TextStyle(fontSize: 10),
                           ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: InkWell(
-                        onTap: () {
-                          if (list[index].count == 0) {
-                            print("cannot");
-                          } else {
-                            servicesList.add(new MyList(
-                                id: list[index].id,
-                                price: list[index].price,
-                                nameAr: list[index].nameAr,
-                                nameEn: list[index].nameEn,
-                                estimatedTime: list[index].estimatedTime,
-                                count: list[index].count));
-                            setState(() {
-                              list[index].isSellected = true;
-                              total = total +
-                                  (list[index].count *
-                                      int.parse(list[index].price));
-                            });
-                            print(json.encode(servicesList));
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 1),
-                            child: Text(
-                              translator.translate("reserve"),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       if (list[index].count == 0) {
+                    //         errorDialog(
+                    //             context: context,
+                    //             text: "${translator.translate("enter_items")}");
+                    //       } else {
+                    //       }
+                    //     },
+                    //     child: Container(
+                    //       decoration: BoxDecoration(
+                    //           color: Theme.of(context).primaryColor,
+                    //           borderRadius: BorderRadius.circular(5)),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             horizontal: 20, vertical: 1),
+                    //         child: Text(
+                    //           translator.translate("reserve"),
+                    //           style: TextStyle(color: Colors.white),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

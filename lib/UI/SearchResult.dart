@@ -1,24 +1,17 @@
-import 'package:localize_and_translate/localize_and_translate.dart';
-import 'package:buty/Bolcs/search_by_category_bloc.dart';
-import 'package:buty/UI/component/searchResultItem.dart';
-import 'package:buty/helpers/appEvent.dart';
-import 'package:buty/helpers/appState.dart';
-import 'package:buty/models/search_by_category.dart';
+import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/models/providers_response.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
-import 'CustomWidgets/AppLoader.dart';
-import 'CustomWidgets/EmptyItem.dart';
 import 'bottom_nav_bar/main_page.dart';
+import 'component/single_provider_item_row.dart';
 
 class SearchResult extends StatefulWidget {
-  final int cat_id;
   final String name;
-  final List<BeauticianServices> beauticianServices;
+  final List<AllButicans> beauticianServices;
 
-  const SearchResult({Key key, this.cat_id, this.name, this.beauticianServices})
+  const SearchResult({Key key, this.name, this.beauticianServices})
       : super(key: key);
 
   @override
@@ -27,58 +20,61 @@ class SearchResult extends StatefulWidget {
 
 class _SearchResultState extends State<SearchResult> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => MainPage(),
             ),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       },
-      child: Scaffold(
-          appBar: AppBar(
-            leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                )),
-            title: Text(
-              "${translator.translate("result")}",
-              style: TextStyle(color: Colors.white),
+      child: Directionality(
+        textDirection: allTranslations.currentLanguage =="ar"?TextDirection.rtl :TextDirection.ltr ,
+        child: Scaffold(
+            appBar: AppBar(
+              leading: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  )),
+              title: Text(
+                "${translator.translate("result")}",
+                style: TextStyle(color: Colors.white),
+              ),
+              centerTitle: true,
             ),
-            centerTitle: true,
-          ),
-          body: AnimationLimiter(
-            child: widget.beauticianServices == null ? Center(
-              child: Text("عفوا لا  يوجد  خبراء تجميل"),) : ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: widget.beauticianServices.length,
-              itemBuilder: (BuildContext context, int index) {
-                return AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                        child: SearchReslutItem(
-                          beautic: widget.beauticianServices[index],
-                        )),
+            body: AnimationLimiter(
+              child: widget.beauticianServices == null
+                  ? Center(
+                      child: Text("عفوا لا  يوجد  خبراء تجميل"),
+                    )
+                  : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: widget.beauticianServices.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                  child: SingleProviderItemRow(
+                                beautic: widget.beauticianServices[index],
+                              )),
+                            ),
+                          );
+                        },
+                      ),
                   ),
-                );
-              },
-            ),
-          )
+            )),
       ),
     );
   }

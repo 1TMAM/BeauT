@@ -213,7 +213,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 10),
                                   child: Text(
-                                    "100 ريال",
+                                    "100 ${translator.translate("sar")}",
                                     style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),

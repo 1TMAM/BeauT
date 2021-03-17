@@ -2,7 +2,6 @@ import 'package:buty/Bolcs/deletNotificationBloc.dart';
 import 'package:buty/Bolcs/notificationBloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/EmptyItem.dart';
-import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/CustomWidgets/on_done_dialog.dart';
 import 'package:buty/helpers/appEvent.dart';
@@ -92,17 +91,9 @@ class _NotificationsState extends State<Notifications> {
       bloc: deleteNotificationBloc,
       listener: (context, state) {
         var data = state.model as GeneralResponse;
-        if (state is Loading) showLoadingDialog(context);
-        if (state is ErrorLoading) {
-          Navigator.of(context).pop();
-          errorDialog(
-            context: context,
-            text: data.msg,
-          );
-        }
         if (state is Done) {
           Navigator.of(context).pop();
-          onDoneDialog(context: context, text: "تم حذف الاشعار بنجاح");
+          onDoneDialog(context: context, text: "${data.msg}");
         }
       },
       child: Padding(
@@ -141,6 +132,7 @@ class _NotificationsState extends State<Notifications> {
                   onTap: () {
                     deleteNotificationBloc.UpdateId(id);
                     deleteNotificationBloc.add(Click());
+                    showLoadingDialog(context);
                   },
                   child: Icon(
                     Icons.delete,

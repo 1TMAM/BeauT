@@ -1,10 +1,11 @@
 import 'package:buty/UI/buty_details/buty_details.dart';
 import 'package:buty/models/all_providers_response.dart';
+import 'package:buty/models/providers_response.dart';
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
 class SingleProviderItemRow extends StatelessWidget {
-  final Beauticians beautic;
+  final AllButicans beautic;
 
   const SingleProviderItemRow({Key key, this.beautic}) : super(key: key);
 
@@ -25,6 +26,7 @@ class SingleProviderItemRow extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
                 color: Colors.grey[300],
                 image: DecorationImage(
                     fit: BoxFit.cover, image: NetworkImage(beautic.photo))),
@@ -32,6 +34,7 @@ class SingleProviderItemRow extends StatelessWidget {
           ),
           Text(
             "${beautic.beautName}",
+            textDirection: TextDirection.ltr,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Row(
@@ -50,8 +53,8 @@ class SingleProviderItemRow extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Container(
-                          width: 35,
-                          height: 35,
+                          width: 25,
+                          height: 25,
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: NetworkImage(
@@ -64,9 +67,6 @@ class SingleProviderItemRow extends StatelessWidget {
                     }),
               ),
             ],
-          ),
-          SizedBox(
-            height: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,16 +87,17 @@ class SingleProviderItemRow extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                     )),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      "${beautic.services[0].location}",
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                  //   child: Text(
+                  //     "${beautic.services[0].location}",
+                  //   ),
+                  // ),
                 ],
               )
             ],
           ),
+         Divider(),
         ],
       ),
     );

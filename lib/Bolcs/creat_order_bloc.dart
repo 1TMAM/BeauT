@@ -25,6 +25,7 @@ class CreateOrderBloc extends Bloc<AppEvent, AppState> {
 
   Function(int) get updateLocationType => location_type.sink.add;
 
+
   Function(int) get updateBeauticianId => beautician_id.sink.add;
 
   Function(List<int>) get updateServices => services.sink.add;

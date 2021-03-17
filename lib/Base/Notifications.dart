@@ -48,7 +48,7 @@ class AppPushNotifications {
   Future<String> getFcmToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('msgToken', await _firebaseMessaging.getToken());
-    print('firebase token => ${await _firebaseMessaging.getToken()}');
+    print('firebase token => ${await _firebaseMessaging.getToken()??""}');
     print("_____________" + await _firebaseMessaging.getToken());
     return await _firebaseMessaging.getToken();
   }

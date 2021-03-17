@@ -57,18 +57,18 @@ class UserJourny {
 
 //------------------------------------------------------------------------------/
 
-  static Future<SearchByCategoryResponse> SEARCHBYCATEGORY(int id) async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-    print(token);
-    Map<String, String> headers = {
-      'Authorization': token,
-    };
-    return NetworkUtil.internal().get(SearchByCategoryResponse(),
-        "users/search/category-search?category_id=${id}",
-        headers: headers);
-  }
+  // static Future<SearchByCategoryResponse> SEARCHBYCATEGORY(int id) async {
+  //   var mSharedPreferenceManager = SharedPreferenceManager();
+  //   var token =
+  //       await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+  //   print(token);
+  //   Map<String, String> headers = {
+  //     'Authorization': token,
+  //   };
+  //   return NetworkUtil.internal().get(SearchByCategoryResponse(),
+  //       "users/search/category-search?category_id=${id}",
+  //       headers: headers);
+  // }
 
 //------------------------------------------------------------------------------/
 
@@ -87,48 +87,48 @@ class UserJourny {
 
 //------------------------------------------------------------------------------/
 
-  static Future<SearchByCategoryResponse> SEARCHBYTIME(String time) async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-    print(token);
-    Map<String, String> headers = {
-      'Authorization': token,
-    };
-    return NetworkUtil.internal().get(SearchByCategoryResponse(),
-        "users/search/search-beautician-time?time=${time}",
-        headers: headers);
-  }
+  // static Future<SearchByCategoryResponse> SEARCHBYTIME(String time) async {
+  //   var mSharedPreferenceManager = SharedPreferenceManager();
+  //   var token =
+  //       await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+  //   print(token);
+  //   Map<String, String> headers = {
+  //     'Authorization': token,
+  //   };
+  //   return NetworkUtil.internal().get(SearchByCategoryResponse(),
+  //       "users/search/search-beautician-time?time=${time}",
+  //       headers: headers);
+  // }
 //------------------------------------------------------------------------------/
 
-  static Future<SearchByCategoryResponse> SearchByName(String Name) async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-    print(token);
-    Map<String, String> headers = {
-      'Authorization': token,
-    };
-    return NetworkUtil.internal().get(SearchByCategoryResponse(),
-        "users/search/search-beautician-name?name=${Name}",
-        headers: headers);
-  }
+  // static Future<SearchByCategoryResponse> SearchByName(String Name) async {
+  //   var mSharedPreferenceManager = SharedPreferenceManager();
+  //   var token =
+  //       await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+  //   print(token);
+  //   Map<String, String> headers = {
+  //     'Authorization': token,
+  //   };
+  //   return NetworkUtil.internal().get(SearchByCategoryResponse(),
+  //       "users/search/search-beautician-name?name=${Name}",
+  //       headers: headers);
+  // }
 
 //------------------------------------------------------------------------------/
 
-  static Future<SearchByCategoryResponse> SEARCHBYADDRESS(
-      String address) async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-    print(token);
-    Map<String, String> headers = {
-      'Authorization': token,
-    };
-    return NetworkUtil.internal().get(SearchByCategoryResponse(),
-        "users/search/search-beautician-address?address=${address}",
-        headers: headers);
-  }
+  // static Future<SearchByCategoryResponse> SEARCHBYADDRESS(
+  //     String address) async {
+  //   var mSharedPreferenceManager = SharedPreferenceManager();
+  //   var token =
+  //       await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+  //   print(token);
+  //   Map<String, String> headers = {
+  //     'Authorization': token,
+  //   };
+  //   return NetworkUtil.internal().get(SearchByCategoryResponse(),
+  //       "users/search/search-beautician-address?address=${address}",
+  //       headers: headers);
+  // }
 
 //------------------------------------------------------------------------------/
   static Future<CurrentOrdersResponse> GETCURRENTORDERS() async {
@@ -171,14 +171,13 @@ class UserJourny {
       List<int> person_num,
       int payment_method,
       String coupon,
-      int location_id}) async {
+      int location_id , int id }) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
     print("In RePPO");
     print("Sellected Date ===========>" + date);
-    // print("Time  ===========>" + time ??"No Time");
     print("Location Time  ===========>${location_type == 0 ? "Home " : "AT  Butyy Place"}");
     print("beautician_id  ===========> ${beautician_id}");
     print("servces   ===========> ${services}");
@@ -196,7 +195,7 @@ class UserJourny {
       "person_num": person_num,
       "payment_method": payment_method,
       "coupon": coupon,
-      "location_id": location_id
+      "location_id": location_id,
     });
 
     Map<String, String> headers = {
