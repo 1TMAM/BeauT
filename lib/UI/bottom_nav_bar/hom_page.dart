@@ -325,6 +325,7 @@ class _HomePageState extends State<HomePage> {
                                                       searchByCities(allCities
                                                           .cities[index].id);
                                                     },
+
                                                     child: Column(
                                                       children: [
                                                         Text(
