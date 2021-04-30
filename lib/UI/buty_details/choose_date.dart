@@ -1,5 +1,6 @@
 import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
+import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/buty_details/payment.dart';
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +26,25 @@ class _ChooseDateState extends State<ChooseDate> {
   bool isHouse = true;
 
   String order_time;
-
+  var total_cost;
   @override
   void initState() {
     createOrderBloc.updateDate(_currentDate.toString().substring(0, 10));
+    total_cost = widget.total+130;
     super.initState();
   }
-
+  int _selectedIndex;
+  _onSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    total_cost =0;
+  }
   @override
   Widget build(BuildContext context) {
     _calendarCarousel = CalendarCarousel<Event>(
@@ -43,6 +56,7 @@ class _ChooseDateState extends State<ChooseDate> {
         print(date.toString().substring(0, 10));
         createOrderBloc.updateDate(date.toString().substring(0, 10));
       },
+
       isScrollable: true,
       thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
@@ -94,12 +108,17 @@ class _ChooseDateState extends State<ChooseDate> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: (){
+                              _onSelected(index);
                               createOrderBloc.updateTime(timeList[index]);
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 5),
                               child: Container(
-                                color: Colors.grey,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: _selectedIndex ==index ? Color(0xFFDBB2D2) : Colors.grey.shade200,
+                                ),
+
                                 child: Center(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -116,75 +135,79 @@ class _ChooseDateState extends State<ChooseDate> {
                         })),
                 Divider(),
                 ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: widget.servicseList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                if (widget.servicseList.isEmpty) {
-                                  Navigator.pop(context);
-                                } else {
-                                  setState(() {
-                                    widget.servicseList.removeAt(index);
-                                  });
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(Icons.close),
-                                  SizedBox(),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${translator.translate("service_name")}  :  ${translator.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    Text(
-                                      "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
-                                      style: TextStyle(fontSize: 13),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Divider()
-                          ],
-                        ),
-                      );
-                    }),
+                     shrinkWrap: true,
+                     physics: NeverScrollableScrollPhysics(),
+                     itemCount: widget.servicseList.length,
+                     itemBuilder: (context, index) {
+                       return Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: Column(
+                           children: [
+                             InkWell(
+                               onTap: () {
+                                 if (widget.servicseList.isEmpty) {
+                                   Navigator.pop(context);
+                                 } else {
+                                   setState(() {
+                                     print("service-price : ${widget.servicseList[index].price}");
+                                     print('totalcost : ${total_cost}');
+                                     total_cost = total_cost - int.parse(widget.servicseList[index].price);
+                                     widget.servicseList.removeAt(index);
+
+                                   });
+                                 }
+                               },
+                               child: Row(
+                                 mainAxisAlignment:
+                                 MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Icon(Icons.close,color: Colors.red,),
+                                   SizedBox(),
+                                 ],
+                               ),
+                             ),
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: [
+                                 Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     Text(
+                                       "${translator.translate("service_name")}  :  ${translator.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
+                                       style: TextStyle(
+                                           fontSize: 13,
+                                           fontWeight: FontWeight.bold),
+                                     ),
+                                     Text(
+                                       "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
+                                       style: TextStyle(
+                                           fontSize: 13,
+                                           fontWeight: FontWeight.bold),
+                                     ),
+                                   ],
+                                 ),
+                                 Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     Text(
+                                       "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
+                                       style: TextStyle(
+                                           fontSize: 13,
+                                           fontWeight: FontWeight.w400),
+                                     ),
+                                     Text(
+                                       "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
+                                       style: TextStyle(fontSize: 13),
+                                     ),
+                                   ],
+                                 ),
+                               ],
+                             ),
+                             Divider()
+                           ],
+                         ),
+                       );
+                     }),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -196,6 +219,7 @@ class _ChooseDateState extends State<ChooseDate> {
                   onTap: () {
                     setState(() {
                       isHouse = true;
+                      total_cost = widget.total +130 ;
                     });
                     createOrderBloc.updateLocationType(0);
                   },
@@ -235,7 +259,7 @@ class _ChooseDateState extends State<ChooseDate> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
-                                "130 ",
+                                "130 SAR",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -260,6 +284,7 @@ class _ChooseDateState extends State<ChooseDate> {
                   onTap: () {
                     setState(() {
                       isHouse = false;
+                      total_cost = widget.total + 100;
                     });
                     createOrderBloc.updateLocationType(1);
                   },
@@ -323,18 +348,24 @@ class _ChooseDateState extends State<ChooseDate> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
+                    print('dssssssssssssssssssss ${widget.servicseList}');
+                    widget.servicseList.isEmpty? errorDialog(
+                      context: context,
+                      text: translator.translate("services_list"),
+                    ):   Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => PaymentScreen(
                                   servicseList: widget.servicseList,
                                   address: isHouse,
-                                  total: widget.total.toString(),
+                                  total: total_cost.toString(),
                                 )));
+                    total_cost=0;
                   },
                   child: CustomButton(
                     text:
-                        "${translator.translate("pay_now")}  ${widget.total} ريال  ",
+                        "${translator.translate("pay_now")}  ${total_cost} ريال  ",
+
                   ),
                 )
               ],

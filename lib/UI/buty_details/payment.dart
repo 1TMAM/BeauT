@@ -274,7 +274,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           width: MediaQuery.of(context).size.width / 2,
                           child: CustomTextField(
                             hint: translator.translate("enter_copoun"),
-                            inputType: TextInputType.number,
+                            inputType: TextInputType.text,
                             value: (String val) {
                               createOrderBloc.updateCopone(val);
                             },
@@ -300,12 +300,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     height: 20,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                  Icon(Icons.calendar_today,
+                       color: Theme.of(context).primaryColor),
+                      SizedBox(width: 5,),
                       Text(
                         translator.translate("date"),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      Spacer(),
+
                       Center(
                         child:
                             Text("${DateTime.now().toString().substring(0, 10)}"),
@@ -313,24 +318,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+               Icon(Icons.access_time,
+                          color: Theme.of(context).primaryColor),
+                      SizedBox(width: 5,),
                       Text(
                         translator.translate("time"),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      Spacer(),
                       Center(
                         child: Text("10 Pm"),
                       ),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                       Icon(Icons.money_off,
+                              color: Theme.of(context).primaryColor),
+                      SizedBox(width: 5,),
                       Text(
                         translator.translate("total"),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      Spacer(),
                       Center(
                         child: Text(
                             "${widget.total}   ${translator.translate("sar")}"),

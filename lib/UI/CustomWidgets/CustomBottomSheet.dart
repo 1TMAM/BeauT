@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 void CustomSheet({BuildContext context, Widget widget , double hight}) {
   showModalBottomSheet(
       context: context,
+      isScrollControlled:true,
       builder: (context) {
         return Container(
           color: Color(0xFF737373),

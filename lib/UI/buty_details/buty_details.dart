@@ -21,8 +21,9 @@ import 'package:localize_and_translate/localize_and_translate.dart';
 class ButyDetails extends StatefulWidget {
   final int id;
   final String name;
-
-  const ButyDetails({Key key, this.id, this.name}) : super(key: key);
+  final int visits;
+  final double rate;
+  const ButyDetails({Key key, this.id, this.name,this.visits,this.rate}) : super(key: key);
 
   @override
   _ButyDetailsState createState() => _ButyDetailsState();
@@ -105,11 +106,44 @@ class _ButyDetailsState extends State<ButyDetails> {
               var data = state.model as BeauticianDetailsResponse;
               return data == null
                   ? AppLoader()
-                  : ListView(
+                  : data.msg=='عفوا لا يوجد خبراء تجميل' ? Container(
+                child: Center(
+                  child: Text(data.msg),
+                ),
+              ): ListView(
                       children: [
-                        CustomCarousel(
-                          img: data.beautician[0].gallery,
+                        Stack(
+                          children: [
+                            CustomCarousel(
+                              img: data.beautician[0].gallery,
+                            ),
+                            Positioned(
+                                top: 0,
+                                left: 20,
+                                child: Container(
+                                  color: Colors.grey.shade700,
+                                  width: MediaQuery.of(context).size.width/4,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.star,color: Colors.yellowAccent,),
+                                          SizedBox(width: 5,),
+                                          Text("${widget.rate.toString()}",
+                                            style: TextStyle(color: Colors.white),)
+                                        ],
+                                      ),
+                                      Text("${widget.visits}   ${translator.translate('reviews')}" , style: TextStyle(color: Colors.white),)
+                                    ],
+                                  ),
+                                ))
+
+                          ],
                         ),
+
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(

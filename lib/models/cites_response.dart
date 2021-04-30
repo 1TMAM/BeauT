@@ -43,6 +43,9 @@ class Cities {
     id = json['id'];
     nameEn =translator.currentLanguage =="ar"? json['name_ar'] :json['name_en'];
     countryEn =translator.currentLanguage =="ar"? json['country_ar'] : json['country_en'];
+    print("nameEn : $nameEn");
+    print("name_ar : ${json['name_ar']}");
+    print("name_en : ${json['name_en']}");
   }
 
   Map<String, dynamic> toJson() {

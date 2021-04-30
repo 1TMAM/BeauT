@@ -38,6 +38,7 @@
   "nails": "اظافر",
   "services": "الخدمات",
   "service_address": "عنوان الخدمة",
+  "service_city": "المدينة",
   "at_home": "في المنزل",
   "notifications": "الاشعارات",
   "clear_notifications": "مسح جميع الاشعارات",
@@ -88,7 +89,7 @@
   "persons": "عدد الاشخاص",
   "reserve": "احجز",
   "choose_time": "اختيار الوقت",
-  "at_buty": "في منزل مقدم الخدمة",
+  "at_buty": "موقع الخبيرة",
   "pay_now": "ادفع الان",
   "payment": "الدفع",
   "copoun": "كوبون الخصم",
@@ -117,7 +118,10 @@
   "done": "بحث",
   "choose_location": "اختار المكان",
   "loading": "جاري التحميل",
-  "order_time": "اختر الوقت"
+  "order_time": "اختر الوقت",
+  "services_list" : "لا توجد خدمات مضافة فى الطلب",
+  "reviews" : "زائر"
+
 }
 
 

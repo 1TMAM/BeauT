@@ -3,7 +3,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="BeauT-User"
+        android:label="BeauT"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.geo.API_KEY"

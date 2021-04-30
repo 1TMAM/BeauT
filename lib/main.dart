@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    super.initState();
+
     setState(() {
       appPushNotifications.notificationSetup(navKey);
     });
@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
     permissionStatus.then((status) {
       print("======> $status");
     });
+    super.initState();
   }
 
   @override

@@ -13,38 +13,68 @@ class SingleProviderItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ButyDetails(
                       id: beautic.id,
                       name: beautic.beautName,
+                  visits: beautic.visits,
+                  rate: beautic.totalRate !=null ? beautic.totalRate.value.toDouble() : 0.0,
                     )));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-                color: Colors.grey[300],
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage(beautic.photo))),
-            height: 200,
+          Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey[300],
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: NetworkImage(beautic.photo))),
+                height: MediaQuery.of(context).size.width/2.5,
+              ),
+            Positioned(
+              top: 0,
+                left: 20,
+                child: Container(
+                  color: Colors.grey.shade700,
+              width: MediaQuery.of(context).size.width/4,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star,color: Colors.yellowAccent,),
+                      SizedBox(width: 5,),
+                      Text("${beautic.totalRate==null ? 0: beautic.totalRate.value}",
+                        style: TextStyle(color: Colors.white),)
+                    ],
+                  ),
+                  Text("${beautic.visits}   ${translator.translate('reviews')}" , style: TextStyle(color: Colors.white),)
+                ],
+              ),
+            ))
+            ],
           ),
           Text(
             "${beautic.beautName}",
             textDirection: TextDirection.ltr,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Row(
+          beautic.services.isEmpty?Container() : Row(
             children: [
               Text(
                 "${translator.translate("services")} : ",
               ),
               Container(
                 width: MediaQuery.of(context).size.width - 100,
-                height: 50,
+                height: MediaQuery.of(context).size.width/8,
                 child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
@@ -71,14 +101,14 @@ class SingleProviderItemRow extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "${translator.translate("service_address")} : ",
+              beautic.address==null? Container() : Text(
+                "${translator.translate("service_city")} :  ${beautic.address}",
               ),
               Row(
                 children: [
                   Container(
-                    width: 35,
-                    height: 35,
+                    width:  MediaQuery.of(context).size.width/9,
+                    height:  MediaQuery.of(context).size.width/9,
                     decoration: BoxDecoration(
                         color: Colors.grey[200], shape: BoxShape.circle),
                     child: Center(

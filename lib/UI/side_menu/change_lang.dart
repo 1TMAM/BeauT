@@ -121,6 +121,7 @@ class _ChangeLanguageState extends State<ChangeLanguage> {
       restart: false,
     );
   });
+
     MyApp.setLocale(context, Locale('${lang}'));
 
   }

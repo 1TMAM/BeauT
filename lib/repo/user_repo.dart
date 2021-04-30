@@ -12,16 +12,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserDataRepo {
   static Future<UserResponse> LOGIN(String email, String password) async {
     var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+   // var token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     SharedPreferences preferences =await SharedPreferences.getInstance();
 
-    print(token);
+    print('device-token : ${preferences.getString("msgToken")}');
+    print('email : $email');
+    print('password : $password');
     FormData data = FormData.fromMap({
       "email": email,
       "password": password,
       "deviceToken" :preferences.getString("msgToken")
-
     });
     return NetworkUtil.internal().post(
       UserResponse(),

@@ -37,16 +37,15 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
         bloc: currentOrdersBloc,
         builder: (context, state) {
           var data = state.model as CurrentOrdersResponse;
+
           return data == null
               ? AppLoader()
               : data.orders == null
                   ? Center(
                       child: EmptyItem(
                       text: data.msg == "الرمز المميز غير موجود"
-                          ? "عفواً يرجي تسجيل الدخول اولاًً "
-                          : data.msg == "الرمز المميز غير موجود"
-                              ? "Authorization Token Not Found"
-                              : "Sorry You Must Log In First",
+                          ? translator.currentLanguage=='ar' ? "عفواً يرجي تسجيل الدخول اولاًً " :  "Sorry You Must Log In First"
+                          :translator.currentLanguage=='ar' ? 'عفوا لا يوجد طلبات حتى الان' : "Sorry There Is No Orders Added Yet ",
                     ))
                   : AnimationLimiter(
                       child: ListView.builder(

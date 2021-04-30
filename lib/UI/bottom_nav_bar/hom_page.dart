@@ -1,11 +1,15 @@
 import 'dart:convert';
 
 import 'package:buty/Base/old_netWork.dart';
+import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/Bolcs/get_category_bloc.dart';
 import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomBottomSheet.dart';
+import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
+import 'package:buty/UI/CustomWidgets/custom_when_search.dart';
+import 'package:buty/UI/CustomWidgets/static_data.dart';
 import 'package:buty/UI/SearchResult.dart';
 import 'package:buty/UI/component/single_provider_item_row.dart';
 import 'package:buty/helpers/appEvent.dart';
@@ -18,6 +22,8 @@ import 'package:buty/models/search_by_category.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
@@ -27,12 +33,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  CalendarCarousel _calendarCarousel;
+  var when_date;
+  var when_time;
+  DateTime _currentDate = DateTime.now();
+  int _selectedIndex;
+  _onSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   @override
   void initState() {
     getFromCash();
     getCategoriesBloc.add(Hydrate());
     getHomeData();
     getAllCities();
+    createOrderBloc.updateDate(_currentDate.toString().substring(0, 10));
+    category_status = false;
     super.initState();
   }
 
@@ -45,26 +63,30 @@ class _HomePageState extends State<HomePage> {
 
   ProvidersResponse allProviders = ProvidersResponse();
   CitiesResponse allCities = CitiesResponse();
-  List<AllButicans> data = [];
   List<AllButicans> searshResult = [];
   OldNetworkUtil _util = OldNetworkUtil();
   bool isLoading = true;
   String time = null;
-
+  String where_value;
+  String when_value;
+  bool category_status;
   SearchResultResponse resultRess = SearchResultResponse();
 
   void getHomeData() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+
     Response response = await _util.get(
-      "user/provider/get-all-provider?lang=${translator.currentLanguage}",
+      "user/provider/get-all-provider?lang=${translator.currentLanguage}&latitude=${await mSharedPreferenceManager.readDouble(CachingKey.USER_LAT)}"
+          "&longitude=${await mSharedPreferenceManager.readDouble(CachingKey.USER_LONG)}",
     );
     print(response.statusCode);
     if (response.data["status"] == true) {
       print("Donee ");
       setState(() {
-        data.clear();
+        StaticData.data.clear();
         allProviders =
             ProvidersResponse.fromJson(json.decode(response.toString()));
-        data.addAll(allProviders.beauticians);
+        StaticData.data.addAll(allProviders.beauticians);
         isLoading = false;
       });
     } else {
@@ -75,7 +97,7 @@ class _HomePageState extends State<HomePage> {
   void getAllCities() async {
     print("In CITIES Service");
     Response response = await _util.get(
-      "cities/get-all-cities?lang=ar",
+      "cities/get-all-cities?lang=${translator.currentLanguage}",
     );
     print("STATUS CODE =========> ${response.statusCode}");
     print("RESPONSE =========> ${response}");
@@ -101,18 +123,18 @@ class _HomePageState extends State<HomePage> {
     if (response.data["status"] == true) {
       print("Donee");
       setState(() {
-        data.clear();
+        StaticData.data.clear();
         resultRess =
             SearchResultResponse.fromJson(json.decode(response.toString()));
-        // data.addAll(resultRess.data.beauticianServices);
+        StaticData.data.addAll(resultRess.data.beauticianServices);
         Navigator.pop(context);
-        Navigator.push(
+       /* Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => SearchResult(
                       name: name,
                       beauticianServices: resultRess.data.beauticianServices,
-                    )));
+                    )));*/
       });
     } else {
       Navigator.pop(context);
@@ -121,21 +143,25 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void searchByTime(String id) async {
+  void searchByTime(String time , String date) async {
     showLoadingDialog(context);
     print("In Time Service");
+    print("time : ${time}");
+    print("date : ${date}");
+
     Response response = await _util.get(
-      "users/search/key-search?value_name=$id&key=time",
+     // "users/search/key-search?value_name=$id&key=time",
+      "users/search/search-beautician-time?time=$time&date=${date}"
     );
     print("STATUS CODE =========> ${response.statusCode}");
     print("RESPONSE =========> ${response}");
     if (response.data["status"] == true) {
       print("Donee");
       setState(() {
-        data.clear();
+        StaticData.data.clear();
         resultRess =
             SearchResultResponse.fromJson(json.decode(response.toString()));
-        data.addAll(resultRess.data.beauticianServices);
+        StaticData.data.addAll(resultRess.data.beauticianServices);
         Navigator.pop(context);
       });
     } else {
@@ -149,13 +175,13 @@ class _HomePageState extends State<HomePage> {
     for (int i = 0; i < allProviders.beauticians.length; i++) {
       if (allProviders.beauticians[i].beautName.contains(keyWord)) {
         setState(() {
-          searshResult.add(data[i]);
+          searshResult.add(StaticData.data[i]);
         });
       }
     }
     print(json.encode(searshResult));
     setState(() {
-      data = searshResult;
+      StaticData.data = searshResult;
     });
   }
 
@@ -165,13 +191,13 @@ class _HomePageState extends State<HomePage> {
       print("IDD =======>  ${allProviders.beauticians[i].cityId}");
       if (allProviders.beauticians[i].cityId == id) {
         setState(() {
-          searshResult.add(data[i]);
+          searshResult.add(StaticData.data[i]);
         });
       }
     }
     print(json.encode(searshResult));
     setState(() {
-      data = searshResult;
+      StaticData.data = searshResult;
     });
     Navigator.pop(context);
   }
@@ -203,14 +229,42 @@ class _HomePageState extends State<HomePage> {
     "09 : 30",
   ];
 
+
   @override
   Widget build(BuildContext context) {
+    _calendarCarousel = CalendarCarousel<Event>(
+      nextMonthDayBorderColor: Theme.of(context).primaryColor,
+      prevMonthDayBorderColor: Theme.of(context).primaryColor,
+      onDayPressed: (DateTime date, List<Event> events) {
+        this.setState(() => _currentDate = date);
+        events.forEach((event) => print(event.title));
+        when_date = date.toString().substring(0, 10);
+        print(date.toString().substring(0, 10));
+        createOrderBloc.updateDate(date.toString().substring(0, 10));
+      },
+      isScrollable: true,
+      thisMonthDayBorderColor: Colors.grey,
+      weekFormat: false,
+      height: MediaQuery.of(context).size.width,
+      selectedDateTime: _currentDate,
+      customGridViewPhysics: NeverScrollableScrollPhysics(),
+      markedDateShowIcon: true,
+      selectedDayTextStyle: TextStyle(
+        color: Colors.white,
+      ),
+      todayTextStyle: TextStyle(
+        color: Colors.white,
+      ),
+      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
+      maxSelectedDate: _currentDate.add(Duration(days: 360)),
+      todayButtonColor: Theme.of(context).primaryColor,
+      todayBorderColor: Theme.of(context).primaryColor,
+    );
     return Scaffold(
       body: ListView(
         children: [
           Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 2.5,
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,6 +310,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   InkWell(
                                       onTap: () {
+                                        print("#### cities ### : ${allCities.cities[0].id}");
                                         Navigator.pop(context);
                                         CustomSheet(
                                             context: context,
@@ -269,8 +324,11 @@ class _HomePageState extends State<HomePage> {
                                                 itemBuilder: (context, index) {
                                                   return InkWell(
                                                     onTap: () {
-                                                      searchByCities(allCities
-                                                          .cities[index].id);
+                                                      setState(() {
+                                                        where_value = allCities.cities[index].nameEn;
+                                                      });
+                                                      searchByCities(allCities.cities[index].id);
+
                                                     },
                                                     child: Column(
                                                       children: [
@@ -324,6 +382,10 @@ class _HomePageState extends State<HomePage> {
                                                     onTap: () {
                                                       searchByCities(allCities
                                                           .cities[index].id);
+
+                                                      setState(() {
+                                                        where_value = allCities.cities[index].nameEn;
+                                                      });
                                                     },
 
                                                     child: Column(
@@ -361,7 +423,7 @@ class _HomePageState extends State<HomePage> {
                                                 color: Theme.of(context)
                                                     .primaryColor,
                                               )),
-                                          Text(translator.translate("at_buty")),
+                                          Text(translator.translate("at_home")),
                                         ],
                                       )),
                                 ],
@@ -386,7 +448,7 @@ class _HomePageState extends State<HomePage> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     Text(
-                                      translator.translate("where"),
+                                        where_value?? translator.translate("where"),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -418,7 +480,7 @@ class _HomePageState extends State<HomePage> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     Text(
-                                      time ?? translator.translate("when"),
+                                      when_value ?? translator.translate("when"),
                                       textDirection: TextDirection.ltr,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
@@ -494,17 +556,47 @@ class _HomePageState extends State<HomePage> {
           isLoading == true
               ? AppLoader()
               : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: StaticData.data.length,
+                itemBuilder: (context, index) {
+                  return SingleProviderItemRow(
+                        beautic: StaticData.data[index],
+                      );
+
+                }),
+          ),
+
+          /*Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: data.length,
+                      itemCount: category_status? resultRess.data.beauticianServices.length : data.length,
                       itemBuilder: (context, index) {
-                        return SingleProviderItemRow(
-                          beautic: data[index],
-                        );
+                       if(category_status){
+                        if(resultRess.data.beauticianServices[index] !=null){
+                          return SingleProviderItemRow(
+                            beautic:resultRess.data.beauticianServices[index],
+                          );
+                        }else{
+                          return CircularProgressIndicator();
+                        }
+                       }else{
+                         if( data[index] !=null){
+                           return SingleProviderItemRow(
+                             beautic: data[index],
+                           );
+                         }else{
+                           return CircularProgressIndicator();
+
+                         }
+                       }
+
                       }),
-                ),
+                ),*/
         ],
       ),
     );
@@ -513,6 +605,9 @@ class _HomePageState extends State<HomePage> {
   Widget cat_item(String image, String name, int id) {
     return InkWell(
       onTap: () {
+        setState(() {
+          category_status=true;
+        });
         searchByCategoryId(id, name);
       },
       child: Container(
@@ -520,18 +615,19 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
-              height: 80,
-              width: 80,
+              height: MediaQuery.of(context).size.width / 4.5,
+              width: MediaQuery.of(context).size.width / 4,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                   image: DecorationImage(
-                      image: NetworkImage(image), fit: BoxFit.cover)),
+                      image: NetworkImage(image), fit: BoxFit.cover)
+              ),
             ),
-            Text(
-              name,
-              style: TextStyle(color: Colors.white),
-            )
+          Text(
+             name,
+             style: TextStyle(color: Colors.white),
+           ),
           ],
         ),
       ),
@@ -539,30 +635,60 @@ class _HomePageState extends State<HomePage> {
   }
 
   void timeDialog() {
+
     CustomSheet(
         context: context,
-        hight: MediaQuery.of(context).size.height / 2.3,
-        widget: ListView.builder(
-          itemCount: timeList.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                setState(() {
-                  time = timeList[index];
-                  searchByTime(time);
-                });
+        hight: MediaQuery.of(context).size.height,
+      widget: CustomWhenSearch()
+
+      /* StatefulBuilder(builder: (context,snapshot){
+        return Column(
+          children: [
+            SizedBox(height:10,),
+            _calendarCarousel,
+            SizedBox(height: 10,),
+            Container(
+                height:  MediaQuery.of(context).size.width/7,
+                child: ListView.builder(
+                    itemCount: timeList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: (){
+                          _onSelected(index);
+                          createOrderBloc.updateTime(timeList[index]);
+                          when_time = timeList[index];
+                          print("time----- : ${timeList[index]}");
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Container(
+                            color: _selectedIndex ==index ? Color(0xFFDBB2D2) : Colors.grey,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20),
+                                child: Text(
+                                  timeList[index],
+                                  textDirection: TextDirection.ltr,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    })),
+            SizedBox(height: MediaQuery.of(context).size.width/7,),
+            CustomButton(
+              text: 'بحث',
+              onBtnPress: (){
+                searchByTime(when_time,when_date);
+                Navigator.pop(context);
               },
-              child: Column(
-                children: [
-                  Text(
-                    timeList[index],
-                    textDirection: TextDirection.ltr,
-                  ),
-                  Divider()
-                ],
-              ),
-            );
-          },
-        ));
+            )
+          ],
+        );
+      })*/
+    );
   }
 }

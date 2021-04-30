@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:buty/Base/Notifications.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:location/location.dart';
 
 import '../CustomWidgets/app_logo.dart';
 import 'choose_languae.dart';
@@ -20,9 +23,14 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-
+  var mSharedPreferenceManager = SharedPreferenceManager();
+  final GlobalKey<NavigatorState> navKey = GlobalKey();
+  AppPushNotifications appPushNotifications = AppPushNotifications();
   @override
   void initState() {
+    setState(() {
+      appPushNotifications.notificationSetup(navKey);
+    });
     _loadData();
     super.initState();
   }
@@ -37,23 +45,28 @@ class _SplashState extends State<Splash> {
     token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(isLogged);
     print(token);
+
     return new Timer(Duration(seconds: 4), _onDoneLoading);
   }
 
   _onDoneLoading() async {
-    isLogged == true
-        ? Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainPage(),
-            ),
-            (Route<dynamic> route) => false)
-        : Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Languages(),
-            ),
-            (Route<dynamic> route) => false);
+    if(isLogged){
+      getUserLocation();
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainPage(),
+          ),
+              (Route<dynamic> route) => false);
+    }else{
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Languages(),
+          ),
+              (Route<dynamic> route) => false);
+    }
+
   }
 
   @override
@@ -78,5 +91,24 @@ class _SplashState extends State<Splash> {
         ),
       ),
     );
+  }
+
+
+
+  static Future<void> getUserLocation() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    final Location location = Location();
+    String _error;
+    try {
+      await location.requestService();
+      final LocationData _locationResult = await location.getLocation();
+      final coordinates = new Coordinates(
+          _locationResult.latitude, _locationResult.longitude);
+      mSharedPreferenceManager.writeData(CachingKey.USER_LAT, _locationResult.latitude);
+      mSharedPreferenceManager.writeData(CachingKey.USER_LONG, _locationResult.longitude);
+
+    } catch (err) {
+      _error = err.code;
+    }
   }
 }

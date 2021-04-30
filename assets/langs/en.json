@@ -87,7 +87,7 @@
   "persons": "Persons",
   "reserve": "Book",
   "choose_time": "Choose Time",
-  "at_buty": "In The Provider's Home",
+  "at_buty": "At Beautician's Site",
   "pay_now": "Pay Now",
   "payment": "Payment",
   "copoun": "Discount Coupon",
@@ -117,6 +117,10 @@
   "done": "Search",
   "choose_location": "Choose Location",
   "loading": "Loading",
-  "order_time": "Choose Order Time"
+  "order_time": "Choose Order Time",
+  "service_city": "City",
+  " services_list" : "there is no chossed services",
+  "reviews" : "Reviews"
+
 
 }

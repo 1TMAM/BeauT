@@ -1,3 +1,6 @@
+import 'package:buty/Base/Notifications.dart';
+import 'package:buty/helpers/shared_preference_manger.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/loginBloc.dart';
 import 'package:buty/UI/Auth/forget_password.dart';
@@ -12,6 +15,7 @@ import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:location/location.dart';
  class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -48,6 +52,7 @@ class _LoginState extends State<Login> {
                   );
                 }
                 if (state is Done) {
+                  getUserLocation();
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -64,6 +69,7 @@ class _LoginState extends State<Login> {
                     rowItem(Icons.mail,  translator.translate("email")),
                     CustomTextField(
                       hint: "example@gmail.com",
+                      inputType: TextInputType.emailAddress,
                       validate: (String val) {
                         if (val.isEmpty) {
                           return " البريد الالكتروني غير صحيح";
@@ -142,4 +148,23 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  static Future<void> getUserLocation() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    final Location location = Location();
+    String _error;
+    try {
+      await location.requestService();
+      final LocationData _locationResult = await location.getLocation();
+      final coordinates = new Coordinates(
+          _locationResult.latitude, _locationResult.longitude);
+      mSharedPreferenceManager.writeData(CachingKey.USER_LAT, _locationResult.latitude);
+      mSharedPreferenceManager.writeData(CachingKey.USER_LONG, _locationResult.longitude);
+
+    } catch (err) {
+      _error = err.code;
+    }
+  }
+
+
 }
