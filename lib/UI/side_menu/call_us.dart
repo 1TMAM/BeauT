@@ -1,6 +1,8 @@
+
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CallUs extends StatefulWidget {
   @override
@@ -36,67 +38,115 @@ class _CallUsState extends State<CallUs> {
             )),
         body: Column(
           children: [
-            call_row(
-              translator.translate("phonee"),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Image.asset(
-                  "assets/images/call_phone.png",
-                  width: 20,
-                  height: 20,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: InkWell(
+                onTap: (){
+                  _launchURL('tel:0530209074');
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Image.asset(
+                        "assets/images/call_phone.png",
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                    Text(
+                      "Contact  Us On ${translator.translate("phone")}",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
             ),
-            call_row(
-              translator.translate("whats"),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Image.asset(
-                  "assets/images/whats.png",
-                  width: 20,
-                  height: 20,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: InkWell(
+                onTap: (){
+                  _launchURL(
+                      'https://api.whatsapp.com/send?phone=+966530209074');                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Image.asset(
+                        "assets/images/whats.png",
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                    Text(
+                      "Contact  Us On ${translator.translate("whats")}",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
             ),
-            call_row(
-              translator.translate("twitter"),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Image.asset(
-                  "assets/images/twii.png",
-                  width: 20,
-                  height: 20,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: InkWell(
+                onTap: (){
+                  _launchURL('https://instagram.com/beaut_ksa?igshid=ut2jzgyerofo');
+                  },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Image.asset(
+                        "assets/images/instagram.png",
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+                    Text(
+                      "Contact  Us On ${translator.translate("Instagram")}",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
             ),
-            call_row(
-              translator.translate("e_mail"),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Icon(
-                    Icons.mail,
-                    color: Theme.of(context).primaryColor,
-                  )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: InkWell(
+                onTap: (){
+                  _launchURL(
+                      'mailto:Info@beautsa.com');
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(
+                          Icons.mail,
+                          color: Theme.of(context).primaryColor,
+                        )),
+                    Text(
+                      "Contact  Us On ${translator.translate("e_mail")}",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
             ),
+
           ],
         ),
       ),
     );
   }
 
-  Widget call_row(String social, Widget image) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        children: [
-          image,
-          Text(
-            "${            translator.translate("call_us_on")
-              } ${social}",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-        ],
-      ),
-    );
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
+
 }

@@ -26,14 +26,16 @@ class UserJourny {
 //------------------------------------------------------------------------------/
 
   static Future<AllProvidersResponse> GETALLPROVIDERS() async {
+    print("provider 1");
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
-
+    print("provider 2");
     Map<String, String> headers = {
       'Authorization': token,
     };
+    print("provider 3");
     return NetworkUtil.internal().get(
         AllProvidersResponse(), "user/provider/get-all-provider",
         headers: headers);

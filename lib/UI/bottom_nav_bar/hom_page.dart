@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
             width: double.infinity,
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -296,10 +296,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.03,
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                    left: MediaQuery.of(context).size.width * 0.1,
+                    right: MediaQuery.of(context).size.width * 0.1,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       InkWell(
                         onTap: () {
@@ -429,8 +434,9 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ));
                         },
+
                         child: Container(
-                            width: MediaQuery.of(context).size.width / 2.3,
+                           //width: MediaQuery.of(context).size.width / 3,
                             height: 40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -438,7 +444,7 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 40),
+                                    const EdgeInsets.symmetric(horizontal: 30),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -457,12 +463,13 @@ class _HomePageState extends State<HomePage> {
                               ),
                             )),
                       ),
+                      SizedBox(width: 10,),
                       InkWell(
                         onTap: () {
                           timeDialog();
                         },
                         child: Container(
-                            width: MediaQuery.of(context).size.width / 2.3,
+                           // width: MediaQuery.of(context).size.width / 2.3,
                             height: 40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -470,7 +477,7 @@ class _HomePageState extends State<HomePage> {
                             child: Center(
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 40),
+                                    const EdgeInsets.symmetric(horizontal: 30),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -479,6 +486,7 @@ class _HomePageState extends State<HomePage> {
                                       Icons.timer,
                                       color: Theme.of(context).primaryColor,
                                     ),
+                                    SizedBox(width: 10,),
                                     Text(
                                       when_value ?? translator.translate("when"),
                                       textDirection: TextDirection.ltr,

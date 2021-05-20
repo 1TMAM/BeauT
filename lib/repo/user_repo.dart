@@ -21,7 +21,7 @@ class UserDataRepo {
     FormData data = FormData.fromMap({
       "email": email,
       "password": password,
-      "deviceToken" :preferences.getString("msgToken")
+      "deviceToken" :preferences.getString("msgToken")==null?'device token' : preferences.getString("msgToken"),
     });
     return NetworkUtil.internal().post(
       UserResponse(),
@@ -189,7 +189,7 @@ class UserDataRepo {
       "exp_date": number == null ? null : "02/23",
       "holder_name": holder_name,
       "lang": translator.currentLanguage,
-      "deviceToken" :preferences.getString("msgToken")
+      "deviceToken" :preferences.getString("msgToken")==null?'device token' : preferences.getString("msgToken"),
     });
     return NetworkUtil.internal().post(
       GeneralResponse(),

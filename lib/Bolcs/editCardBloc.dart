@@ -35,7 +35,7 @@ class EditCardBloc extends Bloc<AppEvent, AppState> {
           number: number.value,
           date: expData.value,
           holder_name: holder_name.value,
-          cvv: cvv.value);
+          cvv: '123');
       print("AddCard  Response" + userResponee.msg);
       if (userResponee.status == true) {
         yield Done(userResponee);

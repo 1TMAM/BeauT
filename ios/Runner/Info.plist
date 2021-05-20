@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>BeauT</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -19,9 +21,19 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>BeauT Stylist Need to upload image to share more experienc and services betwwen users</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string> BeauT Stylist Need location to help users know providers locations to get thier services</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string> BeauT Stylist Need location to help users know providers locations to get thier services</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>BeauT Stylist Need to upload image to share more experienc and services betwwen users</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>BeauT Stylist Need to upload image to share more experienc and services betwwen users</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -13,8 +13,10 @@ class AllProvicersBloc extends Bloc<AppEvent, AppState> {
   Stream<AppState> mapEventToState(AppEvent event) async* {
     if (event is Hydrate) {
       yield Start(null);
+      print("provider 11");
       ress = await UserJourny.GETALLPROVIDERS();
       print("Status " + ress.status.toString() + "");
+      print("provider 22");
       yield Done(ress);
     }
   }

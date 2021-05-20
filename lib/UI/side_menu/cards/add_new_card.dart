@@ -23,7 +23,7 @@ class _AddNewCardState extends State<AddNewCard> {
 
   String cardHolder = "Enter your Name";
 
-  String cvv = "1234";
+  String cvv = "";
   String date = "${DateTime.now().toString().substring(0,10)}";
   GlobalKey<FormState> key = GlobalKey();
 
@@ -152,7 +152,7 @@ class _AddNewCardState extends State<AddNewCard> {
                                         }
                                       },
                                       hint: "02/20",
-                                      inputType: TextInputType.number,
+                                      inputType: TextInputType.text,
                                       value: (String val) {
                                         setState(() {
                                           date = val;
@@ -163,7 +163,7 @@ class _AddNewCardState extends State<AddNewCard> {
                                     )),
                               ],
                             ),
-                            Column(
+                        /*    Column(
                               children: [
                                 Text("CVV"),
                                 Container(
@@ -187,7 +187,7 @@ class _AddNewCardState extends State<AddNewCard> {
                                       },
                                     )),
                               ],
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
@@ -270,12 +270,13 @@ class _AddNewCardState extends State<AddNewCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("CVV"),
                       Text("Expire Date"),
+                      Text(date),
+
                     ],
                   ),
                 ),
-                Padding(
+                /*Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -284,7 +285,7 @@ class _AddNewCardState extends State<AddNewCard> {
                       Text(date),
                     ],
                   ),
-                ),
+                ),*/
                 SizedBox(
                   height: 20,
                 ),

@@ -34,6 +34,8 @@ class AddressRow extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
+                print("id : ${address.id}");
+                print("address : ${address.address}");
                 Navigator.push(
                     context,
                     MaterialPageRoute(

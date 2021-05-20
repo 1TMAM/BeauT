@@ -91,6 +91,7 @@ class _MyAddressesState extends State<MyAddresses> {
                                         itemCount: data.locations.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
+                                          print("locations : ${data.locations[index]}");
                                           return AnimationConfiguration
                                               .staggeredList(
                                             position: index,

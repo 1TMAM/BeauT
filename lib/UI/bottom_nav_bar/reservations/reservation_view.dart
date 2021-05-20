@@ -89,7 +89,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                             Text(
                                                 "${translator.translate("buty_name")}"),
                                             Text(
-                                              "${data.orders[index].beautician.beautName}",
+                                              "${data.orders[index].beautician==null?'' :data.orders[index].beautician.beautName}",
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .primaryColor),
@@ -120,7 +120,7 @@ class _CurrentReservationViewState extends State<CurrentReservationView> {
                                             ),
                                           ],
                                         ),
-                                        Row(
+                                        Wrap(
                                           children: [
                                             Text(
                                                 "${translator.translate("details")}  "),

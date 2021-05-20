@@ -152,10 +152,7 @@ class _EditCardState extends State<EditCard> {
                                     print(val);
                                     editCardBloc.updateDate(val);
                                   },
-                                )),
-                          ],
-                        ),
-                        Column(
+                                )),/*  Column(
                           children: [
                             Text("CVV"),
                             Container(
@@ -172,7 +169,10 @@ class _EditCardState extends State<EditCard> {
                                   },
                                 )),
                           ],
+                        ),*/
+                          ],
                         ),
+
                       ],
                     ),
                   ),
@@ -244,12 +244,13 @@ class _EditCardState extends State<EditCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("CVV"),
                       Text("Expire Date"),
+                      Text("${widget.card.expDate}"),
+
                     ],
                   ),
                 ),
-                Padding(
+               /* Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 80),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,7 +259,7 @@ class _EditCardState extends State<EditCard> {
                       Text("${widget.card.expDate}"),
                     ],
                   ),
-                ),
+                ),*/
                 SizedBox(
                   height: 20,
                 ),
