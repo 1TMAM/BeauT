@@ -33,12 +33,15 @@ class _AddNewLocationState extends State<AddNewLocation> {
 
   @override
   void initState() {
+    print("1111");
     _getAddress();
+    print("22222");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("3333");
     return Directionality(
       textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
 
