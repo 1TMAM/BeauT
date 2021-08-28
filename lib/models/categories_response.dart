@@ -30,14 +30,15 @@ class Categories {
   String nameAr;
   String nameEn;
   String icon;
-
-  Categories({this.id, this.nameAr, this.icon});
+  int beauticians_count;
+  Categories({this.id, this.nameAr, this.icon,this.beauticians_count});
 
   Categories.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nameAr = json['name_ar'];
     nameEn = json['name_en'];
     icon = json['icon'];
+    beauticians_count = json['beauticians_count'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +46,7 @@ class Categories {
     data['id'] = this.id;
     data['name_ar'] = this.nameAr;
     data['icon'] = this.icon;
+    data['beauticians_count'] = this.beauticians_count;
     return data;
   }
 }

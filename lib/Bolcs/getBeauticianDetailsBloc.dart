@@ -16,7 +16,7 @@ class GetBeauticianDetailsBloc extends Bloc<AppEvent, AppState> {
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {
     if (event is Hydrate) {
-      yield Start(null);
+      yield Loading(null);
       ress = await UserJourny.GetBeauticianDetails(id.value);
       print("Status " + ress.status.toString() + "");
 

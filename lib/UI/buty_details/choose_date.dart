@@ -1,14 +1,25 @@
+import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:buty/Bolcs/creat_order_bloc.dart';
+import 'package:buty/Bolcs/payment_bloc.dart';
+import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/ErrorDialog.dart';
+import 'package:buty/UI/CustomWidgets/on_done_dialog.dart';
 import 'package:buty/UI/buty_details/payment.dart';
+import 'package:buty/helpers/appEvent.dart';
+import 'package:buty/helpers/appState.dart';
+import 'package:buty/models/Payment/beautician_avaliable_time_model.dart';
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel, EventList;
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart' as intl;
 
 class ChooseDate extends StatefulWidget {
   final List<MyList> servicseList;
@@ -20,15 +31,22 @@ class ChooseDate extends StatefulWidget {
   _ChooseDateState createState() => _ChooseDateState();
 }
 
-class _ChooseDateState extends State<ChooseDate> {
+class _ChooseDateState extends State<ChooseDate> with TickerProviderStateMixin{
   DateTime _currentDate = DateTime.now();
   CalendarCarousel _calendarCarousel;
+  CalendarController _calendarController;
+  AnimationController _animationController;
+  String datee;
   bool isHouse = true;
 
   String order_time;
   var total_cost;
   @override
   void initState() {
+    payment_bloc.add(BeauticianTimesEvent());
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+    _calendarController = CalendarController();
     createOrderBloc.updateDate(_currentDate.toString().substring(0, 10));
     total_cost = widget.total+130;
     super.initState();
@@ -38,58 +56,38 @@ class _ChooseDateState extends State<ChooseDate> {
     setState(() {
       _selectedIndex = index;
     });
+
+    print("widget.servicseList : ${widget.servicseList}");
   }
   @override
   void dispose() {
     // TODO: implement dispose
+    _calendarController.dispose();
+
     super.dispose();
     total_cost =0;
   }
   @override
   Widget build(BuildContext context) {
-    _calendarCarousel = CalendarCarousel<Event>(
-      nextMonthDayBorderColor: Theme.of(context).primaryColor,
-      prevMonthDayBorderColor: Theme.of(context).primaryColor,
-      onDayPressed: (DateTime date, List<Event> events) {
-        this.setState(() => _currentDate = date);
-        events.forEach((event) => print(event.title));
-        print(date.toString().substring(0, 10));
-        createOrderBloc.updateDate(date.toString().substring(0, 10));
-      },
-
-      isScrollable: true,
-      thisMonthDayBorderColor: Colors.grey,
-      weekFormat: false,
-      height: 360.0,
-      selectedDateTime: _currentDate,
-      customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateShowIcon: true,
-      selectedDayTextStyle: TextStyle(
-        color: Colors.white,
-      ),
-      todayTextStyle: TextStyle(
-        color: Colors.white,
-      ),
-      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
-      maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      todayButtonColor: Theme.of(context).primaryColor,
-      todayBorderColor: Theme.of(context).primaryColor,
-    );
-    return Directionality(
+    return  Directionality(
       textDirection: translator.currentLanguage == "ar"
           ? TextDirection.rtl
           : TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
-            leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                )),
+            actions: [
+              Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+
+                    },
+                    child:  Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    )),)
+            ],
             centerTitle: true,
             title: Text(
               translator.translate("choose_time"),
@@ -99,115 +97,154 @@ class _ChooseDateState extends State<ChooseDate> {
           children: [
             ListView(
               children: [
-                _calendarCarousel,
+                //   _calendarCarousel,
+                _buildTableCalendar(),
                 Container(
                     height: 40,
-                    child: ListView.builder(
-                        itemCount: timeList.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: (){
-                              _onSelected(index);
-                              createOrderBloc.updateTime(timeList[index]);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: _selectedIndex ==index ? Color(0xFFDBB2D2) : Colors.grey.shade200,
-                                ),
+                    child: BlocBuilder(
+                      bloc: payment_bloc,
+                      builder: (context,state){
+                        if(state is Loading){
+                          if(state.indicator == 'beautician_time'){
+                            return AppLoader();
+                          }
+                        }else if(state is Done){
+                          if(state.indicator == 'beautician_time'){
+                            return StreamBuilder<BeauticianAvaliableTimeModel>(
+                                stream: payment_bloc.subject,
+                                builder: (context , snapshot){
+                                  if(snapshot.hasData){
+                                    if(snapshot.data.data.isEmpty){
+                                      return Container();
+                                    }else{
+                                      return ListView.builder(
+                                          itemCount: snapshot.data.data.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                              onTap: (){
+                                                _onSelected(index);
+                                                createOrderBloc.updateTime(snapshot.data.data[index]);
+                                                sharedPreferenceManager.writeData(CachingKey.RESERVATION_TIME, snapshot.data.data[index]);
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    color: _selectedIndex ==index ? Color(0xFFDBB2D2) : Colors.grey.shade200,
+                                                  ),
 
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Text(
-                                      timeList[index],
-                                      textDirection: TextDirection.ltr,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                                                  child: Center(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(
+                                                          horizontal: 20),
+                                                      child: Text(
+                                                        snapshot.data.data[index],
+                                                        textDirection: TextDirection.ltr,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          });
+                                    }
+                                  }else if (snapshot.hasError) {
+                                    return Container(
+                                      child: Text('${snapshot.error}'),
+                                    );
+                                  } else {
+                                    return AppLoader();
+                                    ;
+                                  }
+                                }
+                            );
+                          }
+                        }else if (state is ErrorLoading) {
+                          return Container(
                           );
-                        })),
+                        } else {
+                          return AppLoader();
+                        }
+                      },
+                    )
+                ),
                 Divider(),
                 ListView.builder(
-                     shrinkWrap: true,
-                     physics: NeverScrollableScrollPhysics(),
-                     itemCount: widget.servicseList.length,
-                     itemBuilder: (context, index) {
-                       return Padding(
-                         padding: const EdgeInsets.all(8.0),
-                         child: Column(
-                           children: [
-                             InkWell(
-                               onTap: () {
-                                 if (widget.servicseList.isEmpty) {
-                                   Navigator.pop(context);
-                                 } else {
-                                   setState(() {
-                                     print("service-price : ${widget.servicseList[index].price}");
-                                     print('totalcost : ${total_cost}');
-                                     total_cost = total_cost - int.parse(widget.servicseList[index].price);
-                                     widget.servicseList.removeAt(index);
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: widget.servicseList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                if (widget.servicseList.isEmpty) {
+                                  Navigator.pop(context);
+                                } else {
+                                  setState(() {
+                                    print("service-price : ${widget.servicseList[index].price}");
+                                    print('totalcost : ${total_cost}');
+                                    total_cost = total_cost - int.parse(widget.servicseList[index].price);
+                                    widget.servicseList.removeAt(index);
 
-                                   });
-                                 }
-                               },
-                               child: Row(
-                                 mainAxisAlignment:
-                                 MainAxisAlignment.spaceBetween,
-                                 children: [
-                                   Icon(Icons.close,color: Colors.red,),
-                                   SizedBox(),
-                                 ],
-                               ),
-                             ),
-                             Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                               children: [
-                                 Column(
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                     Text(
-                                       "${translator.translate("service_name")}  :  ${translator.currentLanguage == "ar" ? widget.servicseList[index].nameAr : widget.servicseList[index].nameEn}",
-                                       style: TextStyle(
-                                           fontSize: 13,
-                                           fontWeight: FontWeight.bold),
-                                     ),
-                                     Text(
-                                       "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
-                                       style: TextStyle(
-                                           fontSize: 13,
-                                           fontWeight: FontWeight.bold),
-                                     ),
-                                   ],
-                                 ),
-                                 Column(
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                     Text(
-                                       "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
-                                       style: TextStyle(
-                                           fontSize: 13,
-                                           fontWeight: FontWeight.w400),
-                                     ),
-                                     Text(
-                                       "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
-                                       style: TextStyle(fontSize: 13),
-                                     ),
-                                   ],
-                                 ),
-                               ],
-                             ),
-                             Divider()
-                           ],
-                         ),
-                       );
-                     }),
+                                  });
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(Icons.close,color: Colors.red,),
+                                  SizedBox(),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${translator.translate("service_name")}  :  ${ widget.servicseList[index].nameAr}",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      "${translator.translate("persons")}  :  ${widget.servicseList[index].count}  ",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${widget.servicseList[index].price} ${translator.translate("sar")}  ",
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    Text(
+                                      "${widget.servicseList[index].estimatedTime} ${translator.translate("min")} ",
+                                      style: TextStyle(fontSize: 13),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Divider()
+                          ],
+                        ),
+                      );
+                    }),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -219,7 +256,7 @@ class _ChooseDateState extends State<ChooseDate> {
                   onTap: () {
                     setState(() {
                       isHouse = true;
-                      total_cost = widget.total +130 ;
+                      total_cost = widget.total + 130 ;
                     });
                     createOrderBloc.updateLocationType(0);
                   },
@@ -231,21 +268,21 @@ class _ChooseDateState extends State<ChooseDate> {
                         Row(
                           children: [
                             Container(
-                              width: 35,
-                              height: 35,
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              height: MediaQuery.of(context).size.width * 0.15,
                               decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   shape: BoxShape.circle),
                               child: Center(
-                                child: Icon(
-                                  Icons.home,
-                                  color: Theme.of(context).primaryColor,
+                                child: Image.asset(
+                                  "assets/images/home.png",
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 translator.translate("at_home"),
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -257,7 +294,7 @@ class _ChooseDateState extends State<ChooseDate> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 "130 SAR",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -265,15 +302,15 @@ class _ChooseDateState extends State<ChooseDate> {
                             ),
                             isHouse == true
                                 ? Icon(
-                                    Icons.check_circle,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 25,
-                                  )
+                              Icons.check_circle,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            )
                                 : Icon(
-                                    Icons.check_circle_outline,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 25,
-                                  ),
+                              Icons.check_circle_outline,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            ),
                           ],
                         ),
                       ],
@@ -296,22 +333,21 @@ class _ChooseDateState extends State<ChooseDate> {
                         Row(
                           children: [
                             Container(
-                              width: 35,
-                              height: 35,
+                              width: MediaQuery.of(context).size.width * 0.15,
+                              height: MediaQuery.of(context).size.width * 0.15,
                               decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   shape: BoxShape.circle),
                               child: Center(
                                 child: Image.asset(
-                                  "assets/images/car.png",
-                                  width: 25,
-                                  height: 25,
+                                  "assets/images/beaut_location.png",
+                                  fit:  BoxFit.fill,
                                 ),
                               ),
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 translator.translate("at_buty"),
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -323,7 +359,7 @@ class _ChooseDateState extends State<ChooseDate> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
+                              const EdgeInsets.symmetric(horizontal: 10),
                               child: Text(
                                 "100 ${translator.translate("sar")}",
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -331,15 +367,15 @@ class _ChooseDateState extends State<ChooseDate> {
                             ),
                             isHouse == false
                                 ? Icon(
-                                    Icons.check_circle,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 25,
-                                  )
+                              Icons.check_circle,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            )
                                 : Icon(
-                                    Icons.check_circle_outline,
-                                    color: Theme.of(context).primaryColor,
-                                    size: 25,
-                                  ),
+                              Icons.check_circle_outline,
+                              color: Theme.of(context).primaryColor,
+                              size: 25,
+                            ),
                           ],
                         ),
                       ],
@@ -348,23 +384,26 @@ class _ChooseDateState extends State<ChooseDate> {
                 ),
                 InkWell(
                   onTap: () {
-                    print('dssssssssssssssssssss ${widget.servicseList}');
+                    print("@@@@total_cost : ${total_cost}");
                     widget.servicseList.isEmpty? errorDialog(
                       context: context,
                       text: translator.translate("services_list"),
-                    ):   Navigator.push(
+                    ):   createOrderBloc.time.value ==null ? errorDialog(
+                      context: context,
+                      text: translator.translate( "you must choose date and time for your order"),
+                    ): Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => PaymentScreen(
-                                  servicseList: widget.servicseList,
-                                  address: isHouse,
-                                  total: total_cost.toString(),
-                                )));
-                    total_cost=0;
+                              servicseList: widget.servicseList,
+                              address: isHouse,
+                              total: total_cost.toString(),
+                            )));
+                    //   total_cost=0;
                   },
                   child: CustomButton(
                     text:
-                        "${translator.translate("pay_now")}  ${total_cost} ريال  ",
+                    "${translator.translate("pay_now")}  ${total_cost} ريال  ",
 
                   ),
                 )
@@ -378,50 +417,61 @@ class _ChooseDateState extends State<ChooseDate> {
 
   bool show_time = false;
 
-  Widget TimePicker() {
-    return TimePickerSpinner(
-      is24HourMode: false,
-      normalTextStyle: TextStyle(fontSize: 24, color: Colors.white),
-      highlightedTextStyle:
-          TextStyle(fontSize: 24, color: Theme.of(context).primaryColor),
-      spacing: 10,
-      itemHeight: 50,
-      isForce2Digits: true,
-      onTimeChange: (time) {
-        createOrderBloc.updateTime(time.toString().substring(10, 16));
 
-        setState(() {
-          order_time = time.toString().substring(10, 16);
-        });
-        print("TIMEEEEEEEEEEE" + time.toString());
+  Widget _buildTableCalendar() {
+    return TableCalendar(
+      startDay: DateTime.now(),
+      calendarController: _calendarController,
+      locale: allTranslations.currentLanguage,
+      daysOfWeekStyle: DaysOfWeekStyle(
+          weekendStyle: TextStyle(color: Color(0xFFBABDC3), fontSize: 12),
+          weekdayStyle: TextStyle(color: Color(0xFFBABDC3), fontSize: 12)),
+      startingDayOfWeek: StartingDayOfWeek.saturday,
+      onUnavailableDaySelected: () {
+        print("ssss");
       },
+      calendarStyle: CalendarStyle(
+          highlightToday: false,
+        //  selectedColor: Theme.of(context).primaryColor,
+          selectedColor: Color(0xFFDBB2D2),
+          selectedStyle: TextStyle(color:Color(0xFFDBB2D2),fontSize: 16 ),
+          highlightSelected: true,
+          outsideDaysVisible: false,
+          weekendStyle: TextStyle(color: Colors.black),
+          holidayStyle: TextStyle(color: Color(0xFFBABDC3))),
+      headerStyle:
+      HeaderStyle(formatButtonVisible: false, centerHeaderTitle: true),
+      onDaySelected: (date, events, holidays) {
+        String date_formatted;
+        setState(() {
+          final intl.DateFormat formatter = intl.DateFormat('dd-MM-yyyy');
+            date_formatted = formatter.format(date);
+          createOrderBloc.updateDate(date_formatted);
+          sharedPreferenceManager.writeData(CachingKey.RESERVATION_DATE, date_formatted);
+          payment_bloc.add(BeauticianTimesEvent());
+        });
+      },
+      builders: CalendarBuilders(
+        selectedDayBuilder: (context, date, _) {
+          return FadeTransition(
+            opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
+            child: Container(
+              margin: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 3),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Center(
+                child: Text(
+                  '${date.day}',
+                  style:
+                  TextStyle(color: Colors.white).copyWith(fontSize: 16.0),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
-
-  List<String> timeList = [
-    "10 : 00",
-    "10 : 30",
-    "11 : 00",
-    "11 : 30",
-    "12 : 00",
-    "12 : 30",
-    "01 : 00",
-    "01 : 30",
-    "02 : 00",
-    "02 : 30",
-    "03 : 00",
-    "03 : 30",
-    "04 : 00",
-    "04 : 30",
-    "05 : 00",
-    "05 : 30",
-    "06 : 00",
-    "06 : 30",
-    "07 : 00",
-    "07 : 30",
-    "08 : 00",
-    "08 : 30",
-    "09 : 00",
-    "09 : 30",
-  ];
 }

@@ -1,15 +1,14 @@
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:buty/models/my_address.dart';
 import 'package:dio/dio.dart';
 
 class AddressRepo {
   static Future<MyAddressResponse> GetAllAdress() async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+        await sharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
     Map<String, String> headers = {
       'Authorization': token,

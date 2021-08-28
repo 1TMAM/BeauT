@@ -18,8 +18,9 @@ class NumberError extends AppState {}
 
 class Done extends AppState {
   Mappable model;
+  final String indicator;
 
-  Done(this.model);
+  Done(this.model,{this.indicator});
 
   @override
   String toString() => 'Done';
@@ -36,8 +37,9 @@ class Start extends AppState {
 
 class Loading extends AppState {
   Mappable model;
+  final String indicator;
 
-  Loading(this.model);
+  Loading(this.model,{this.indicator});
 
   @override
   String toString() => 'Loading';
@@ -45,8 +47,9 @@ class Loading extends AppState {
 
 class ErrorLoading extends AppState {
   Mappable model;
+  final String indicator;
 
-  ErrorLoading(this.model);
+  ErrorLoading(this.model,{this.indicator});
 
   @override
   String toString() => 'Error';

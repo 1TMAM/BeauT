@@ -1,3 +1,4 @@
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:buty/Bolcs/update_profile_bloc.dart';
 import 'package:buty/UI/CustomWidgets/CustomButton.dart';
 import 'package:buty/UI/CustomWidgets/CustomTextFormField.dart';
@@ -7,7 +8,6 @@ import 'package:buty/UI/CustomWidgets/on_done_dialog.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/updateProfileResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,19 +58,22 @@ class _EditProfileState extends State<EditProfile> {
       child: Scaffold(
           appBar: AppBar(
               automaticallyImplyLeading: false,
-              leading: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainPage(
+              actions: [
+                Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainPage(
                                   index: 0,
                                 )));
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  )),
+                      },
+                      child:  Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                      )),)
+              ],
               centerTitle: true,
               title: Text(
                 translator.translate("edit_profile"),

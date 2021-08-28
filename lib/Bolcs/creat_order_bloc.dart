@@ -45,15 +45,18 @@ class CreateOrderBloc extends Bloc<AppEvent, AppState> {
       yield (Start(null));
       yield Loading(null);
 
-      print("Sellected Time ===========>" + date.value);
-      // print(
-      //     "Location Time  ===========>${location_type.value == 0 ? "Home " : "AT  Butyy Place"}");
+      print("Sellected Date ===========>" + date.value);
+      print("Sellected Time ===========>" + time.value);
+
+      // print(---------------"Location Time  ===========>${location_type.value == 0 ? "Home " : "AT  Butyy Place"}");
       print("beautician_id  ===========> ${beautician_id.value}");
       print("servces   ===========> ${services.value}");
       print("persons   ===========> ${person_num.value}");
       print("payment_method ======> ${payment_method.value} ");
       print("coupon ======>  ${coupon.value}");
       print("location_id  ======> ${location_id.value}");
+      print("location_type  ======> ${location_type.value}");
+
       print("In Bloc");
 
       var userResponee = await UserJourny.CreateReservation(

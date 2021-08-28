@@ -1,7 +1,7 @@
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:buty/models/updateProfileResponse.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/NotificationResponse.dart';
 import 'package:buty/models/general_response.dart';
 import 'package:buty/models/login_model.dart';
@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDataRepo {
   static Future<UserResponse> LOGIN(String email, String password) async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
    // var token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     SharedPreferences preferences =await SharedPreferences.getInstance();
 
@@ -33,9 +32,8 @@ class UserDataRepo {
 //-------------------------------------------------------------------------------
 
   static Future<GeneralResponse> ForgetPassword(String email) async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+        await sharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
     FormData data = FormData.fromMap({
       "email": email,
@@ -171,6 +169,7 @@ class UserDataRepo {
       String number,
       String cvv,
       String exp_date}) async {
+    print("exp_date### : ${exp_date}");
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
@@ -185,8 +184,8 @@ class UserDataRepo {
       "longitude": 31.245175,
       "latitude": 41.245175,
       "number": number,
-      "cvv": cvv,
-      "exp_date": number == null ? null : "02/23",
+     // "cvv": cvv,
+      "exp_date": number == null ? null : exp_date,
       "holder_name": holder_name,
       "lang": translator.currentLanguage,
       "deviceToken" :preferences.getString("msgToken")==null?'device token' : preferences.getString("msgToken"),

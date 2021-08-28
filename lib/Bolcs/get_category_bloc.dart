@@ -14,7 +14,7 @@ class GetCategoriesBloc extends Bloc<AppEvent, AppState> {
     if (event is Hydrate) {
       yield Start(null);
       ress = await UserJourny.GETALLCATEGORIES();
-      print("Status " + ress.status.toString() + "");
+      print("---- categories ---------- " + ress.status.toString() + "");
       yield Done(ress);
     }
   }

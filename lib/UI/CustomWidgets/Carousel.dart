@@ -19,14 +19,13 @@ class _CustomCarouselState extends State<CustomCarousel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CarouselSlider(
+     CarouselSlider(
             items: widget.img.map((item) {
               return Container(
                 width: double.infinity,
-                height: 400,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(item.photo), fit: BoxFit.fitWidth)),
+                        image: NetworkImage(item.photo), fit: BoxFit.cover)),
               );
             }).toList(),
             options: CarouselOptions(
@@ -35,7 +34,6 @@ class _CustomCarouselState extends State<CustomCarousel> {
               viewportFraction: 0.99,
               initialPage: 0,
               disableCenter: true,
-              pageSnapping: true,
               enableInfiniteScroll: true,
               reverse: false,
               autoPlay: true,
@@ -44,6 +42,11 @@ class _CustomCarouselState extends State<CustomCarousel> {
               autoPlayCurve: Curves.fastOutSlowIn,
               enlargeCenterPage: true,
               scrollDirection: Axis.horizontal,
+              onPageChanged: (index, reason) {
+                  setState(() {
+                    _current = index;
+                  });
+                }
             )),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +59,7 @@ class _CustomCarouselState extends State<CustomCarousel> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _current == index
-                    ? Color.fromRGBO(0, 0, 0, 0.9)
+                    ? Color.fromRGBO(219, 178, 210, 0.9)
                     : Color.fromRGBO(0, 0, 0, 0.4),
               ),
             );
@@ -70,8 +73,8 @@ class _CustomCarouselState extends State<CustomCarousel> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return CupertinoDialog(
-            child: Image.network(image),
+          return CupertinoAlertDialog(
+            content: Image.network(image),
           );
         });
   }

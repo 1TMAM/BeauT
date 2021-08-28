@@ -1,3 +1,4 @@
+
 import 'package:buty/Base/Notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
@@ -9,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await translator.init(
     assetsDirectory: 'assets/langs/',
+    languagesList: ['ar','en']
   );
 
   runApp(LocalizedApp(child: MyApp()));
@@ -39,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       appPushNotifications.notificationSetup(navKey);
     });
     Future<PermissionStatus> permissionStatus =
-        NotificationPermissions.getNotificationPermissionStatus();
+    NotificationPermissions.getNotificationPermissionStatus();
     permissionStatus.then((status) {
       print("======> $status");
     });

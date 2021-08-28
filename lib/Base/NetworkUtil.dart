@@ -10,15 +10,17 @@ class NetworkUtil {
 
   Dio dio = Dio();
 
-  String base_url = "http://beauty.wothoq.co/api/";
+  String base_url = "https://beauty.wothoq.co/api/";
 
   Future<ResponseType> get<ResponseType extends Mappable>(
       ResponseType responseType, String url,
       {Map headers}) async {
+    print("header : $headers");
     var response;
     try {
       dio.options.baseUrl = base_url;
-      response = await dio.get(url, options: Options(headers: headers));
+      response = await dio.get(url, options: Options(headers: headers,));
+
     } on DioError catch (e) {
       if (e.response != null) {
         response = e.response;

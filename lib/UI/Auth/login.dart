@@ -1,5 +1,5 @@
 import 'package:buty/Base/Notifications.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Bolcs/loginBloc.dart';
@@ -150,7 +150,6 @@ class _LoginState extends State<Login> {
   }
 
   static Future<void> getUserLocation() async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
     final Location location = Location();
     String _error;
     try {
@@ -158,8 +157,8 @@ class _LoginState extends State<Login> {
       final LocationData _locationResult = await location.getLocation();
       final coordinates = new Coordinates(
           _locationResult.latitude, _locationResult.longitude);
-      mSharedPreferenceManager.writeData(CachingKey.USER_LAT, _locationResult.latitude);
-      mSharedPreferenceManager.writeData(CachingKey.USER_LONG, _locationResult.longitude);
+      sharedPreferenceManager.writeData(CachingKey.USER_LAT, _locationResult.latitude);
+      sharedPreferenceManager.writeData(CachingKey.USER_LONG, _locationResult.longitude);
 
     } catch (err) {
       _error = err.code;

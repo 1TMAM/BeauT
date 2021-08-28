@@ -1,5 +1,7 @@
+import 'package:buty/Base/AllTranslation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 void onDoneDialog({BuildContext context, String text, Function function}) {
   showDialog(
@@ -59,7 +61,7 @@ void onDoneDialog({BuildContext context, String text, Function function}) {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "حسنا",
+                        translator.translate("ok"),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             decoration: TextDecoration.underline,

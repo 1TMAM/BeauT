@@ -1,4 +1,7 @@
-import 'package:buty/UI/bottom_nav_bar/reservations/reservation_view.dart';
+import 'package:buty/UI/bottom_nav_bar/hom_page.dart';
+import 'package:buty/UI/bottom_nav_bar/main_page.dart';
+import 'package:buty/UI/bottom_nav_bar/reservations/finished_reservations.dart';
+import 'package:buty/UI/bottom_nav_bar/reservations/current_reservation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 
@@ -12,7 +15,14 @@ class _ReservationState extends State<Reservation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: (){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage(
+            index: 0,
+          )));
+
+        },
+        child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
@@ -22,7 +32,7 @@ class _ReservationState extends State<Reservation> {
               width: 100,
               height: 30,
             )),
-        body: ListView(
+        body: Column(
           children: [
             Row(
               children: [
@@ -78,7 +88,7 @@ class _ReservationState extends State<Reservation> {
                           width: MediaQuery.of(context).size.width / 4,
                           height: 2,
                           color:
-                              type == "last" ? Colors.black : Colors.grey[200],
+                          type == "last" ? Colors.black : Colors.grey[200],
                         )
                       ],
                     ),
@@ -89,16 +99,20 @@ class _ReservationState extends State<Reservation> {
                 ),
               ],
             ),
-            type == "current"
-                ? CurrentReservationView()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 150),
-                    child: Center(
-                        child: Text(translator.currentLanguage == "en"
-                            ? "No Reservations"
-                            : "ليس لديك حجوزات منتهية حتي الان")),
-                  ),
+            Expanded(
+                child:  ListView(
+                  children: [
+
+                    type == "current"
+                        ? CurrentReservationView()
+                        : FinishedReservationView(),
+
+
+                  ],
+                ))
           ],
-        ));
+        )
+
+    ),);
   }
 }

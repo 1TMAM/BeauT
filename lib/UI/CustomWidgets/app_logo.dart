@@ -10,8 +10,8 @@ class AppLogo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 100),
       child: Container(
-        width: 50 ,
-        height: 50 ,
+        width: 100 ,
+        height: 75 ,
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("assets/images/logo.png"), fit: BoxFit.contain)),

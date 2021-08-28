@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:buty/Base/AllTranslation.dart';
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/Bolcs/getBeauticianDetailsBloc.dart';
 import 'package:buty/UI/Auth/login.dart';
@@ -11,19 +13,24 @@ import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/UI/buty_details/choose_date.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/BeauticianDetails.dart';
+import 'package:buty/models/providers_response.dart' as providers_response;
+
 import 'package:buty/models/my_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ButyDetails extends StatefulWidget {
   final int id;
   final String name;
-  final int visits;
+  final int reviews;
+  final String beautician_name;
+  final String insta_link;
   final double rate;
-  const ButyDetails({Key key, this.id, this.name,this.visits,this.rate}) : super(key: key);
+  final List<providers_response.Gallery> gallery;
+  const ButyDetails({Key key, this.id, this.name,this.reviews,this.rate,this.beautician_name,this.insta_link,this.gallery}) : super(key: key);
 
   @override
   _ButyDetailsState createState() => _ButyDetailsState();
@@ -34,14 +41,13 @@ class _ButyDetailsState extends State<ButyDetails> {
 
   bool isLogged = false;
 
-  List<int> allPrices = List();
-  List<MyList> servicesList = List();
+  List<int> allPrices = [];
+  List<MyList> servicesList =[];
   int total = 0;
 
   void getFromCash() async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
     var logged =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+        await sharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
 
     if (logged == "") {
       setState(() {
@@ -53,7 +59,7 @@ class _ButyDetailsState extends State<ButyDetails> {
       });
     }
     print(
-        "Valuee ===>  ${mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN)}");
+        "Valuee ===>  ${sharedPreferenceManager.readString(CachingKey.AUTH_TOKEN)}");
 
     print("USER STATUS    ======> ${isLogged == true ? "User" : "Geust"}");
   }
@@ -64,6 +70,7 @@ class _ButyDetailsState extends State<ButyDetails> {
     getBeauticianDetailsBloc.updateId(widget.id);
     getBeauticianDetailsBloc.add(Hydrate());
     createOrderBloc.updateBeauticianId(widget.id);
+    print("BeauticianId :  ${widget.id}");
     super.initState();
   }
 
@@ -76,25 +83,30 @@ class _ButyDetailsState extends State<ButyDetails> {
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
-            leading: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainPage(
-                                index: 0,
-                              )));
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                )),
+           // leading:  ,
             centerTitle: true,
             title: Text(
               widget.name ?? "Buty Name",
               textDirection: TextDirection.ltr,
               style: TextStyle(color: Colors.white, fontSize: 17),
-            )),
+            ),
+        actions: [
+            Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainPage(
+                                index: 0,
+                              )));
+                    },
+                    child:  Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    )),)
+      ],
+        ),
         body: BlocListener<GetBeauticianDetailsBloc, AppState>(
           bloc: getBeauticianDetailsBloc,
           listener: (context, state) {
@@ -104,150 +116,192 @@ class _ButyDetailsState extends State<ButyDetails> {
             bloc: getBeauticianDetailsBloc,
             builder: (context, state) {
               var data = state.model as BeauticianDetailsResponse;
-              return data == null
-                  ? AppLoader()
-                  : data.msg=='عفوا لا يوجد خبراء تجميل' ? Container(
-                child: Center(
-                  child: Text(data.msg),
-                ),
-              ): ListView(
+              if(state is Loading){
+                return AppLoader();
+              }else if(state is Done){
+                return data.beautician == null
+                    ? Container(
+                  child: Center(
+                    child: Text(data.msg),
+                  ),
+                )
+                    : ListView(
+                  children: [
+                    Stack(
                       children: [
-                        Stack(
-                          children: [
-                            CustomCarousel(
-                              img: data.beautician[0].gallery,
-                            ),
-                            Positioned(
-                                top: 0,
-                                left: 20,
-                                child: Container(
-                                  color: Colors.grey.shade700,
-                                  width: MediaQuery.of(context).size.width/4,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
 
+                        widget.gallery.length==1?  Container(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.width * 0.6,
+                          child: Image.network(widget.gallery[0].photo, fit: BoxFit.fitWidth,)
+
+                        ):   CustomCarousel(
+                          img:  widget.gallery,
+                        ),
+                        Positioned(
+                            top: 0,
+                            left: 20,
+                            child: Container(
+                              color: Colors.grey.shade700,
+                              width: MediaQuery.of(context).size.width/4,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.star,color: Colors.yellowAccent,),
-                                          SizedBox(width: 5,),
-                                          Text("${widget.rate.toString()}",
-                                            style: TextStyle(color: Colors.white),)
-                                        ],
-                                      ),
-                                      Text("${widget.visits}   ${translator.translate('reviews')}" , style: TextStyle(color: Colors.white),)
+                                      Text("${widget.rate.toInt()}",
+                                        style: TextStyle(color: Colors.white),),
+                                      SizedBox(width: 5,),
+                                      Icon(Icons.star,color: Theme.of(context).primaryColor,size: 15,),
                                     ],
                                   ),
-                                ))
+                                  Text("${widget.reviews}   ${translator.translate('reviews')}" , style: TextStyle(color: Colors.white),)
+                                ],
+                              ),
+                            ))
 
-                          ],
-                        ),
+                      ],
+                    ),
 
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            "${widget.name}",
-                            textDirection: TextDirection.ltr,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                      child: Text(
+                        "${widget.beautician_name}",
+                        //   textDirection: TextDirection.ltr,
 
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Text(
+                            "${translator.translate("services")} : ",
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width - 100,
+                            height: 50,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: data.beautician[0].categories.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child:  Padding(
+                                          padding: EdgeInsets.only(left: 10,right: 10),
+                                          child: Image.network(data.beautician[0].categories[index].icon)
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.03,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: InkWell(
+                          onTap: (){
+                            _launchURL(widget.insta_link);
+                          },
                           child: Row(
+                            /*  crossAxisAlignment: translator.currentLanguage =='ar' ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                              mainAxisAlignment:translator.currentLanguage =='ar' ? MainAxisAlignment.end :  MainAxisAlignment.start,*/
                             children: [
-                              Text(
-                                "${translator.translate("services")} : ",
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width - 100,
-                                height: 50,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        data.beautician[0].services.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Container(
-                                          width: 35,
-                                          height: 35,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: NetworkImage(data
-                                                      .beautician[0]
-                                                      .services[index]
-                                                      .icon),
-                                                  fit: BoxFit.cover),
-                                              color: Colors.grey[200],
-                                              shape: BoxShape.circle),
-                                        ),
-                                      );
-                                    }),
-                              ),
+                              Expanded(
+                                  flex:1,
+                                  child:   Text(
+                                    "${translator.translate("Instagram : ")} ",)),
+                              Expanded(
+                                flex:3,
+                                child: Text(
+                                  widget.insta_link ==null ? '' :" ${ widget.insta_link} ",style: TextStyle(color: Colors.blueAccent),),)
                             ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                              "${translator.translate("location")}  : ${data.beautician[0].address}  "),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            "${translator.translate("services")}  ",
-                          ),
-                        ),
-                        ListView.builder(
+                          )
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.03,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                          "${translator.translate( "city")}  : ${translator.currentLanguage =='ar' ?
+                          data.beautician[0].city.nameAr : data.beautician[0].city.nameEn}  "),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.03,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "${translator.translate("services")}  ",
+                      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: data.beautician[0].services.length,
                             itemBuilder: (context, index) {
                               return serviceRow(
                                   data.beautician[0].services, index);
-                            }),
-                        InkWell(
-                            onTap: () {
-                              if (isLogged == true) {
-                                if (servicesList.isEmpty) {
-                                  errorDialog(
-                                      context: context,
-                                      text:
-                                          translator.translate("enter_items"));
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ChooseDate(
-                                                total: total,
-                                                servicseList: servicesList,
-                                              )));
-                                }
-                              } else {
-                                errorDialog(
-                                    text: translator.currentLanguage == "ar"
-                                        ? "يرجي تسجيل الدخول اولاًً "
-                                        : " You Must Login Frist",
-                                    context: context,
-                                    function: () => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Login())));
-                              }
-                            },
-                            child: CustomButton(
-                              text:
-                                  "${translator.translate("choose_time")} ${total} ${translator.translate("sar")}",
-                            ))
-                      ],
-                    );
+                            })),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          if (isLogged == true) {
+                            if (servicesList.isEmpty) {
+                              errorDialog(
+                                  context: context,
+                                  text:
+                                  translator.translate("enter_items"));
+                            } else {
+                              print("servicesList : ${servicesList}");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChooseDate(
+                                        total: total,
+                                        servicseList: servicesList,
+                                      )));
+                            }
+                          } else {
+                            errorDialog(
+                                text: translator.currentLanguage == "ar"
+                                    ? "يرجي تسجيل الدخول اولاًً "
+                                    : " You Must Login Frist",
+                                context: context,
+                                function: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Login())));
+                          }
+                        },
+                        child: CustomButton(
+                          text:
+                          "${translator.translate( "payment")}  ${total}  ${translator.translate("sar")}",
+                        ))
+                  ],
+                );
+              }else{
+                return AppLoader();
+              }
+
             },
           ),
         ),
@@ -296,6 +350,7 @@ class _ButyDetailsState extends State<ButyDetails> {
                             });
 
                             if (servicesList.isEmpty) {
+                              print("------- frist -------");
                               servicesList.add(new MyList(
                                   id: list[index].id,
                                   price: list[index].price,
@@ -304,9 +359,14 @@ class _ButyDetailsState extends State<ButyDetails> {
                                   estimatedTime: list[index].estimatedTime,
                                   count: list[index].count));
                               print(json.encode(servicesList));
+                              print("------- frist 1 -------");
                             }
                             else {
+                              print("servicesList.length : ${servicesList.length}");
                               for (int i = 0; i < servicesList.length; i++) {
+                                print("servicesList[i].id  : ${servicesList[i].id }");
+                                print("list[i].id  : ${list[i].id }");
+
                                 if (servicesList[i].id == list[index].id) {
                                   print("Edited");
                                   print("SERVICE ID ==> ${servicesList[i].id}");
@@ -319,17 +379,20 @@ class _ButyDetailsState extends State<ButyDetails> {
                                       nameAr: list[index].nameAr,
                                       nameEn: list[index].nameEn,
                                       estimatedTime: list[index].estimatedTime,
-                                      count: list[index].count));
+                                      count: list[index].count)
+                                  );
                                   print(json.encode(servicesList));
                                 } else {
                                   print("New");
-                                  servicesList.add(new MyList(
-                                      id: list[index].id,
-                                      price: list[index].price,
-                                      nameAr: list[index].nameAr,
-                                      nameEn: list[index].nameEn,
-                                      estimatedTime: list[index].estimatedTime,
-                                      count: list[index].count));
+
+                                servicesList.add(new MyList(
+                                        id: list[index].id,
+                                        price: list[index].price,
+                                        nameAr: list[index].nameAr,
+                                        nameEn: list[index].nameEn,
+                                        estimatedTime: list[index].estimatedTime,
+                                        count: list[index].count)
+                                );
 
                                   print(json.encode(servicesList));
                                   break;
@@ -356,6 +419,8 @@ class _ButyDetailsState extends State<ButyDetails> {
                             } else {
                               setState(() {
                                 list[index].count--;
+                                servicesList.remove(list[index]);
+                                print("remove serviceList : ${servicesList}");
                                 total = total - (int.parse(list[index].price));
                               });
                             }
@@ -436,5 +501,13 @@ class _ButyDetailsState extends State<ButyDetails> {
         ],
       ),
     );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

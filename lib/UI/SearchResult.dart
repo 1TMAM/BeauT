@@ -34,14 +34,17 @@ class _SearchResultState extends State<SearchResult> {
         textDirection: allTranslations.currentLanguage =="ar"?TextDirection.rtl :TextDirection.ltr ,
         child: Scaffold(
             appBar: AppBar(
-              leading: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  )),
+              actions: [
+                Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child:  Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                      )),)
+              ],
               title: Text(
                 "${translator.translate("result")}",
                 style: TextStyle(color: Colors.white),

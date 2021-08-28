@@ -43,19 +43,22 @@ class _MyAddressesState extends State<MyAddresses> {
         child: Scaffold(
           appBar: AppBar(
               automaticallyImplyLeading: false,
-              leading: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MainPage(
+              actions: [
+                Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                  child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainPage(
                                   index: 0,
                                 )));
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
-                  )),
+                      },
+                      child:  Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                      )),)
+              ],
               centerTitle: true,
               title: Text(
                 translator.translate("my_adresses"),

@@ -52,7 +52,7 @@ class PaymentMethods {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['name_ar'] = this.nameAr;
-    data['name_en'] = this.nameEn;
+    data['name_en'] = this.nameAr;
     if (this.card != null) {
       data['card'] = this.card.map((v) => v.toJson()).toList();
     }

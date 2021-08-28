@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/repo/user_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
@@ -42,7 +42,7 @@ class SignUpBloc extends Bloc<AppEvent, AppState> {
 
   Function(String) get updateCvv => cvv.sink.add;
 
-  Function(String) get updateExpDate => email.sink.add;
+  Function(String) get updateExpDate => exp_date.sink.add;
 
   String msg;
 
@@ -50,10 +50,11 @@ class SignUpBloc extends Bloc<AppEvent, AppState> {
   Stream<AppState> mapEventToState(AppEvent event) async* {
     if (event is Click) {
       yield Loading(null);
+      print("exp_date.value : ${exp_date.value}");
       var response = await UserDataRepo.SIGNUP(
           holder_name: holderName.value,
-          address: address.value,
-          cvv: cvv.value,
+        //  address: address.value,
+        //  cvv: cvv.value,
           email: email.value,
           exp_date: exp_date.value,
           lat: lat.value,
@@ -65,8 +66,7 @@ class SignUpBloc extends Bloc<AppEvent, AppState> {
       print("LogIn ResPonse" + response.msg);
       if (response.status == true) {
         print(response);
-        SharedPreferenceManager preferenceManager = SharedPreferenceManager();
-        preferenceManager.writeData(CachingKey.EMAIL, email.value);
+        sharedPreferenceManager.writeData(CachingKey.EMAIL, email.value);
         yield Done(response);
       } else if (response.status == false) {
         print("Error Loading Event ");

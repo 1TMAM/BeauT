@@ -17,20 +17,23 @@ class _CallUsState extends State<CallUs> {
 
       child: Scaffold(
         appBar: AppBar(
-            automaticallyImplyLeading: false,
-            leading: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainPage(
+          automaticallyImplyLeading: false,
+            actions: [
+              Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainPage(
                                 index: 0,
                               )));
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                )),
+                    },
+                    child:  Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    )),)
+            ],
             centerTitle: true,
             title: Text(
               translator.translate("call_us"),
@@ -55,7 +58,7 @@ class _CallUsState extends State<CallUs> {
                       ),
                     ),
                     Text(
-                      "Contact  Us On ${translator.translate("phone")}",
+                      "${translator.translate("Contact  Us On")}  ${translator.translate("phone")}",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
@@ -79,7 +82,7 @@ class _CallUsState extends State<CallUs> {
                       ),
                     ),
                     Text(
-                      "Contact  Us On ${translator.translate("whats")}",
+                      "${translator.translate("Contact  Us On")} ${translator.translate("whats")}",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
@@ -100,10 +103,11 @@ class _CallUsState extends State<CallUs> {
                         "assets/images/instagram.png",
                         width: 20,
                         height: 20,
+
                       ),
                     ),
                     Text(
-                      "Contact  Us On ${translator.translate("Instagram")}",
+                      "${translator.translate("Contact  Us On")}  ${translator.translate("Instagram")}",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
@@ -126,7 +130,7 @@ class _CallUsState extends State<CallUs> {
                           color: Theme.of(context).primaryColor,
                         )),
                     Text(
-                      "Contact  Us On ${translator.translate("e_mail")}",
+                      "${translator.translate("Contact  Us On")}  ${translator.translate("e_mail")}",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],

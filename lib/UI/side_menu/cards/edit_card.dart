@@ -46,15 +46,19 @@ class _EditCardState extends State<EditCard> {
         appBar: AppBar(
             elevation: 0,
             automaticallyImplyLeading: false,
-            leading: InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyCards()));
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                )),
+            actions: [
+              Padding(padding: EdgeInsets.only(right: 10,left: 10),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MyCards()));
+                    },
+                    child:  Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                    )),)
+            ],
+
             centerTitle: true,
             title: Text(
               translator.translate("add_new_card"),

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'active_account.dart';
 
@@ -20,7 +21,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool showVisa = false;
+  bool showVisa = false, acceptTerms = false;
   GlobalKey<FormState> key = GlobalKey();
 
   @override
@@ -107,7 +108,7 @@ class _SignUpState extends State<SignUp> {
                         signUpBloc.updateEmail(val);
                       },
                     ),
-                    rowItem(Icons.location_on, translator.translate("address")),
+               /*     rowItem(Icons.location_on, translator.translate("address")),
                     CustomTextField(
                       validate: (String val) {
                         if (val.isEmpty) {
@@ -118,7 +119,7 @@ class _SignUpState extends State<SignUp> {
                       value: (String val) {
                         signUpBloc.updateAddress(val);
                       },
-                    ),
+                    ),*/
                     rowItem(Icons.lock, translator.translate("password")),
                     CustomTextField(
                       validate: (String val) {
@@ -173,12 +174,23 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(
                       height: 20,
                     ),
+                    checkBoxAndAccept(),
+                    SizedBox(
+                      height: 20,
+                    ),
                     InkWell(
                       onTap: () {
                         if (!key.currentState.validate()) {
                           return;
                         } else {
-                          signUpBloc.add(Click());
+                          if (acceptTerms) {
+                            signUpBloc.add(Click());
+                          } else {
+                            errorDialog(
+                                context: context,
+                                text: translator
+                                    .translate("Accept terms & conditions *"));
+                          }
                         }
                       },
                       child: CustomButton(
@@ -223,13 +235,13 @@ class _SignUpState extends State<SignUp> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              translator.translate("expireDate"),
+              translator.translate("expireDate") ,
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
             ),
           ),
           CustomTextField(
-            hint: translator.translate("expireDate"),
-            inputType: TextInputType.number,
+            hint: "02/23",
+            inputType: TextInputType.text,
             value: (String val) {
               signUpBloc.updateExpDate(val);
             },
@@ -275,5 +287,49 @@ class _SignUpState extends State<SignUp> {
         ],
       ),
     );
+  }
+
+  Widget checkBoxAndAccept() {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Theme(
+              data: ThemeData(
+                  unselectedWidgetColor: Colors.grey,
+                  primaryColor: Colors.grey,
+                  accentColor: Theme.of(context).primaryColor),
+              child: Checkbox(
+                  value: acceptTerms,
+                  tristate: false,
+                  onChanged: (bool value) {
+                    setState(() {
+                      acceptTerms = !acceptTerms;
+                      print(acceptTerms);
+                    });
+                  })),
+          Text(
+            translator.translate("Accept terms & conditions *"),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          InkWell(
+            onTap: (){
+              _launchURL(translator.currentLanguage == 'ar' ? 'https://beauty.wothoq.co/terms-user/ar' : 'https://beauty.wothoq.co/terms-user/en');
+            },
+            child: Text("  ${translator.translate("Click Here")}",style: TextStyle(color: Theme.of(context).primaryColor),),
+          )
+        ],
+      ),
+    );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

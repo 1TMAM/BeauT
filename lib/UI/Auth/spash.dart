@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:buty/Base/Notifications.dart';
+import 'package:buty/Base/shared_preference_manger.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/UI/bottom_nav_bar/main_page.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -39,10 +39,9 @@ class _SplashState extends State<Splash> {
   var token;
 
   Future<Timer> _loadData() async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
     isLogged =
-        await mSharedPreferenceManager.readBoolean(CachingKey.IS_LOGGED_IN);
-    token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+        await sharedPreferenceManager.readBoolean(CachingKey.IS_LOGGED_IN);
+    token = await sharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(isLogged);
     print(token);
 

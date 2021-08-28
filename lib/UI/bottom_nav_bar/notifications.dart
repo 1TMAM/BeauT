@@ -4,6 +4,7 @@ import 'package:buty/UI/CustomWidgets/AppLoader.dart';
 import 'package:buty/UI/CustomWidgets/EmptyItem.dart';
 import 'package:buty/UI/CustomWidgets/LoadingDialog.dart';
 import 'package:buty/UI/CustomWidgets/on_done_dialog.dart';
+import 'package:buty/UI/bottom_nav_bar/main_page.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
 import 'package:buty/models/NotificationResponse.dart';
@@ -11,6 +12,7 @@ import 'package:buty/models/general_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -26,7 +28,14 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: (){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage(
+            index: 0,
+          )));
+
+        },
+        child:Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
@@ -69,11 +78,13 @@ class _NotificationsState extends State<Notifications> {
                                     child: SlideAnimation(
                                       verticalOffset: 50.0,
                                       child: notificationItem(
-                                          data.notifications[index].beautician
-                                              .beautName,
+                                          data.notifications[index].beautician.beautName,
                                           data.notifications[index].title,
                                           data.notifications[index].message,
-                                          data.notifications[index].id),
+                                          data.notifications[index].id,
+                                          data.notifications[index].createdAt
+                                      ),
+                                     
                                     ),
                                   );
                                 },
@@ -83,17 +94,20 @@ class _NotificationsState extends State<Notifications> {
               ),
             ),
           ],
-        ));
+        )));
   }
 
-  Widget notificationItem(String ButyName, String title, String body, int id) {
+  Widget notificationItem(String ButyName, String title, String body, int id,String date) {
     return BlocListener(
       bloc: deleteNotificationBloc,
       listener: (context, state) {
         var data = state.model as GeneralResponse;
         if (state is Done) {
           Navigator.of(context).pop();
-          onDoneDialog(context: context, text: "${data.msg}");
+          onDoneDialog(context: context, text: "${data.msg}",
+          function: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainPage(index: 1,)));
+          });
         }
       },
       child: Padding(
@@ -151,16 +165,39 @@ class _NotificationsState extends State<Notifications> {
                     color: Theme.of(context).primaryColor),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 8,
+                    child:    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child:Wrap(
+                      children: [
+                        Text(
+                          "${body}",
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ))
+                )
+                ,
+
+              ],
+            ),
+            Container(
+              alignment: translator.currentLanguage =='ar' ? Alignment.centerLeft : Alignment.centerRight,
               child: Text(
-                "${body}",
+                "${date.substring(0,16).replaceRange(10,11, '  ')}",
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey),
               ),
-            ),
+            )
           ],
         ),
       ),

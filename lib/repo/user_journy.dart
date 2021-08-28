@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:buty/Base/shared_preference_manger.dart';
+import 'package:buty/models/cancel_order_reason_model.dart';
+import 'package:buty/models/create_order_model.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:buty/Base/NetworkUtil.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/models/all_providers_response.dart';
 import 'package:buty/models/categories_response.dart';
 import 'package:buty/models/current_ordera_model.dart';
@@ -14,28 +18,23 @@ class UserJourny {
 
   static Future<CategoriesResponse> GETALLCATEGORIES() async {
     var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    var token = await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
     Map<String, String> headers = {
       'Authorization': token,
     };
-    return NetworkUtil.internal().get(CategoriesResponse(), "user/categories/get-all-categories?lang=${translator.currentLanguage}", headers: headers);
+    return NetworkUtil.internal().get(CategoriesResponse(), "https://beauty.wothoq.co/api/user/categories/get-all-categories?lang=${translator.currentLanguage}",);
   }
 
 //------------------------------------------------------------------------------/
 
   static Future<AllProvidersResponse> GETALLPROVIDERS() async {
-    print("provider 1");
-    var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+        await sharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
-    print("provider 2");
     Map<String, String> headers = {
       'Authorization': token,
     };
-    print("provider 3");
     return NetworkUtil.internal().get(
         AllProvidersResponse(), "user/provider/get-all-provider",
         headers: headers);
@@ -134,15 +133,33 @@ class UserJourny {
 
 //------------------------------------------------------------------------------/
   static Future<CurrentOrdersResponse> GETCURRENTORDERS() async {
+    print("translator.currentLanguage : ${translator.currentLanguage}");
     var mSharedPreferenceManager = SharedPreferenceManager();
     var token =
         await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
     print(token);
     Map<String, String> headers = {
       'Authorization': token,
+      'lang':translator.currentLanguage
     };
     return NetworkUtil.internal().get(
-        CurrentOrdersResponse(), "users/orders/get-current-orders",
+        CurrentOrdersResponse(), "users/orders/get-current-orders?lang=${translator.currentLanguage}",
+        headers: headers);
+  }
+
+
+  static Future<CurrentOrdersResponse> GETDONEORDERS() async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+    await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    Map<String, String> headers = {
+      'Authorization': token,
+      'lang':translator.currentLanguage
+    };
+
+    return NetworkUtil.internal().get(
+        CurrentOrdersResponse(), "users/orders/get-previous-orders?lang=${translator.currentLanguage}",
         headers: headers);
   }
 
@@ -163,8 +180,28 @@ class UserJourny {
         headers: headers, body: data);
   }
 
+
+  static Future<GeneralResponse> CanselOrderReason({int order_id, int beautician_id , String cancel_reason , String details,int status}) async {
+    var mSharedPreferenceManager = SharedPreferenceManager();
+    var token =
+    await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
+    print(token);
+    FormData data = FormData.fromMap({
+      "order_id": order_id,
+      "beautician_id": beautician_id,
+      "cancel_reason" : cancel_reason,
+     // "details" : details,
+      //"order_status": status,
+    });
+    Map<String, String> headers = {
+      'Authorization': token,
+      'lang':translator.currentLanguage
+    };
+    return NetworkUtil.internal().post(GeneralResponse(), "users/orders/cancel-reason",
+        headers: headers, body: data);
+  }
 //------------------------------------------------------------------------------/
-  static Future<GeneralResponse> CreateReservation(
+  static Future<CreateOrderModel> CreateReservation(
       {String date,
       String time,
       int location_type,
@@ -183,6 +220,7 @@ class UserJourny {
     print("Location Time  ===========>${location_type == 0 ? "Home " : "AT  Butyy Place"}");
     print("beautician_id  ===========> ${beautician_id}");
     print("servces   ===========> ${services}");
+    print("unique servces   ===========> ${services.toSet().toList()}");
     print("persons   ===========> ${person_num}");
     print("payment_method ======> ${payment_method} ");
     print("coupon ======>  ${coupon}");
@@ -190,36 +228,27 @@ class UserJourny {
     FormData data = FormData.fromMap({
       "lang": translator.currentLanguage,
       "date": date,
-      "time": "10:00",
+      "time": time,
       "location_type": location_type,
       "beautician_id": beautician_id,
-      "services": services,
+      "services": services ,
       "person_num": person_num,
       "payment_method": payment_method,
       "coupon": coupon,
       "location_id": location_id,
     });
-
+    print("type@@@ : ${services.runtimeType}");
+    var x =jsonEncode(services);
+    print("@@@type@@@ : ${x.runtimeType}");
     Map<String, String> headers = {
       'Authorization': token,
     };
-    return NetworkUtil.internal().post(GeneralResponse(), "users/orders/store",
+    return NetworkUtil.internal().post(CreateOrderModel(), "users/orders/store",
         headers: headers, body: data);
   }
 
 //------------------------------------------------------------------------------/
-  static Future<CurrentOrdersResponse> GETDONEORDERS() async {
-    var mSharedPreferenceManager = SharedPreferenceManager();
-    var token =
-        await mSharedPreferenceManager.readString(CachingKey.AUTH_TOKEN);
-    print(token);
-    Map<String, String> headers = {
-      'Authorization': token,
-    };
-    return NetworkUtil.internal().get(
-        CurrentOrdersResponse(), "users/orders/get-current-orders",
-        headers: headers);
-  }
+
 //------------------------------------------------------------------------------/
 
 }

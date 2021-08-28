@@ -13,17 +13,28 @@ class CanselOrderBloc extends Bloc<AppEvent, AppState> {
 
   final order_id = BehaviorSubject<int>();
   final status = BehaviorSubject<int>();
-
+  final beautician_id = BehaviorSubject<int>();
+  final reason = BehaviorSubject<String>();
+  final details = BehaviorSubject<String>();
   Function(int) get updateId => order_id.sink.add;
-
   Function(int) get updateStatus => status.sink.add;
+  Function(int) get beauticianId => beautician_id.sink.add;
+  Function(String) get cancel_reason => reason.sink.add;
+  Function(String) get cancel_details => details.sink.add;
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {
     if (event is Click) {
       yield (Start(null));
       yield Loading(null);
-      var userResponee = await UserJourny.CanselOrder(order_id.value ,status.value);
+      print("status : ${status.value}");
+      var userResponee = await UserJourny.CanselOrderReason(
+        order_id:   order_id.value ,
+      //  status:status.value,
+        beautician_id: beautician_id.value,
+        cancel_reason: reason.value,
+       // details: 'hhh'//details.value
+      );
       print("AddCard  Response" + userResponee.status.toString());
       if (userResponee.status == true) {
         print("Donee");

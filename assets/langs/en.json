@@ -47,7 +47,7 @@
   "current": "Current Bookings",
   "last": "Previous Bookings",
   "section": "Section :",
-  "buty_name": "The Name Of The Beaut :",
+  "buty_name": "Beautician :",
   "time": "Time :",
   "date": "Date : ",
   "details": "Details Of Services :",
@@ -84,6 +84,7 @@
   "done_add_card": "The Card Was Added Successfully !",
   "back": "Back",
   "location": "Location",
+  "Min" : "Min",
   "persons": "Persons",
   "reserve": "Book",
   "choose_time": "Choose Time",
@@ -120,7 +121,20 @@
   "order_time": "Choose Order Time",
   "service_city": "City",
   " services_list" : "there is no chossed services",
-  "reviews" : "Reviews"
-
-
+  "reviews" : "Reviews",
+  "Accept terms & conditions *" : "Accept terms & conditions *",
+  "Click Here" : "Click Here",
+  "ok" : "ok",
+  "search by artist name": "search by artist name",
+  "Duration" : "Duration",
+  "Service" : "Services",
+  "service_price" :  "price",
+  "cancel reason details" : "cancel reason details",
+  "cancel reason" : "cancel reason",
+  "Sorry, there are no beauticians" : "Sorry, there are no beauticians",
+  "Categories" :  "Categories",
+  "Search By Time Results" : "Search By Time Results",
+  "you must choose date and time for your order" :  "you must choose date and time for your order",
+  "service location price" :  "service location price",
+  "Contact  Us On" : "Contact  Us On"
 }

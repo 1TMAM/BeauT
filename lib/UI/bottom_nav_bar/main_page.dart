@@ -1,10 +1,11 @@
+import 'package:buty/Base/shared_preference_manger.dart';
+import 'package:buty/Bolcs/creat_order_bloc.dart';
 import 'package:buty/UI/bottom_nav_bar/hom_page.dart';
 import 'package:buty/UI/bottom_nav_bar/reservations/reservations.dart';
 import 'package:buty/UI/component/drawer.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
-
+import 'package:intl/intl.dart' as intl;
 import 'more.dart';
 import 'notifications.dart';
 
@@ -70,13 +71,14 @@ class _MainPageState extends State<MainPage> {
     } else {
       selectedPageIndex = widget.index;
     }
+    get_today_date();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl :TextDirection.ltr,
+      textDirection: translator.currentLanguage=="ar"?TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
           endDrawer: MyDrawer(
             isLogged: isLogged,
@@ -88,7 +90,7 @@ class _MainPageState extends State<MainPage> {
                   IconThemeData(size: 26, color: Theme.of(context).primaryColor),
               unselectedIconTheme: IconThemeData(size: 20, color: Colors.grey),
               showSelectedLabels: true,
-              type: BottomNavigationBarType.shifting,
+              type: BottomNavigationBarType.fixed,
               currentIndex: selectedPageIndex,
               items: [
                 BottomNavigationBarItem(
@@ -159,5 +161,13 @@ class _MainPageState extends State<MainPage> {
               onTap: _onItemTapped),
           body: pages[selectedPageIndex]),
     );
+  }
+
+  void get_today_date(){
+    final DateTime now = DateTime.now();
+    final intl.DateFormat formatter = intl.DateFormat('dd-MM-yyyy');
+    final String date_formatted = formatter.format(now);
+    createOrderBloc.updateDate(date_formatted);
+    sharedPreferenceManager.writeData(CachingKey.RESERVATION_DATE, date_formatted);
   }
 }

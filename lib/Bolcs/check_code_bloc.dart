@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:buty/helpers/appEvent.dart';
 import 'package:buty/helpers/appState.dart';
-import 'package:buty/helpers/shared_preference_manger.dart';
 import 'package:buty/repo/user_repo.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';

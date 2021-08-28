@@ -60,6 +60,12 @@ class NotValidCacheTypeException implements Exception {
 
 class   CachingKey extends Enum<String> {
   const CachingKey(String val) : super(val);
+  static const CachingKey PAYMENT_METHOD = const CachingKey('PAYMENT_METHOD');
+  static const CachingKey CARD_ID = const CachingKey('CARD_ID');
+  static const CachingKey CVV = const CachingKey('CVV');
+  static const CachingKey AMOUNT = const CachingKey('AMOUNT');
+  static const CachingKey ORDER_ID = const CachingKey('ORDER_ID');
+  static const CachingKey WHEN_DATE = const CachingKey('WHEN_DATE');
   static const CachingKey USER_NAME = const CachingKey('USER_NAME');
   static const CachingKey EMAIL = const CachingKey('EMAIL');
   static const CachingKey USER_ID = const CachingKey('USER_ID');
@@ -73,4 +79,8 @@ class   CachingKey extends Enum<String> {
   static const CachingKey ADDRESS = const CachingKey('ADDRESS');
   static const CachingKey USER_LAT = const CachingKey('USER_LAT');
   static const CachingKey USER_LONG = const CachingKey('USER_LONG');
+  static const CachingKey RESERVATION_DATE = const CachingKey('RESERVATION_DATE');
+  static const CachingKey RESERVATION_TIME = const CachingKey('RESERVATION_TIME');
 }
+
+final sharedPreferenceManager =SharedPreferenceManager();

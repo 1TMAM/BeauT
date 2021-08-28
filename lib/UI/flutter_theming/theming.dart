@@ -162,6 +162,6 @@ Widget buildThemeData(BuildContext context, Widget navigator, bool isShatta) {
   return Theme(
     data: isShatta ? shattaTheme : sherryTheme,
     child: navigator,
-    isMaterialAppTheme: true,
+   // isMaterialAppTheme: true,
   );
 }

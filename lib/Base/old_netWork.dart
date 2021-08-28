@@ -5,7 +5,7 @@ class OldNetworkUtil {
 
   OldNetworkUtil.internal();
 
-  String base_url = "http://beauty.wothoq.co/api/";
+  String base_url = "https://beauty.wothoq.co/api/";
   Dio dio = Dio();
 
   factory OldNetworkUtil() => _instance;
